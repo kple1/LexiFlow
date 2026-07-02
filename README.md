@@ -1,0 +1,239 @@
+# LexiFlow
+
+> **Lexicon + Flow** — 머릿속 단어들이 자연스럽게 흘러나오는 상태.
+
+Notion을 데이터 원본으로 사용하는 풀스택 영어 단어 학습 앱입니다. Notion에서 단어를 관리하면, 서버가 자동으로 동기화하여 모바일 앱에 표시합니다.
+
+<p align="left">
+  <img alt=".NET" src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white">
+  <img alt="MAUI" src="https://img.shields.io/badge/.NET_MAUI-Client-512BD4">
+  <img alt="ASP.NET Core" src="https://img.shields.io/badge/ASP.NET_Core-Web_API-512BD4">
+  <img alt="SQL Server" src="https://img.shields.io/badge/SQL_Server-2022-CC2927?logo=microsoftsqlserver&logoColor=white">
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white">
+</p>
+
+---
+
+## ✨ 주요 특징
+
+- **Notion을 단어장으로** — 익숙한 Notion에서 단어를 추가/편집하면 앱에 자동 반영
+- **자동 동기화** — 서버가 Notion 변경사항을 주기적으로 감지하여 DB에 반영
+- **크로스플랫폼 앱** — .NET MAUI로 Android / Windows 지원
+- **컨테이너 배포** — Docker Compose로 API와 DB를 한 번에 실행
+- **REST API** — 표준 HTTP 인터페이스로 클라이언트와 통신
+
+---
+
+## 🏗️ 아키텍처
+
+데이터는 한 방향으로 흐릅니다. 각 계층은 자신의 역할만 수행합니다.
+
+```
+┌─────────────┐   polling    ┌──────────────────┐   EF Core    ┌─────────────┐
+│   Notion    │ ───────────▶ │  ASP.NET Core    │ ───────────▶ │   MSSQL     │
+│ (단어 원본) │  (10초마다)  │  Web API (서버)  │   upsert     │  (WordDb)   │
+└─────────────┘              └──────────────────┘              └─────────────┘
+                                      │
+                                      │  GET /words (REST / JSON)
+                                      ▼
+                             ┌──────────────────┐
+                             │   .NET MAUI 앱   │
+                             │   (클라이언트)   │
+                             └──────────────────┘
+```
+
+| 계층 | 역할 |
+| --- | --- |
+| **Notion** | 데이터 원본. 사용자가 단어를 관리하는 곳 |
+| **서버 (Web API)** | Notion을 읽어 DB에 저장하고, 앱에 REST API 제공 |
+| **MSSQL** | 서버가 읽고 쓰는 저장소 |
+| **MAUI 앱** | 서버 API를 호출해 단어를 화면에 표시 |
+
+> **설계 원칙:** 앱은 오직 서버의 REST API만 호출합니다. 앱이 DB나 Notion에 직접 접근하지 않아, 데이터 흐름이 단순하고 각 계층이 독립적입니다.
+
+### 동기화 방식
+
+Notion API는 변경 알림(webhook)을 제공하지 않습니다. 따라서 서버가 `BackgroundService`로 **주기적으로 Notion을 조회(polling)** 하고, `last_edited_time`을 기준으로 변경된 단어를 감지하여 DB에 반영합니다. Notion에서 삭제된 단어는 DB에서도 제거됩니다.
+
+---
+
+## 🛠️ 기술 스택
+
+**클라이언트**
+- .NET MAUI 10.0 — 크로스플랫폼 UI
+- HttpClient — REST API 통신
+
+**서버**
+- ASP.NET Core Web API — REST 엔드포인트
+- Entity Framework Core — ORM
+- BackgroundService — Notion 동기화 워커
+- Notion API — 데이터 소스 연동
+
+**데이터 / 인프라**
+- SQL Server 2022 — 데이터 저장
+- Docker & Docker Compose — 컨테이너 배포
+
+---
+
+## 📁 프로젝트 구조
+
+```
+LexiFlow/
+├── Server/                      # ASP.NET Core Web API
+│   ├── WordApp/
+│   │   ├── Controllers/
+│   │   │   └── WordsController.cs    # GET /words 엔드포인트
+│   │   ├── Services/
+│   │   │   ├── NotionService.cs      # Notion API 호출 + 파싱
+│   │   │   └── WordSyncService.cs    # 주기적 동기화 (BackgroundService)
+│   │   ├── Data/
+│   │   │   └── AppDbContext.cs       # EF Core DbContext
+│   │   ├── Models/
+│   │   │   └── Word.cs               # 단어 엔티티
+│   │   └── Program.cs                # 앱 시작점 (DI, 미들웨어)
+│   ├── Dockerfile                    # 멀티스테이지 빌드
+│   └── docker-compose.yml            # API + SQL Server
+│
+└── Application/                 # .NET MAUI 클라이언트
+    └── LexiFlow/
+        ├── Services/
+        │   └── ApiService.cs         # 서버 API 호출
+        ├── Views/                    # UI 페이지
+        ├── Models/
+        └── Platforms/Android/
+            └── AndroidManifest.xml   # 권한, 네트워크 설정
+```
+
+---
+
+## 🔌 API
+
+| 메서드 | 엔드포인트 | 설명 |
+| --- | --- | --- |
+| `GET` | `/words` | 전체 단어 목록 조회 |
+| `GET` | `/words?status={status}` | 상태별 필터링 (외움 / 애매 / 모름 / 미분류) |
+
+**응답 예시**
+
+```json
+[
+  {
+    "id": "39021ce8-5244-...",
+    "english": "allocate",
+    "meaning": "할당하다, 배분하다",
+    "status": "미분류",
+    "example": "The manager will allocate resources to each team. (관리자가 각 팀에 자원을 할당할 것이다.)"
+  }
+]
+```
+
+---
+
+## 🚀 시작하기
+
+### 사전 요구사항
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (컨테이너 실행 시)
+- Notion API 토큰 및 데이터베이스
+
+### 1. 서버 실행 (Docker — 권장)
+
+Docker Compose를 사용하면 API 서버와 SQL Server를 한 번에 실행합니다. 대상 머신에 SQL Server를 설치할 필요가 없습니다.
+
+```bash
+cd Server
+docker compose up --build
+```
+
+- API: `http://localhost:5276`
+- SQL Server: `localhost:1433`
+
+동작 확인:
+
+```bash
+curl http://localhost:5276/words
+```
+
+> 환경 변수(연결 문자열, Notion 토큰 등)는 `docker-compose.yml`에서 설정합니다.
+
+### 2. 서버 실행 (로컬 — Docker 없이)
+
+로컬에 SQL Server가 설치되어 있다면:
+
+```bash
+cd Server/WordApp
+dotnet run --urls "http://0.0.0.0:5276"
+```
+
+> 외부 기기(모바일)에서 접근하려면 `localhost`가 아닌 `0.0.0.0`에 바인딩해야 합니다.
+
+### 3. 클라이언트 실행
+
+`ApiService.cs`에서 실행 환경에 맞게 서버 주소를 설정합니다.
+
+```csharp
+string baseUrl =
+#if ANDROID
+    "http://10.0.2.2:5276/";   // Android 에뮬레이터 → 호스트 PC
+#else
+    "http://localhost:5276/";  // Windows 데스크톱
+#endif
+```
+
+| 실행 환경 | 서버 주소 |
+| --- | --- |
+| Windows 데스크톱 | `localhost` |
+| Android 에뮬레이터 | `10.0.2.2` |
+| 실기기 / 원격 접속 | PC의 LAN IP 또는 배포된 서버 IP |
+
+```bash
+cd Application/LexiFlow
+
+# Windows
+dotnet build -t:Run -f net10.0-windows10.0.19041.0
+
+# Android (에뮬레이터 또는 연결된 기기)
+dotnet build -t:Run -f net10.0-android
+```
+
+### 4. Android APK 빌드 (배포용)
+
+```bash
+dotnet publish -f net10.0-android -c Release
+```
+
+서명된 APK가 생성됩니다:
+
+```
+bin/Release/net10.0-android/publish/io.leeple.lexiflow-Signed.apk
+```
+
+> 실기기에 사이드로딩 시, 삼성 기기는 **설정 → 보안 → 자동 차단**을 해제해야 설치됩니다.
+
+---
+
+## ⚙️ 설정
+
+`docker-compose.yml` 또는 `appsettings.json`에서 다음을 설정합니다.
+
+| 항목 | 설명 |
+| --- | --- |
+| `ConnectionStrings:Default` | SQL Server 연결 문자열 |
+| Notion API 토큰 | Notion 통합(integration) 토큰 |
+| Notion Data Source ID | 단어 데이터베이스 식별자 |
+| 동기화 주기 | 기본 10초 |
+
+> Docker 환경에서는 연결 문자열의 서버 주소로 서비스 이름(`Server=db`)을 사용합니다. 컨테이너 간에는 서비스 이름으로 통신합니다.
+
+---
+
+## 📄 라이선스
+
+이 프로젝트는 학습 목적으로 제작되었습니다.
+
+---
+
+<p align="center">
+  <sub>Built with .NET MAUI · ASP.NET Core · SQL Server · Docker</sub>
+</p>

@@ -2,6 +2,22 @@
   "version": 4,
   "targets": {
     "net10.0-android": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -2487,6 +2503,22 @@
       }
     },
     "net10.0-android/android-arm64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -4972,2491 +5004,22 @@
       }
     },
     "net10.0-android/iossimulator-x64": {
-      "GoogleGson/2.13.1.1": {
+      "CommunityToolkit.Mvvm/8.4.2": {
         "type": "package",
-        "dependencies": {
-          "Xamarin.Google.ErrorProne.Annotations": "2.41.0.1"
-        },
         "compile": {
-          "lib/net10.0-android36.0/GoogleGson.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/GoogleGson.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Extensions.Configuration/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/net8.0/_._": {}
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
         }
       },
-      "Microsoft.Extensions.Configuration.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Diagnostics.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.FileProviders.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Hosting.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Debug/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Options/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Options.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Primitives/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Maui.Controls/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Build.Tasks": "10.0.20",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20",
-          "Microsoft.Maui.Resizetizer": "10.0.20"
-        }
-      },
-      "Microsoft.Maui.Controls.Build.Tasks/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20"
-        },
-        "build": {
-          "buildTransitive/netstandard2.0/Microsoft.Maui.Controls.Build.Tasks.props": {},
-          "buildTransitive/netstandard2.0/Microsoft.Maui.Controls.Build.Tasks.targets": {}
-        }
-      },
-      "Microsoft.Maui.Controls.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Core": "10.0.20",
-          "Xamarin.AndroidX.DynamicAnimation": "1.1.0.3"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Controls.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Controls.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "resource": {
-          "lib/net10.0-android36.0/ar/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ar"
-          },
-          "lib/net10.0-android36.0/ca/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ca"
-          },
-          "lib/net10.0-android36.0/cs/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "cs"
-          },
-          "lib/net10.0-android36.0/da/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "da"
-          },
-          "lib/net10.0-android36.0/de/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "de"
-          },
-          "lib/net10.0-android36.0/el/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "el"
-          },
-          "lib/net10.0-android36.0/es/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "es"
-          },
-          "lib/net10.0-android36.0/fi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fi"
-          },
-          "lib/net10.0-android36.0/fr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fr"
-          },
-          "lib/net10.0-android36.0/he/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "he"
-          },
-          "lib/net10.0-android36.0/hi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hi"
-          },
-          "lib/net10.0-android36.0/hr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hr"
-          },
-          "lib/net10.0-android36.0/hu/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hu"
-          },
-          "lib/net10.0-android36.0/id/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "id"
-          },
-          "lib/net10.0-android36.0/it/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "it"
-          },
-          "lib/net10.0-android36.0/ja/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ja"
-          },
-          "lib/net10.0-android36.0/ko/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ko"
-          },
-          "lib/net10.0-android36.0/ms/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ms"
-          },
-          "lib/net10.0-android36.0/nb/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nb"
-          },
-          "lib/net10.0-android36.0/nl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nl"
-          },
-          "lib/net10.0-android36.0/pl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pl"
-          },
-          "lib/net10.0-android36.0/pt-BR/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt-BR"
-          },
-          "lib/net10.0-android36.0/pt/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt"
-          },
-          "lib/net10.0-android36.0/ro/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ro"
-          },
-          "lib/net10.0-android36.0/ru/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ru"
-          },
-          "lib/net10.0-android36.0/sk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sk"
-          },
-          "lib/net10.0-android36.0/sv/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sv"
-          },
-          "lib/net10.0-android36.0/th/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "th"
-          },
-          "lib/net10.0-android36.0/tr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "tr"
-          },
-          "lib/net10.0-android36.0/uk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "uk"
-          },
-          "lib/net10.0-android36.0/vi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "vi"
-          },
-          "lib/net10.0-android36.0/zh-HK/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-HK"
-          },
-          "lib/net10.0-android36.0/zh-Hans/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hans"
-          },
-          "lib/net10.0-android36.0/zh-Hant/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hant"
-          }
-        }
-      },
-      "Microsoft.Maui.Controls.Xaml/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Essentials": "10.0.20",
-          "Microsoft.Maui.Graphics": "10.0.20",
-          "Xamarin.Android.Glide": "4.16.0.14",
-          "Xamarin.AndroidX.Lifecycle.LiveData": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Common": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Fragment": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.UI": "2.9.2.1",
-          "Xamarin.AndroidX.SwipeRefreshLayout": "1.1.0.29",
-          "Xamarin.Google.Android.Material": "1.12.0.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Microsoft.Maui.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Microsoft.Maui.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/Microsoft.Maui.Core.props": {},
-          "buildTransitive/Microsoft.Maui.Core.targets": {}
-        }
-      },
-      "Microsoft.Maui.Essentials/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Graphics": "10.0.20",
-          "Xamarin.AndroidX.Activity": "1.10.1.3",
-          "Xamarin.AndroidX.Browser": "1.8.0.11",
-          "Xamarin.AndroidX.Security.SecurityCrypto": "1.1.0.4-alpha07",
-          "Xamarin.Google.Crypto.Tink.Android": "1.18.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Essentials.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Essentials.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Graphics/10.0.20": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Resizetizer/10.0.20": {
-        "type": "package",
-        "build": {
-          "buildTransitive/Microsoft.Maui.Resizetizer.props": {},
-          "buildTransitive/Microsoft.Maui.Resizetizer.targets": {}
-        }
-      },
-      "Microsoft.NET.ILLink.Tasks/10.0.9": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.NET.ILLink.Tasks.props": {}
-        }
-      },
-      "Xamarin.Android.Glide/4.16.0.14": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Android.Glide.Annotations": "4.16.0.14",
-          "Xamarin.Android.Glide.DiskLruCache": "4.16.0.14",
-          "Xamarin.Android.Glide.GifDecoder": "4.16.0.14",
-          "Xamarin.AndroidX.ExifInterface": "1.4.1.1",
-          "Xamarin.AndroidX.Fragment": "1.8.8.1",
-          "Xamarin.AndroidX.Tracing.Tracing": "1.3.0.1",
-          "Xamarin.AndroidX.VectorDrawable.Animated": "1.2.0.8"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Android.Glide.Annotations/4.16.0.14": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.Annotations.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.Annotations.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Android.Glide.DiskLruCache/4.16.0.14": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.DiskLruCache.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.DiskLruCache.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Android.Glide.GifDecoder/4.16.0.14": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.GifDecoder.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Android.Glide.GifDecoder.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.AndroidX.Activity/1.10.1.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Core.ViewTree": "1.0.0.3",
-          "Xamarin.AndroidX.Lifecycle.Common": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModelSavedState": "2.9.2.1",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5",
-          "Xamarin.AndroidX.SavedState": "1.3.1.1",
-          "Xamarin.AndroidX.Tracing.Tracing": "1.3.0.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Activity.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Activity.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Activity.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Activity.Ktx/1.10.1.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity": "[1.10.1.3, 1.10.2)",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Ktx": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel.Ktx": "2.9.2.1",
-          "Xamarin.AndroidX.SavedState.SavedState.Ktx": "1.3.1.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Activity.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Activity.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Activity.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Annotation/1.9.1.5": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Annotation.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Annotation.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Annotation.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Annotation.Experimental/1.5.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Annotation.Experimental.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Annotation.Experimental.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Annotation.Experimental.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Annotation.Jvm/1.9.1.5": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Annotation.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Annotation.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Annotation.Jvm.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.AppCompat/1.7.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity": "1.10.1.3",
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.AppCompat.AppCompatResources": "[1.7.1.1, 1.7.2)",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.CursorAdapter": "1.0.0.34",
-          "Xamarin.AndroidX.DrawerLayout": "1.2.0.18",
-          "Xamarin.AndroidX.Emoji2": "1.5.0.6",
-          "Xamarin.AndroidX.Emoji2.ViewsHelper": "1.5.0.6",
-          "Xamarin.AndroidX.Fragment": "1.8.8.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5",
-          "Xamarin.AndroidX.ResourceInspection.Annotation": "1.0.1.22",
-          "Xamarin.AndroidX.SavedState": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.AppCompat.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.AppCompat.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.AppCompat.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.AppCompat.AppCompatResources/1.7.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.VectorDrawable": "1.2.0.8",
-          "Xamarin.AndroidX.VectorDrawable.Animated": "1.2.0.8"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.AppCompat.AppCompatResources.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.AppCompat.AppCompatResources.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.AppCompat.AppCompatResources.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Arch.Core.Common/2.2.0.18": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Arch.Core.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Arch.Core.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Arch.Core.Common.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Arch.Core.Runtime/2.2.0.18": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Arch.Core.Common": "[2.2.0.18, 2.2.1)"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Arch.Core.Runtime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Arch.Core.Runtime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Arch.Core.Runtime.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Browser/1.8.0.11": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Annotation.Experimental": "1.5.1.1",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Concurrent.Futures": "1.3.0.1",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Interpolator": "1.0.0.34",
-          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.29"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Browser.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Browser.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Browser.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.CardView/1.0.0.36": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CardView.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CardView.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.CardView.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Collection/1.5.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection.Jvm": "1.5.0.3",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Collection.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Collection.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Collection.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Collection.Jvm/1.5.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Collection.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Collection.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Collection.Jvm.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Collection.Ktx/1.5.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Collection.Jvm": "[1.5.0.3, 1.5.1)"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Collection.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Collection.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Collection.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Concurrent.Futures/1.3.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.29",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Concurrent.Futures.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Concurrent.Futures.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Concurrent.Futures.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ConstraintLayout/2.2.1.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.AppCompat": "1.7.1.1",
-          "Xamarin.AndroidX.ConstraintLayout.Core": "1.1.1.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ConstraintLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ConstraintLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ConstraintLayout.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ConstraintLayout.Core/1.1.1.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ConstraintLayout.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ConstraintLayout.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ConstraintLayout.Core.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.CoordinatorLayout/1.3.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.CustomView": "1.2.0.1",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CoordinatorLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CoordinatorLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.CoordinatorLayout.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Core/1.16.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Annotation.Experimental": "1.5.1.1",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Concurrent.Futures": "1.3.0.1",
-          "Xamarin.AndroidX.Core.ViewTree": "1.0.0.3",
-          "Xamarin.AndroidX.Interpolator": "1.0.0.34",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Tracing.Tracing": "1.3.0.1",
-          "Xamarin.AndroidX.VersionedParcelable": "1.2.1.3",
-          "Xamarin.JSpecify": "1.0.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Core.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Core.Core.Ktx/1.16.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Core.Core.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Core.Core.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Core.Core.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Core.ViewTree/1.0.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Core.ViewTree.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Core.ViewTree.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Core.ViewTree.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.CursorAdapter/1.0.0.34": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CursorAdapter.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CursorAdapter.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.CursorAdapter.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.CustomView/1.2.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CustomView.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CustomView.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.CustomView.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.CustomView.PoolingContainer/1.1.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CustomView.PoolingContainer.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.CustomView.PoolingContainer.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.CustomView.PoolingContainer.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.DrawerLayout/1.2.0.18": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.CustomView": "1.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.DrawerLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.DrawerLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.DrawerLayout.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.DynamicAnimation/1.1.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.DynamicAnimation.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.DynamicAnimation.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.DynamicAnimation.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Emoji2/1.5.0.6": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Lifecycle.Process": "2.9.2.1",
-          "Xamarin.AndroidX.Startup.StartupRuntime": "1.2.0.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Emoji2.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Emoji2.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Emoji2.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Emoji2.ViewsHelper/1.5.0.6": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Emoji2": "[1.5.0.6, 1.5.1)"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Emoji2.ViewsHelper.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Emoji2.ViewsHelper.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Emoji2.ViewsHelper.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ExifInterface/1.4.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ExifInterface.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ExifInterface.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ExifInterface.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Fragment/1.8.8.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity": "1.10.1.3",
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Annotation.Experimental": "1.5.1.1",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModelSavedState": "2.9.2.1",
-          "Xamarin.AndroidX.Loader": "1.1.0.34",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5",
-          "Xamarin.AndroidX.SavedState": "1.3.1.1",
-          "Xamarin.AndroidX.ViewPager": "1.1.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Fragment.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Fragment.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Fragment.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Fragment.Ktx/1.8.8.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity.Ktx": "1.10.1.3",
-          "Xamarin.AndroidX.Collection.Ktx": "1.5.0.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Fragment": "[1.8.8.1, 1.8.9)",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel.Ktx": "2.9.2.1",
-          "Xamarin.AndroidX.SavedState.SavedState.Ktx": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Fragment.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Fragment.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Fragment.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Interpolator/1.0.0.34": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Interpolator.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Interpolator.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Interpolator.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Common/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Common.Jvm": "2.9.2.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Common.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Common.Jvm/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.JSpecify": "1.0.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Common.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Common.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Common.Jvm.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.LiveData/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Arch.Core.Common": "2.2.0.18",
-          "Xamarin.AndroidX.Arch.Core.Runtime": "2.2.0.18",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx": "[2.9.2.1, 2.9.3)",
-          "Xamarin.JSpecify": "1.0.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.LiveData.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.LiveData.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.LiveData.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.LiveData.Core/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Arch.Core.Common": "2.2.0.18",
-          "Xamarin.AndroidX.Arch.Core.Runtime": "2.2.0.18",
-          "Xamarin.AndroidX.Lifecycle.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.JSpecify": "1.0.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.LiveData.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.LiveData.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.LiveData.Core.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core": "[2.9.2.1, 2.9.3)",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Process/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Startup.StartupRuntime": "1.2.0.5",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Process.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Process.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Process.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Runtime/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Arch.Core.Common": "2.2.0.18",
-          "Xamarin.AndroidX.Lifecycle.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Android": "2.9.2.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Runtime.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Runtime.Android/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.AndroidX.Arch.Core.Common": "2.2.0.18",
-          "Xamarin.AndroidX.Arch.Core.Runtime": "2.2.0.18",
-          "Xamarin.AndroidX.Core.ViewTree": "1.0.0.3",
-          "Xamarin.AndroidX.Lifecycle.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5",
-          "Xamarin.JSpecify": "1.0.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Android": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Runtime.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Runtime.Ktx/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Ktx.Android": "2.9.2.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Runtime.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.Runtime.Ktx.Android/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Android": "[2.9.2.1, 2.9.3)",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Android": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.Ktx.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.Runtime.Ktx.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.Runtime.Ktx.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.ViewModel/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.ViewModel.Android": "2.9.2.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModel.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModel.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.ViewModel.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.ViewModel.Android/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.AndroidX.Core.ViewTree": "1.0.0.3",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Android": "1.10.2.1",
-          "Xamarin.KotlinX.Coroutines.Core.Jvm": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModel.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModel.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.ViewModel.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.ViewModel.Ktx/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "[2.9.2.1, 2.9.3)",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Android": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModel.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModel.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.ViewModel.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.ViewModelSavedState/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android": "2.9.2.1",
-          "Xamarin.AndroidX.SavedState": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1",
-          "Xamarin.KotlinX.Serialization.Core": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModelSavedState.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModelSavedState.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.ViewModelSavedState.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Lifecycle.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.SavedState.SavedState.Android": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Android": "1.10.2.1",
-          "Xamarin.KotlinX.Coroutines.Core.Jvm": "1.10.2.1",
-          "Xamarin.KotlinX.Serialization.Core.Jvm": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Loader/1.1.0.34": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Loader.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Loader.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Loader.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Navigation.Common/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Common": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModelSavedState": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Common.Android": "2.9.2.1",
-          "Xamarin.AndroidX.SavedState": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Navigation.Common.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Navigation.Common.Android/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.AndroidX.Collection.Jvm": "1.5.0.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Lifecycle.Common.Jvm": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Android": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel.Android": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android": "2.9.2.1",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5",
-          "Xamarin.AndroidX.SavedState.SavedState.Android": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Serialization.Core.Jvm": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Common.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Common.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Navigation.Common.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Navigation.Fragment/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity": "1.10.1.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Fragment.Ktx": "1.8.8.1",
-          "Xamarin.AndroidX.Lifecycle.Common": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.LiveData.Core": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Navigation.Runtime": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.SavedState": "1.3.1.1",
-          "Xamarin.AndroidX.SlidingPaneLayout": "1.2.0.22",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1",
-          "Xamarin.KotlinX.Serialization.Core": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Fragment.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Fragment.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Navigation.Fragment.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Navigation.Runtime/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Lifecycle.Common": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Navigation.Runtime.Android": "2.9.2.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Runtime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Runtime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Navigation.Runtime.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Navigation.Runtime.Android/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity.Ktx": "1.10.1.3",
-          "Xamarin.AndroidX.Annotation.Experimental": "1.5.1.1",
-          "Xamarin.AndroidX.Collection.Jvm": "1.5.0.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Lifecycle.Common.Jvm": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Android": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime.Ktx.Android": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel.Android": "2.9.2.1",
-          "Xamarin.AndroidX.Lifecycle.ViewModel.Ktx": "2.9.2.1",
-          "Xamarin.AndroidX.Navigation.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core.Jvm": "1.10.2.1",
-          "Xamarin.KotlinX.Serialization.Core.Jvm": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Runtime.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.Runtime.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Navigation.Runtime.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Navigation.UI/2.9.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.AppCompat": "1.7.1.1",
-          "Xamarin.AndroidX.CoordinatorLayout": "1.3.0.3",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.CustomView": "1.2.0.1",
-          "Xamarin.AndroidX.DrawerLayout": "1.2.0.18",
-          "Xamarin.AndroidX.Navigation.Common": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Navigation.Runtime": "[2.9.2.1, 2.9.3)",
-          "Xamarin.AndroidX.Transition": "1.6.0.1",
-          "Xamarin.Google.Android.Material": "1.12.0.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.UI.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Navigation.UI.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Navigation.UI.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller/1.4.1.5": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Concurrent.Futures": "1.3.0.1",
-          "Xamarin.AndroidX.Startup.StartupRuntime": "1.2.0.5",
-          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.29"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.RecyclerView/1.4.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.CustomView": "1.2.0.1",
-          "Xamarin.AndroidX.CustomView.PoolingContainer": "1.1.0.1",
-          "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller": "1.4.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.RecyclerView.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.RecyclerView.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.RecyclerView.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ResourceInspection.Annotation/1.0.1.22": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ResourceInspection.Annotation.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ResourceInspection.Annotation.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ResourceInspection.Annotation.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.SavedState/1.3.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Lifecycle.Common": "2.9.2.1",
-          "Xamarin.AndroidX.SavedState.SavedState.Android": "1.3.1.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core": "1.10.2.1",
-          "Xamarin.KotlinX.Serialization.Core": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SavedState.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SavedState.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.SavedState.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.SavedState.SavedState.Android/1.3.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.AndroidX.Core.Core.Ktx": "1.16.0.3",
-          "Xamarin.AndroidX.Core.ViewTree": "1.0.0.3",
-          "Xamarin.AndroidX.Lifecycle.Common.Jvm": "2.9.2.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core.Jvm": "1.10.2.1",
-          "Xamarin.KotlinX.Serialization.Core.Jvm": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SavedState.SavedState.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SavedState.SavedState.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.SavedState.SavedState.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.SavedState.SavedState.Ktx/1.3.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.SavedState": "[1.3.1.1, 1.3.2)",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SavedState.SavedState.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SavedState.SavedState.Ktx.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.SavedState.SavedState.Ktx.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Security.SecurityCrypto/1.1.0.4-alpha07": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.4",
-          "Xamarin.AndroidX.Collection": "1.5.0.2",
-          "Xamarin.Google.Crypto.Tink.Android": "1.17.0.2",
-          "Xamarin.JSpecify": "1.0.0.3"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Security.SecurityCrypto.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Security.SecurityCrypto.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Security.SecurityCrypto.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.SlidingPaneLayout/1.2.0.22": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.CustomView": "1.2.0.1",
-          "Xamarin.AndroidX.Transition": "1.6.0.1",
-          "Xamarin.AndroidX.Window": "1.4.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SlidingPaneLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SlidingPaneLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.SlidingPaneLayout.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Startup.StartupRuntime/1.2.0.5": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Tracing.Tracing": "1.3.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Startup.StartupRuntime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Startup.StartupRuntime.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Startup.StartupRuntime.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.SwipeRefreshLayout/1.1.0.29": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Interpolator": "1.0.0.34"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SwipeRefreshLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.SwipeRefreshLayout.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.SwipeRefreshLayout.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Tracing.Tracing/1.3.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Tracing.Tracing.Android": "1.3.0.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Tracing.Tracing.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Tracing.Tracing.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Tracing.Tracing.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Tracing.Tracing.Android/1.3.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Tracing.Tracing.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Tracing.Tracing.Android.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Tracing.Tracing.Android.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Transition/1.6.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.DynamicAnimation": "1.1.0.3",
-          "Xamarin.AndroidX.Fragment": "1.8.8.1",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Transition.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Transition.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Transition.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.VectorDrawable/1.2.0.8": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.VectorDrawable.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.VectorDrawable.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.VectorDrawable.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.VectorDrawable.Animated/1.2.0.8": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Interpolator": "1.0.0.34",
-          "Xamarin.AndroidX.VectorDrawable": "1.2.0.8"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.VectorDrawable.Animated.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.VectorDrawable.Animated.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.VectorDrawable.Animated.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.VersionedParcelable/1.2.1.3": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.JSpecify": "1.0.0.4"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.VersionedParcelable.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.VersionedParcelable.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.VersionedParcelable.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ViewPager/1.1.0.4": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.CustomView": "1.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ViewPager.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ViewPager.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ViewPager.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.ViewPager2/1.1.0.8": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Annotation.Experimental": "1.5.1.1",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Fragment": "1.8.8.1",
-          "Xamarin.AndroidX.RecyclerView": "1.4.0.3"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ViewPager2.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.ViewPager2.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.ViewPager2.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Window/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Collection": "1.5.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.Window.WindowCore": "[1.4.0.1, 1.4.1)",
-          "Xamarin.JSpecify": "1.0.0.4",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Android": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Window.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Window.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Window.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Window.WindowCore/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Window.WindowCore.Jvm": "1.4.0.1",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Window.WindowCore.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Window.WindowCore.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Window.WindowCore.targets": {}
-        }
-      },
-      "Xamarin.AndroidX.Window.WindowCore.Jvm/1.4.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Window.WindowCore.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.AndroidX.Window.WindowCore.Jvm.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.AndroidX.Window.WindowCore.Jvm.targets": {}
-        }
-      },
-      "Xamarin.Google.Android.Material/1.12.0.5": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.AndroidX.Activity": "1.10.1.3",
-          "Xamarin.AndroidX.Annotation": "1.9.1.5",
-          "Xamarin.AndroidX.Annotation.Experimental": "1.5.1.1",
-          "Xamarin.AndroidX.AppCompat": "1.7.1.1",
-          "Xamarin.AndroidX.CardView": "1.0.0.36",
-          "Xamarin.AndroidX.ConstraintLayout": "2.2.1.3",
-          "Xamarin.AndroidX.CoordinatorLayout": "1.3.0.3",
-          "Xamarin.AndroidX.Core": "1.16.0.3",
-          "Xamarin.AndroidX.DrawerLayout": "1.2.0.18",
-          "Xamarin.AndroidX.DynamicAnimation": "1.1.0.3",
-          "Xamarin.AndroidX.Fragment": "1.8.8.1",
-          "Xamarin.AndroidX.Lifecycle.Runtime": "2.9.2.1",
-          "Xamarin.AndroidX.RecyclerView": "1.4.0.3",
-          "Xamarin.AndroidX.ResourceInspection.Annotation": "1.0.1.22",
-          "Xamarin.AndroidX.Transition": "1.6.0.1",
-          "Xamarin.AndroidX.VectorDrawable": "1.2.0.8",
-          "Xamarin.AndroidX.ViewPager2": "1.1.0.8",
-          "Xamarin.Google.ErrorProne.Annotations": "2.41.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Google.Android.Material.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Google.Android.Material.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-android35.0/Xamarin.Google.Android.Material.targets": {}
-        }
-      },
-      "Xamarin.Google.Code.FindBugs.JSR305/3.0.2.21": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Jsr305Binding.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Jsr305Binding.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Google.Crypto.Tink.Android/1.18.0.1": {
-        "type": "package",
-        "dependencies": {
-          "GoogleGson": "2.13.1.1",
-          "Xamarin.AndroidX.Annotation.Jvm": "1.9.1.5",
-          "Xamarin.Google.Code.FindBugs.JSR305": "3.0.2.21",
-          "Xamarin.Google.ErrorProne.Annotations": "2.41.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Google.Crypto.Tink.Android.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Google.Crypto.Tink.Android.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Google.ErrorProne.Annotations/2.41.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Google.ErrorProne.Annotations.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Google.ErrorProne.Annotations.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Google.Guava.ListenableFuture/1.0.0.29": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Google.Guava.ListenableFuture.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Google.Guava.ListenableFuture.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Jetbrains.Annotations/26.0.2.3": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Jetbrains.Annotations.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Jetbrains.Annotations.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.JSpecify/1.0.0.4": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.JSpecify.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.JSpecify.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.Kotlin.StdLib/2.2.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Jetbrains.Annotations": "26.0.2.3"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.Kotlin.StdLib.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.Kotlin.StdLib.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.KotlinX.Coroutines.Android/1.10.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Kotlin.StdLib": "2.2.0.1",
-          "Xamarin.KotlinX.Coroutines.Core.Jvm": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Coroutines.Android.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Coroutines.Android.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.KotlinX.Coroutines.Core/1.10.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.KotlinX.Coroutines.Core.Jvm": "1.10.2.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Coroutines.Core.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Coroutines.Core.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.KotlinX.Coroutines.Core.Jvm/1.10.2.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Jetbrains.Annotations": "26.0.2.3",
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Coroutines.Core.Jvm.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Coroutines.Core.Jvm.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.KotlinX.Serialization.Core/1.9.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.KotlinX.Serialization.Core.Jvm": "1.9.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Serialization.Core.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Serialization.Core.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      },
-      "Xamarin.KotlinX.Serialization.Core.Jvm/1.9.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Xamarin.Kotlin.StdLib": "2.2.0.1"
-        },
-        "compile": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Serialization.Core.Jvm.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-android36.0/Xamarin.KotlinX.Serialization.Core.Jvm.dll": {
-            "related": ".aar;.pdb;.xml"
-          }
-        }
-      }
-    },
-    "net10.0-android/maccatalyst-arm64": {
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -9942,6 +7505,22 @@
       }
     },
     "net10.0-android/maccatalyst-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -12427,6 +10006,22 @@
       }
     },
     "net10.0-android/win-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -14912,6 +12507,22 @@
       }
     },
     "net10.0-ios": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -15377,6 +12988,22 @@
       }
     },
     "net10.0-ios/android-arm64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -15842,471 +13469,22 @@
       }
     },
     "net10.0-ios/iossimulator-x64": {
-      "Microsoft.Extensions.Configuration/10.0.0": {
+      "CommunityToolkit.Mvvm/8.4.2": {
         "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
         "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/net8.0/_._": {}
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
         }
       },
-      "Microsoft.Extensions.Configuration.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Diagnostics.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.FileProviders.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Hosting.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Debug/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Options/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Options.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Primitives/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Maui.Controls/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Build.Tasks": "10.0.20",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20",
-          "Microsoft.Maui.Resizetizer": "10.0.20"
-        }
-      },
-      "Microsoft.Maui.Controls.Build.Tasks/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20"
-        },
-        "build": {
-          "buildTransitive/net6.0-ios10.0/Microsoft.Maui.Controls.Build.Tasks.props": {},
-          "buildTransitive/net6.0-ios10.0/Microsoft.Maui.Controls.Build.Tasks.targets": {}
-        }
-      },
-      "Microsoft.Maui.Controls.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Controls.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Controls.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "resource": {
-          "lib/net10.0-ios26.0/ar/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ar"
-          },
-          "lib/net10.0-ios26.0/ca/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ca"
-          },
-          "lib/net10.0-ios26.0/cs/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "cs"
-          },
-          "lib/net10.0-ios26.0/da/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "da"
-          },
-          "lib/net10.0-ios26.0/de/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "de"
-          },
-          "lib/net10.0-ios26.0/el/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "el"
-          },
-          "lib/net10.0-ios26.0/es/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "es"
-          },
-          "lib/net10.0-ios26.0/fi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fi"
-          },
-          "lib/net10.0-ios26.0/fr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fr"
-          },
-          "lib/net10.0-ios26.0/he/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "he"
-          },
-          "lib/net10.0-ios26.0/hi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hi"
-          },
-          "lib/net10.0-ios26.0/hr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hr"
-          },
-          "lib/net10.0-ios26.0/hu/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hu"
-          },
-          "lib/net10.0-ios26.0/id/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "id"
-          },
-          "lib/net10.0-ios26.0/it/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "it"
-          },
-          "lib/net10.0-ios26.0/ja/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ja"
-          },
-          "lib/net10.0-ios26.0/ko/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ko"
-          },
-          "lib/net10.0-ios26.0/ms/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ms"
-          },
-          "lib/net10.0-ios26.0/nb/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nb"
-          },
-          "lib/net10.0-ios26.0/nl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nl"
-          },
-          "lib/net10.0-ios26.0/pl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pl"
-          },
-          "lib/net10.0-ios26.0/pt-BR/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt-BR"
-          },
-          "lib/net10.0-ios26.0/pt/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt"
-          },
-          "lib/net10.0-ios26.0/ro/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ro"
-          },
-          "lib/net10.0-ios26.0/ru/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ru"
-          },
-          "lib/net10.0-ios26.0/sk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sk"
-          },
-          "lib/net10.0-ios26.0/sv/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sv"
-          },
-          "lib/net10.0-ios26.0/th/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "th"
-          },
-          "lib/net10.0-ios26.0/tr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "tr"
-          },
-          "lib/net10.0-ios26.0/uk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "uk"
-          },
-          "lib/net10.0-ios26.0/vi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "vi"
-          },
-          "lib/net10.0-ios26.0/zh-HK/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-HK"
-          },
-          "lib/net10.0-ios26.0/zh-Hans/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hans"
-          },
-          "lib/net10.0-ios26.0/zh-Hant/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hant"
-          }
-        }
-      },
-      "Microsoft.Maui.Controls.Xaml/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Essentials": "10.0.20",
-          "Microsoft.Maui.Graphics": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/Microsoft.Maui.Core.props": {},
-          "buildTransitive/Microsoft.Maui.Core.targets": {}
-        }
-      },
-      "Microsoft.Maui.Essentials/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Graphics": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Essentials.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Essentials.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Graphics/10.0.20": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-ios26.0/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Resizetizer/10.0.20": {
-        "type": "package",
-        "build": {
-          "buildTransitive/Microsoft.Maui.Resizetizer.props": {},
-          "buildTransitive/Microsoft.Maui.Resizetizer.targets": {}
-        }
-      },
-      "Microsoft.NET.ILLink.Tasks/10.0.9": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.NET.ILLink.Tasks.props": {}
-        }
-      }
-    },
-    "net10.0-ios/maccatalyst-arm64": {
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -16772,6 +13950,22 @@
       }
     },
     "net10.0-ios/maccatalyst-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -17237,6 +14431,22 @@
       }
     },
     "net10.0-ios/win-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -17702,6 +14912,22 @@
       }
     },
     "net10.0-maccatalyst": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -18167,6 +15393,22 @@
       }
     },
     "net10.0-maccatalyst/android-arm64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -18632,471 +15874,22 @@
       }
     },
     "net10.0-maccatalyst/iossimulator-x64": {
-      "Microsoft.Extensions.Configuration/10.0.0": {
+      "CommunityToolkit.Mvvm/8.4.2": {
         "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
         "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/net8.0/_._": {}
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
         }
       },
-      "Microsoft.Extensions.Configuration.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Diagnostics.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.FileProviders.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Hosting.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Debug/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Options/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Options.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Primitives/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Maui.Controls/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Build.Tasks": "10.0.20",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20",
-          "Microsoft.Maui.Resizetizer": "10.0.20"
-        }
-      },
-      "Microsoft.Maui.Controls.Build.Tasks/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20"
-        },
-        "build": {
-          "buildTransitive/net6.0-maccatalyst13.1/Microsoft.Maui.Controls.Build.Tasks.props": {},
-          "buildTransitive/net6.0-maccatalyst13.1/Microsoft.Maui.Controls.Build.Tasks.targets": {}
-        }
-      },
-      "Microsoft.Maui.Controls.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Controls.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Controls.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "resource": {
-          "lib/net10.0-maccatalyst26.0/ar/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ar"
-          },
-          "lib/net10.0-maccatalyst26.0/ca/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ca"
-          },
-          "lib/net10.0-maccatalyst26.0/cs/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "cs"
-          },
-          "lib/net10.0-maccatalyst26.0/da/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "da"
-          },
-          "lib/net10.0-maccatalyst26.0/de/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "de"
-          },
-          "lib/net10.0-maccatalyst26.0/el/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "el"
-          },
-          "lib/net10.0-maccatalyst26.0/es/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "es"
-          },
-          "lib/net10.0-maccatalyst26.0/fi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fi"
-          },
-          "lib/net10.0-maccatalyst26.0/fr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fr"
-          },
-          "lib/net10.0-maccatalyst26.0/he/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "he"
-          },
-          "lib/net10.0-maccatalyst26.0/hi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hi"
-          },
-          "lib/net10.0-maccatalyst26.0/hr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hr"
-          },
-          "lib/net10.0-maccatalyst26.0/hu/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hu"
-          },
-          "lib/net10.0-maccatalyst26.0/id/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "id"
-          },
-          "lib/net10.0-maccatalyst26.0/it/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "it"
-          },
-          "lib/net10.0-maccatalyst26.0/ja/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ja"
-          },
-          "lib/net10.0-maccatalyst26.0/ko/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ko"
-          },
-          "lib/net10.0-maccatalyst26.0/ms/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ms"
-          },
-          "lib/net10.0-maccatalyst26.0/nb/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nb"
-          },
-          "lib/net10.0-maccatalyst26.0/nl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nl"
-          },
-          "lib/net10.0-maccatalyst26.0/pl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pl"
-          },
-          "lib/net10.0-maccatalyst26.0/pt-BR/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt-BR"
-          },
-          "lib/net10.0-maccatalyst26.0/pt/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt"
-          },
-          "lib/net10.0-maccatalyst26.0/ro/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ro"
-          },
-          "lib/net10.0-maccatalyst26.0/ru/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ru"
-          },
-          "lib/net10.0-maccatalyst26.0/sk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sk"
-          },
-          "lib/net10.0-maccatalyst26.0/sv/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sv"
-          },
-          "lib/net10.0-maccatalyst26.0/th/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "th"
-          },
-          "lib/net10.0-maccatalyst26.0/tr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "tr"
-          },
-          "lib/net10.0-maccatalyst26.0/uk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "uk"
-          },
-          "lib/net10.0-maccatalyst26.0/vi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "vi"
-          },
-          "lib/net10.0-maccatalyst26.0/zh-HK/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-HK"
-          },
-          "lib/net10.0-maccatalyst26.0/zh-Hans/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hans"
-          },
-          "lib/net10.0-maccatalyst26.0/zh-Hant/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hant"
-          }
-        }
-      },
-      "Microsoft.Maui.Controls.Xaml/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Essentials": "10.0.20",
-          "Microsoft.Maui.Graphics": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/Microsoft.Maui.Core.props": {},
-          "buildTransitive/Microsoft.Maui.Core.targets": {}
-        }
-      },
-      "Microsoft.Maui.Essentials/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Graphics": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Essentials.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Essentials.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Graphics/10.0.20": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-maccatalyst26.0/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Resizetizer/10.0.20": {
-        "type": "package",
-        "build": {
-          "buildTransitive/Microsoft.Maui.Resizetizer.props": {},
-          "buildTransitive/Microsoft.Maui.Resizetizer.targets": {}
-        }
-      },
-      "Microsoft.NET.ILLink.Tasks/10.0.9": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.NET.ILLink.Tasks.props": {}
-        }
-      }
-    },
-    "net10.0-maccatalyst/maccatalyst-arm64": {
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -19562,6 +16355,22 @@
       }
     },
     "net10.0-maccatalyst/maccatalyst-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -20027,6 +16836,22 @@
       }
     },
     "net10.0-maccatalyst/win-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -20492,6 +17317,22 @@
       }
     },
     "net10.0-windows10.0.19041.0": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -21208,6 +18049,22 @@
       }
     },
     "net10.0-windows10.0.19041.0/android-arm64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -21862,660 +18719,22 @@
       }
     },
     "net10.0-windows10.0.19041.0/iossimulator-x64": {
-      "Microsoft.Extensions.Configuration/10.0.0": {
+      "CommunityToolkit.Mvvm/8.4.2": {
         "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
         "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/net8.0/_._": {}
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
         }
       },
-      "Microsoft.Extensions.Configuration.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Diagnostics.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.FileProviders.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Hosting.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "10.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Abstractions/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Debug/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Logging.Debug.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Options/10.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "10.0.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Options.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Options.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Primitives/10.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Graphics.Win2D/1.3.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.WindowsAppSDK": "1.6.241114003"
-        },
-        "compile": {
-          "lib/net6.0-windows10.0.19041.0/Microsoft.Graphics.Canvas.Interop.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0-windows10.0.19041.0/Microsoft.Graphics.Canvas.Interop.dll": {}
-        },
-        "build": {
-          "buildTransitive/net6.0-windows10.0.19041.0/Microsoft.Graphics.Win2D.props": {},
-          "buildTransitive/net6.0-windows10.0.19041.0/Microsoft.Graphics.Win2D.targets": {}
-        }
-      },
-      "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Controls/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Build.Tasks": "10.0.20",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20",
-          "Microsoft.Maui.Resizetizer": "10.0.20"
-        }
-      },
-      "Microsoft.Maui.Controls.Build.Tasks/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Controls.Xaml": "10.0.20"
-        },
-        "build": {
-          "buildTransitive/net6.0-windows10.0.17763.0/Microsoft.Maui.Controls.Build.Tasks.props": {},
-          "buildTransitive/net6.0-windows10.0.17763.0/Microsoft.Maui.Controls.Build.Tasks.targets": {}
-        }
-      },
-      "Microsoft.Maui.Controls.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Controls.dll": {
-            "related": ".pdb;.pri;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Controls.dll": {
-            "related": ".pdb;.pri;.xml"
-          }
-        },
-        "resource": {
-          "lib/net10.0-windows10.0.19041/ar/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ar"
-          },
-          "lib/net10.0-windows10.0.19041/ca/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ca"
-          },
-          "lib/net10.0-windows10.0.19041/cs/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "cs"
-          },
-          "lib/net10.0-windows10.0.19041/da/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "da"
-          },
-          "lib/net10.0-windows10.0.19041/de/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "de"
-          },
-          "lib/net10.0-windows10.0.19041/el/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "el"
-          },
-          "lib/net10.0-windows10.0.19041/es/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "es"
-          },
-          "lib/net10.0-windows10.0.19041/fi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fi"
-          },
-          "lib/net10.0-windows10.0.19041/fr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "fr"
-          },
-          "lib/net10.0-windows10.0.19041/he/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "he"
-          },
-          "lib/net10.0-windows10.0.19041/hi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hi"
-          },
-          "lib/net10.0-windows10.0.19041/hr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hr"
-          },
-          "lib/net10.0-windows10.0.19041/hu/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "hu"
-          },
-          "lib/net10.0-windows10.0.19041/id/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "id"
-          },
-          "lib/net10.0-windows10.0.19041/it/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "it"
-          },
-          "lib/net10.0-windows10.0.19041/ja/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ja"
-          },
-          "lib/net10.0-windows10.0.19041/ko/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ko"
-          },
-          "lib/net10.0-windows10.0.19041/ms/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ms"
-          },
-          "lib/net10.0-windows10.0.19041/nb/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nb"
-          },
-          "lib/net10.0-windows10.0.19041/nl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "nl"
-          },
-          "lib/net10.0-windows10.0.19041/pl/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pl"
-          },
-          "lib/net10.0-windows10.0.19041/pt-BR/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt-BR"
-          },
-          "lib/net10.0-windows10.0.19041/pt/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "pt"
-          },
-          "lib/net10.0-windows10.0.19041/ro/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ro"
-          },
-          "lib/net10.0-windows10.0.19041/ru/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "ru"
-          },
-          "lib/net10.0-windows10.0.19041/sk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sk"
-          },
-          "lib/net10.0-windows10.0.19041/sv/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "sv"
-          },
-          "lib/net10.0-windows10.0.19041/th/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "th"
-          },
-          "lib/net10.0-windows10.0.19041/tr/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "tr"
-          },
-          "lib/net10.0-windows10.0.19041/uk/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "uk"
-          },
-          "lib/net10.0-windows10.0.19041/vi/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "vi"
-          },
-          "lib/net10.0-windows10.0.19041/zh-HK/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-HK"
-          },
-          "lib/net10.0-windows10.0.19041/zh-Hans/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hans"
-          },
-          "lib/net10.0-windows10.0.19041/zh-Hant/Microsoft.Maui.Controls.resources.dll": {
-            "locale": "zh-Hant"
-          }
-        }
-      },
-      "Microsoft.Maui.Controls.Xaml/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Maui.Controls.Core": "10.0.20",
-          "Microsoft.Maui.Core": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Controls.Xaml.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Core/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "10.0.0",
-          "Microsoft.Extensions.DependencyInjection": "10.0.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.Graphics.Win2D": "1.3.2",
-          "Microsoft.Maui.Essentials": "10.0.20",
-          "Microsoft.Maui.Graphics": "10.0.20",
-          "Microsoft.Maui.Graphics.Win2D.WinUI.Desktop": "10.0.20",
-          "Microsoft.Web.WebView2": "1.0.3179.45",
-          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.756",
-          "Microsoft.WindowsAppSDK": "1.7.250909003"
-        },
-        "compile": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.dll": {
-            "related": ".pdb;.pri;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.dll": {
-            "related": ".pdb;.pri;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net10.0-windows10.0.17763.0/Microsoft.Maui.Core.props": {},
-          "buildTransitive/net10.0-windows10.0.17763.0/Microsoft.Maui.Core.targets": {}
-        }
-      },
-      "Microsoft.Maui.Essentials/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Maui.Graphics": "10.0.20",
-          "Microsoft.Web.WebView2": "1.0.3179.45"
-        },
-        "compile": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Essentials.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Essentials.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Graphics/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Graphics.Win2D": "1.3.2",
-          "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
-          "Microsoft.WindowsAppSDK": "1.7.250909003"
-        },
-        "compile": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Graphics.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Microsoft.Maui.Graphics.Win2D.WinUI.Desktop/10.0.20": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Graphics.Win2D": "1.3.2",
-          "Microsoft.Maui.Graphics": "10.0.20"
-        },
-        "compile": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Graphics.Win2D.WinUI.Desktop.dll": {
-            "related": ".pdb"
-          }
-        },
-        "runtime": {
-          "lib/net10.0-windows10.0.19041/Microsoft.Maui.Graphics.Win2D.WinUI.Desktop.dll": {
-            "related": ".pdb"
-          }
-        }
-      },
-      "Microsoft.Maui.Resizetizer/10.0.20": {
-        "type": "package",
-        "build": {
-          "buildTransitive/Microsoft.Maui.Resizetizer.props": {},
-          "buildTransitive/Microsoft.Maui.Resizetizer.targets": {}
-        }
-      },
-      "Microsoft.Web.WebView2/1.0.3179.45": {
-        "type": "package",
-        "build": {
-          "buildTransitive/Microsoft.Web.WebView2.targets": {}
-        }
-      },
-      "Microsoft.Windows.SDK.BuildTools/10.0.22621.756": {
-        "type": "package",
-        "build": {
-          "buildTransitive/Microsoft.Windows.SDK.BuildTools.props": {},
-          "buildTransitive/Microsoft.Windows.SDK.BuildTools.targets": {}
-        }
-      },
-      "Microsoft.WindowsAppSDK/1.7.250909003": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Web.WebView2": "1.0.2903.40",
-          "Microsoft.Windows.SDK.BuildTools": "10.0.22621.756"
-        },
-        "compile": {
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Graphics.Imaging.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.InteractiveExperiences.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Security.Authentication.OAuth.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.WinUI.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.ContentSafety.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Imaging.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Text.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppLifecycle.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppNotifications.Builder.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppNotifications.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.Background.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.Resources.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.BadgeNotifications.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Management.Deployment.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Media.Capture.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.PushNotifications.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Security.AccessControl.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Storage.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.System.Power.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.System.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Widgets.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.WindowsAppRuntime.Bootstrap.Net.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Graphics.Imaging.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.InteractiveExperiences.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Security.Authentication.OAuth.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.WinUI.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.ContentSafety.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Imaging.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Text.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppLifecycle.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppNotifications.Builder.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppNotifications.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.Background.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.Resources.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.BadgeNotifications.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Management.Deployment.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Media.Capture.Projection.dll": {},
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.PushNotifications.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Security.AccessControl.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Storage.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.System.Power.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.System.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Widgets.Projection.dll": {
-            "related": ".xml"
-          },
-          "lib/net6.0-windows10.0.18362.0/Microsoft.WindowsAppRuntime.Bootstrap.Net.dll": {}
-        },
-        "build": {
-          "buildTransitive/Microsoft.WindowsAppSDK.props": {},
-          "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
-        }
-      }
-    },
-    "net10.0-windows10.0.19041.0/maccatalyst-arm64": {
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -23170,6 +19389,22 @@
       }
     },
     "net10.0-windows10.0.19041.0/maccatalyst-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -23824,6 +20059,22 @@
       }
     },
     "net10.0-windows10.0.19041.0/win-x64": {
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/10.0.0": {
         "type": "package",
         "dependencies": {
@@ -24489,6 +20740,46 @@
     }
   },
   "libraries": {
+    "CommunityToolkit.Mvvm/8.4.2": {
+      "sha512": "WadCzGEc2U+3e20avRLng4qNtt4zoOGWrdUISqJWrHe3/FSnrYjuM5Sb4yQb09LhkBXrrI4Zt3dLKgRMbItsrg==",
+      "type": "package",
+      "path": "communitytoolkit.mvvm/8.4.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "License.md",
+        "ThirdPartyNotices.txt",
+        "analyzers/dotnet/roslyn4.0/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.0/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn4.12/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.12/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn4.3/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.3/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn5.0/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn5.0/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "build/CommunityToolkit.Mvvm.FeatureSwitches.targets",
+        "build/CommunityToolkit.Mvvm.SourceGenerators.targets",
+        "build/CommunityToolkit.Mvvm.Windows.targets",
+        "build/CommunityToolkit.Mvvm.WindowsSdk.targets",
+        "build/CommunityToolkit.Mvvm.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.FeatureSwitches.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.SourceGenerators.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.Windows.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.WindowsSdk.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.targets",
+        "communitytoolkit.mvvm.8.4.2.nupkg.sha512",
+        "communitytoolkit.mvvm.nuspec",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.xml",
+        "lib/net8.0/CommunityToolkit.Mvvm.dll",
+        "lib/net8.0/CommunityToolkit.Mvvm.xml",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.dll",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.xml",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.dll",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.xml"
+      ]
+    },
     "GoogleGson/2.13.1.1": {
       "sha512": "1yD5W1UPmgEEHrqdtVJI7330h1foGWiehVC07er3NiZxJPMmphTmPz2kuSXawIo8xmeIvd92WpiTOEmYpk6mzQ==",
       "type": "package",
@@ -29071,24 +25362,28 @@
   },
   "projectFileDependencyGroups": {
     "net10.0-android": [
+      "CommunityToolkit.Mvvm >= 8.4.2",
       "Microsoft.Extensions.DependencyInjection >= 10.0.0",
       "Microsoft.Extensions.Logging.Debug >= 10.0.0",
       "Microsoft.Maui.Controls >= 10.0.20",
       "Microsoft.NET.ILLink.Tasks >= 10.0.9"
     ],
     "net10.0-ios": [
+      "CommunityToolkit.Mvvm >= 8.4.2",
       "Microsoft.Extensions.DependencyInjection >= 10.0.0",
       "Microsoft.Extensions.Logging.Debug >= 10.0.0",
       "Microsoft.Maui.Controls >= 10.0.20",
       "Microsoft.NET.ILLink.Tasks >= 10.0.9"
     ],
     "net10.0-maccatalyst": [
+      "CommunityToolkit.Mvvm >= 8.4.2",
       "Microsoft.Extensions.DependencyInjection >= 10.0.0",
       "Microsoft.Extensions.Logging.Debug >= 10.0.0",
       "Microsoft.Maui.Controls >= 10.0.20",
       "Microsoft.NET.ILLink.Tasks >= 10.0.9"
     ],
     "net10.0-windows10.0.19041.0": [
+      "CommunityToolkit.Mvvm >= 8.4.2",
       "Microsoft.Extensions.DependencyInjection >= 10.0.0",
       "Microsoft.Extensions.Logging.Debug >= 10.0.0",
       "Microsoft.Maui.Controls >= 10.0.20"
@@ -29167,6 +25462,10 @@
         "framework": "net10.0-android36.0",
         "targetAlias": "net10.0-android",
         "dependencies": {
+          "CommunityToolkit.Mvvm": {
+            "target": "Package",
+            "version": "[8.4.2, )"
+          },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "[10.0.0, )"
@@ -29488,6 +25787,10 @@
         "framework": "net10.0-ios26.5",
         "targetAlias": "net10.0-ios",
         "dependencies": {
+          "CommunityToolkit.Mvvm": {
+            "target": "Package",
+            "version": "[8.4.2, )"
+          },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "[10.0.0, )"
@@ -29809,6 +26112,10 @@
         "framework": "net10.0-maccatalyst26.5",
         "targetAlias": "net10.0-maccatalyst",
         "dependencies": {
+          "CommunityToolkit.Mvvm": {
+            "target": "Package",
+            "version": "[8.4.2, )"
+          },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "[10.0.0, )"
@@ -30131,6 +26438,10 @@
         "framework": "net10.0-windows10.0.19041",
         "targetAlias": "net10.0-windows10.0.19041.0",
         "dependencies": {
+          "CommunityToolkit.Mvvm": {
+            "target": "Package",
+            "version": "[8.4.2, )"
+          },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "[10.0.0, )"
@@ -30157,24 +26468,8 @@
         "warn": true,
         "downloadDependencies": [
           {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[10.0.9, 10.0.9]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
-            "version": "[10.0.9, 10.0.9]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[10.0.9, 10.0.9]"
-          },
-          {
             "name": "Microsoft.Windows.SDK.NET.Ref",
             "version": "[10.0.19041.57, 10.0.19041.57]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[10.0.9, 10.0.9]"
           }
         ],
         "frameworkReferences": {
@@ -30467,9 +26762,6 @@
         "#import": []
       },
       "iossimulator-x64": {
-        "#import": []
-      },
-      "maccatalyst-arm64": {
         "#import": []
       },
       "maccatalyst-x64": {

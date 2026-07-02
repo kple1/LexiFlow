@@ -18,7 +18,7 @@ public class ApiService
 
         _http = new HttpClient(handler)
         {
-            BaseAddress = new Uri("https://192.168.97.1:7299/")
+            BaseAddress = new Uri("http://34.158.213.95:5276/")
         };
     }
     public async Task<List<Word>> GetWordsAsync()
