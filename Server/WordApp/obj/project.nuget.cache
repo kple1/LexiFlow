@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sLfupuJXD6M=",
+  "dgSpecHash": "jGzMcRr1KX4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Leepl\\source\\repos\\WordApp\\WordApp\\WordApp.csproj",
+  "projectFilePath": "D:\\LexiFlow\\Server\\WordApp\\WordApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Leepl\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Leepl\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
@@ -59,9 +59,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "'Microsoft.OpenApi' 2.0.0 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-v5pm-xwqc-g5wc이(가) 있습니다.",
-      "projectPath": "C:\\Users\\Leepl\\source\\repos\\WordApp\\WordApp\\WordApp.csproj",
+      "projectPath": "D:\\LexiFlow\\Server\\WordApp\\WordApp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Leepl\\source\\repos\\WordApp\\WordApp\\WordApp.csproj",
+      "filePath": "D:\\LexiFlow\\Server\\WordApp\\WordApp.csproj",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WordApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdc6d43e706494efdb5cccf8e5a4e9c5ed72e021")]
 [assembly: System.Reflection.AssemblyProductAttribute("WordApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WordApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

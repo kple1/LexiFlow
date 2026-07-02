@@ -61,6 +61,7 @@ public class NotionService
             English = Title(props, "English"),
             Meaning = Text(props, "Meaning"),
             Status = Select(props, "Status"),
+            Example = Text(props, "Example"),
             Note = Text(props, "Note") is { Length: > 0 } n ? n : null,
             NotionCreated = page.GetProperty("created_time").GetDateTime()
         };

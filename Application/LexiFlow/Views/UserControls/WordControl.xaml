@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.UserControls.WordControl">
+    <Grid HorizontalOptions="Center">
+        <VerticalStackLayout Padding="15">
+            <HorizontalStackLayout>
+                <Label Text="{Binding English}" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                <Grid Margin="10,0,0,0" BackgroundColor="Transparent" BindingContext="{Binding}" HorizontalOptions="Center">
+                    <Grid.GestureRecognizers>
+                        <PointerGestureRecognizer PointerPressed="OnWordsInformationClick"/>
+                    </Grid.GestureRecognizers>
+                    <Ellipse Fill="SkyBlue" WidthRequest="20" HeightRequest="20"/>
+                    <Label Text="!" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                </Grid>
+            </HorizontalStackLayout>
+            <Label Text="{Binding Meaning}" FontSize="16" TextColor="Gray" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

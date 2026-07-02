@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "lexiflow123!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - dbdata:/var/opt/mssql
+
+  api:
+    build: .
+    ports:
+      - "5276:5276"
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:5276"
+      ConnectionStrings__Default: "Server=db,1433;Database=WordDb;User Id=sa;Password=lexiflow123!;TrustServerCertificate=True"
+    depends_on:
+      - db
+
+volumes:
+  dbdata:

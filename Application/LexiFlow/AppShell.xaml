@@ -4,11 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:LexiFlow"
+    xmlns:view="clr-namespace:LexiFlow.Views"
     Title="LexiFlow">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="DailyWords"
+        ContentTemplate="{DataTemplate view:DailyWords}"
+        Route="DailyWordsPage" />
+    <ShellContent
+        Title="TestWords"
+        ContentTemplate="{DataTemplate view:TestWords}"
+        Route="TestWordsPage" />
+    <!--<ShellContent
+        Title="DailyWord"
+        ContentTemplate="{DataTemplate view:DailyWords}"
+        Route="DailyWordsPage" />-->
 
 </Shell>

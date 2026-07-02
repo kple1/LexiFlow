@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LexiFlow.Services;
+using LexiFlow.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LexiFlow
 {
@@ -14,9 +16,11 @@ namespace LexiFlow
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("RobotoSerif_28pt-Regular.ttf", "RobotoSerif");
                 });
+            builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddTransient<DailyWords>();
+            builder.Services.AddTransient<TestWords>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

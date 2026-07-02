@@ -3168,11 +3168,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Leepl\\source\\repos\\WordApp\\WordApp\\WordApp.csproj",
+      "projectUniqueName": "D:\\LexiFlow\\Server\\WordApp\\WordApp.csproj",
       "projectName": "WordApp",
-      "projectPath": "C:\\Users\\Leepl\\source\\repos\\WordApp\\WordApp\\WordApp.csproj",
+      "projectPath": "D:\\LexiFlow\\Server\\WordApp\\WordApp.csproj",
       "packagesPath": "C:\\Users\\Leepl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Leepl\\source\\repos\\WordApp\\WordApp\\obj\\",
+      "outputPath": "D:\\LexiFlow\\Server\\WordApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
