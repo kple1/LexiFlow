@@ -10,6 +10,7 @@ Notion을 데이터 원본으로 사용하는 풀스택 영어 단어 학습 앱
   <img alt="ASP.NET Core" src="https://img.shields.io/badge/ASP.NET_Core-Web_API-512BD4">
   <img alt="SQL Server" src="https://img.shields.io/badge/SQL_Server-2022-CC2927?logo=microsoftsqlserver&logoColor=white">
   <img alt="Docker" src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white">
+  <img alt="Google Cloud" src="https://img.shields.io/badge/Google_Cloud-Deployed-4285F4?logo=googlecloud&logoColor=white">
 </p>
 
 ---
@@ -20,36 +21,44 @@ Notion을 데이터 원본으로 사용하는 풀스택 영어 단어 학습 앱
 - **자동 동기화** — 서버가 Notion 변경사항을 주기적으로 감지하여 DB에 반영
 - **크로스플랫폼 앱** — .NET MAUI로 Android / Windows 지원
 - **컨테이너 배포** — Docker Compose로 API와 DB를 한 번에 실행
+- **클라우드 호스팅** — Google Cloud에 배포되어 어디서든 접속 가능
 - **REST API** — 표준 HTTP 인터페이스로 클라이언트와 통신
 
 ---
 
 ## 🏗️ 아키텍처
 
-데이터는 한 방향으로 흐릅니다. 각 계층은 자신의 역할만 수행합니다.
+데이터는 한 방향으로 흐릅니다. 각 계층은 자신의 역할만 수행합니다. 서버와 데이터베이스는 **Google Cloud**에 컨테이너로 배포되어 있습니다.
 
 ```
-┌─────────────┐   polling    ┌──────────────────┐   EF Core    ┌─────────────┐
-│   Notion    │ ───────────▶ │  ASP.NET Core    │ ───────────▶ │   MSSQL     │
-│ (단어 원본) │  (10초마다)  │  Web API (서버)  │   upsert     │  (WordDb)   │
-└─────────────┘              └──────────────────┘              └─────────────┘
-                                      │
-                                      │  GET /words (REST / JSON)
-                                      ▼
-                             ┌──────────────────┐
-                             │   .NET MAUI 앱   │
-                             │   (클라이언트)   │
-                             └──────────────────┘
+                        ┌─────────────────────────────────────────────┐
+                        │                Google Cloud                 │
+                        │                                             │
+  ┌─────────────┐       │   ┌──────────────────┐      ┌─────────────┐ │
+  │   Notion    │ ──────┼──▶│  ASP.NET Core    │─────▶│   MSSQL     │ │
+  │ (단어 원본) │polling │   │  Web API (서버)  │EFCore│  (WordDb)   │ │
+  └─────────────┘(10초)  │   └──────────────────┘upsert└─────────────┘ │
+                        │            │  [Docker Compose]               │
+                        └────────────┼────────────────────────────────┘
+                                     │  GET /words (REST / JSON)
+                                     │  ▲ 인터넷을 통해 어디서든 접속
+                                     ▼
+                            ┌──────────────────┐
+                            │   .NET MAUI 앱   │
+                            │   (클라이언트)   │
+                            └──────────────────┘
 ```
 
-| 계층 | 역할 |
-| --- | --- |
-| **Notion** | 데이터 원본. 사용자가 단어를 관리하는 곳 |
-| **서버 (Web API)** | Notion을 읽어 DB에 저장하고, 앱에 REST API 제공 |
-| **MSSQL** | 서버가 읽고 쓰는 저장소 |
-| **MAUI 앱** | 서버 API를 호출해 단어를 화면에 표시 |
+| 계층 | 역할 | 위치 |
+| --- | --- | --- |
+| **Notion** | 데이터 원본. 사용자가 단어를 관리하는 곳 | 외부 SaaS |
+| **서버 (Web API)** | Notion을 읽어 DB에 저장하고, 앱에 REST API 제공 | Google Cloud |
+| **MSSQL** | 서버가 읽고 쓰는 저장소 | Google Cloud |
+| **MAUI 앱** | 서버 API를 호출해 단어를 화면에 표시 | 사용자 기기 |
 
 > **설계 원칙:** 앱은 오직 서버의 REST API만 호출합니다. 앱이 DB나 Notion에 직접 접근하지 않아, 데이터 흐름이 단순하고 각 계층이 독립적입니다.
+
+> **클라우드 배포의 이점:** 서버가 클라우드에서 24시간 실행되므로, 개인 PC를 켜두지 않아도 됩니다. 앱은 와이파이·LTE 등 네트워크 환경과 무관하게 언제 어디서든 서버에 접속할 수 있습니다.
 
 ### 동기화 방식
 
@@ -228,6 +237,35 @@ bin/Release/net10.0-android/publish/io.leeple.lexiflow-Signed.apk
 
 ---
 
+## ☁️ 배포 (Google Cloud)
+
+이 프로젝트는 Docker 컨테이너로 패키징되어 **Google Cloud**에 배포됩니다. 서버와 데이터베이스가 클라우드에서 상시 실행되므로, 클라이언트 앱은 네트워크 환경과 무관하게 언제든 접속할 수 있습니다.
+
+**배포 흐름**
+
+```
+로컬 개발  →  docker compose 검증  →  이미지 빌드  →  Google Cloud 배포  →  앱이 클라우드 서버에 접속
+```
+
+**로컬에서 먼저 검증하는 이유**
+
+로컬에서 `docker compose up`으로 완전히 동작하는 것을 확인한 뒤 클라우드에 올립니다. 로컬에서 검증된 동일한 컨테이너 이미지가 클라우드에서도 그대로 실행되므로, "로컬에선 되는데 서버에선 안 되는" 문제를 최소화합니다.
+
+**클라이언트 설정**
+
+배포 후, 앱의 `ApiService.cs`에서 `BaseAddress`를 배포된 서버 주소로 지정합니다.
+
+```csharp
+_http = new HttpClient(handler)
+{
+    BaseAddress = new Uri("http://<배포된-서버-IP>:<포트>/")
+};
+```
+
+> **네트워크 확인 팁:** 앱을 다시 빌드하기 전에, 기기의 브라우저에서 `http://<서버-IP>:<포트>/words`에 접속해 JSON이 반환되는지 먼저 확인하세요. 이 한 번의 테스트로 문제가 네트워크에 있는지 앱 코드에 있는지 빠르게 구분할 수 있습니다.
+
+---
+
 ## 📄 라이선스
 
 이 프로젝트는 학습 목적으로 제작되었습니다.
@@ -235,5 +273,5 @@ bin/Release/net10.0-android/publish/io.leeple.lexiflow-Signed.apk
 ---
 
 <p align="center">
-  <sub>Built with .NET MAUI · ASP.NET Core · SQL Server · Docker</sub>
+  <sub>Built with .NET MAUI · ASP.NET Core · SQL Server · Docker · Google Cloud</sub>
 </p>
