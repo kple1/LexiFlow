@@ -23,4 +23,7 @@ public class ApiService
     }
     public async Task<List<Word>> GetWordsAsync()
         => await _http.GetFromJsonAsync<List<Word>>("words") ?? [];
+
+    public async Task<List<Grammar>> GetGrammarAsync()
+        => await _http.GetFromJsonAsync<List<Grammar>>("grammar") ?? [];
 }

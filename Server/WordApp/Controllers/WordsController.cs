@@ -5,7 +5,7 @@ using WordApp.Data;
 namespace WordApp.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[words]")]
 public class WordsController : ControllerBase
 {
     private readonly AppDbContext _db;

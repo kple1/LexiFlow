@@ -19,6 +19,39 @@ public class NotionService
     }
 
     // Notion 전체 단어 가져오기 (페이지네이션 포함)
+    public async Task<List<Grammar>> FetchAllAsyncGrammar(CancellationToken ct = default)
+    {
+        var grammars = new List<Grammar>();
+        string? cursor = null;
+
+        do
+        {
+            var body = cursor is null
+                ? "{\"page_size\":100}"
+                : $"{{\"page_size\":100,\"start_cursor\":\"{cursor}\"}}";
+
+            using var req = new HttpRequestMessage(HttpMethod.Post,
+                $"v1/data_sources/{_dataSourceId}/query");
+            req.Content = new StringContent(body, Encoding.UTF8, "application/json");
+
+            using var res = await _http.SendAsync(req, ct);
+            res.EnsureSuccessStatusCode();
+
+            using var doc = JsonDocument.Parse(await res.Content.ReadAsStringAsync(ct));
+            var root = doc.RootElement;
+
+            foreach (var page in root.GetProperty("results").EnumerateArray())
+                grammars.Add(ParseGrammar(page));
+
+            cursor = root.GetProperty("has_more").GetBoolean()
+                ? root.GetProperty("next_cursor").GetString()
+                : null;
+        }
+        while (cursor is not null);
+
+        return grammars;
+    }
+
     public async Task<List<Word>> FetchAllAsync(CancellationToken ct = default)
     {
         var words = new List<Word>();
@@ -52,6 +85,21 @@ public class NotionService
         return words;
     }
 
+    private static Grammar ParseGrammar(JsonElement page)
+    {
+        var props = page.GetProperty("properties");
+        return new Grammar
+        {
+            Id = page.GetProperty("id").GetString()!,
+            Title = Title(props, "Title"),
+            Category = Select(props, "Category"),
+            Example = Text(props, "Example"),
+            Explanation = Text(props, "Explanation"),
+            Note = Text(props, "Note") is { Length: > 0 } n ? n : null,
+            Status = Select(props, "Status")
+        };
+    }
+
     private static Word Parse(JsonElement page)
     {
         var props = page.GetProperty("properties");
@@ -67,7 +115,6 @@ public class NotionService
         };
     }
 
-    // title: 배열 비었으면 "" 반환
     private static string Title(JsonElement p, string name)
     {
         if (!p.TryGetProperty(name, out var prop)) return "";
@@ -78,7 +125,6 @@ public class NotionService
         return "";
     }
 
-    // rich_text: 배열 비었으면 "" 반환
     private static string Text(JsonElement p, string name)
     {
         if (!p.TryGetProperty(name, out var prop)) return "";
@@ -89,7 +135,6 @@ public class NotionService
         return "";
     }
 
-    // select: null이면 "" 반환
     private static string Select(JsonElement p, string name)
     {
         if (!p.TryGetProperty(name, out var prop)) return "";

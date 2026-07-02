@@ -1,6 +1,7 @@
-@WordApp_HostAddress = http://localhost:5276
+@host = http://localhost:5276
 
-GET {{WordApp_HostAddress}}/weatherforecast/
-Accept: application/json
+### 전체 단어 조회
+GET {{host}}/words
 
-###
+### 상태별 필터
+GET {{host}}/words?status=모름

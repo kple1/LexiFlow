@@ -8,7 +8,7 @@
     Title="LexiFlow">
 
     <ShellContent
-        Title="DailyWords"
+        Title="AllWorlds"
         ContentTemplate="{DataTemplate view:DailyWords}"
         Route="DailyWordsPage" />
     <ShellContent

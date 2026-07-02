@@ -220,6 +220,26 @@ bin/Release/net10.0-android/publish/io.leeple.lexiflow-Signed.apk
 
 > 실기기에 사이드로딩 시, 삼성 기기는 **설정 → 보안 → 자동 차단**을 해제해야 설치됩니다.
 
+### 5. Windows 배포용 빌드
+
+Windows는 실행 파일과 의존 DLL을 담은 **폴더 형태**로 배포합니다.
+
+```bash
+dotnet publish -f net10.0-windows10.0.19041.0 -c Release -p:WindowsPackageType=None
+```
+
+결과물 위치:
+
+```
+bin/Release/net10.0-windows10.0.19041.0/publish/
+```
+
+이 폴더 안의 `LexiFlow.exe`가 실행 파일입니다. **폴더 전체를 압축(zip)하여 배포**하고, 받는 쪽에서 압축을 푼 뒤 `LexiFlow.exe`를 실행합니다. (`.exe` 단독으로는 의존 DLL이 없어 실행되지 않습니다.)
+
+> **참고**
+> - 실행하려면 대상 PC에 **.NET 10 데스크톱 런타임**이 필요합니다.
+> - MAUI Windows는 단일 파일 배포(`PublishSingleFile`)가 불안정하므로, 폴더 배포를 권장합니다.
+
 ---
 
 ## ⚙️ 설정
