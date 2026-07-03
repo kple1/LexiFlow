@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddHttpClient<NotionService>();
 builder.Services.AddHostedService<WordSyncService>();
+builder.Services.AddHostedService<GrammarSyncService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
