@@ -81,35 +81,26 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\AppIcon\" />
-	  <Folder Include="Resources\Images\" />
-	  <Folder Include="ViewModels\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\DailyWords.xaml.cs">
-	    <DependentUpon>DailyWords.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Grammar.xaml.cs">
-	    <DependentUpon>Grammar.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\TestWords.xaml.cs">
-	    <DependentUpon>TestWords.xaml</DependentUpon>
-	  </Compile>
+		<MauiXaml Include="**/*.xaml" />
+
+		<Compile Update="**/*.xaml.cs">
+			<DependentUpon>%(Filename).xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\DailyWords.xaml">
+	  <MauiXaml Update="Views\UserManageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Grammar.xaml">
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Views\UserManageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\TestWords.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\UserControls\WordControl.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+	  </None>
 	</ItemGroup>
 
 </Project>

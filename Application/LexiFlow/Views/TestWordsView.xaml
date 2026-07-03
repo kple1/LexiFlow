@@ -2,11 +2,12 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:uc="clr-namespace:LexiFlow.Views.UserControls"
-             x:Class="LexiFlow.Views.TestWords"
-             Title="TestWords">
+             x:Class="LexiFlow.Views.TestWordsView"
+             Title="TestWords"
+             Background="#222222">
     <Grid HorizontalOptions="Center" VerticalOptions="Center">
         <VerticalStackLayout>
-            <Label Text="Remember 10 words in today." Style="{StaticResource Title}" HorizontalOptions="Center"/>
+            <Label Text="Remember 10 words." Style="{StaticResource Title}" HorizontalOptions="Center"/>
             <Label Text="if you reopen this form, reset the problems." TextColor="Gray" HorizontalOptions="Center"/>
             <VerticalStackLayout Margin="30">
                 

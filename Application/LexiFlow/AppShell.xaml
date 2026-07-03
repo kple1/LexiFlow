@@ -6,18 +6,26 @@
     xmlns:local="clr-namespace:LexiFlow"
     xmlns:view="clr-namespace:LexiFlow.Views"
     Title="LexiFlow">
+    <Shell.Resources>
+        <Style TargetType="Shell" ApplyToDerivedTypes="True">
+            <Setter Property="Shell.BackgroundColor" Value="#222222"/>
+            <Setter Property="Shell.ForegroundColor" Value="#F9F9F9"/>
+        </Style>
+    </Shell.Resources>
 
-    <ShellContent
-        Title="AllWorlds"
-        ContentTemplate="{DataTemplate view:DailyWords}"
-        Route="DailyWordsPage" />
-    <ShellContent
-        Title="TestWords"
-        ContentTemplate="{DataTemplate view:TestWords}"
-        Route="TestWordsPage" />
-    <!--<ShellContent
-        Title="DailyWord"
-        ContentTemplate="{DataTemplate view:DailyWords}"
-        Route="DailyWordsPage" />-->
+    <TabBar>
+        <Tab Icon="book.png" Title="Words" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:WordsView}"/>
+        </Tab>
+        <Tab Icon="test.png" Title="WordTest" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:TestWordsView}"/>
+        </Tab>
+        <Tab Icon="a.png" Title="Grammar" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:GrammarView}"/>
+        </Tab>
+        <Tab Icon="user.png" Title="Account" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:UserManageView}"/>
+        </Tab>
+    </TabBar>
 
 </Shell>

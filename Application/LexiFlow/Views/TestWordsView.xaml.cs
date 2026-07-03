@@ -3,12 +3,12 @@ using LexiFlow.Services;
 
 namespace LexiFlow.Views;
 
-public partial class TestWords : ContentPage
+public partial class TestWordsView : ContentPage
 {
 	private List<CorrectWordState> _words = [];
 	private int _page = 0;
 	private readonly ApiService _api;
-	public TestWords(ApiService api)
+	public TestWordsView(ApiService api)
 	{
 		InitializeComponent();
 		_api = api;
@@ -71,7 +71,7 @@ public partial class TestWords : ContentPage
             }
 			else
 			{
-				display.Text = "Congratulations! You've completed the test.";
+				display.Text = "Congratulations!";
 				results.ItemsSource = _words.Select(x => x.Word).ToList();
 				return;
 			}

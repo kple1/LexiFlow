@@ -1,0 +1,35 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:uc="clr-namespace:LexiFlow.Views.UserControls"
+             xmlns:vm="clr-namespace:LexiFlow.ViewModels"
+             x:Class="LexiFlow.Views.WordsView"
+             Title="Words"
+             BackgroundColor="#222222">
+    <Grid RowDefinitions="Auto,*">
+        <HorizontalStackLayout Margin="5" Grid.Row="0" HeightRequest="30" HorizontalOptions="Center">
+            <Entry x:Name="search" Placeholder="Search words..." WidthRequest="300"
+                   Text="{Binding SearchText}"/>
+            <Image Source="search.png" Margin="10,0,0,0">
+                <Image.GestureRecognizers>
+                    <PointerGestureRecognizer PointerPressed="OnSearchClick"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </HorizontalStackLayout>
+
+        <CollectionView ItemsSource="{Binding Words}" Grid.Row="1">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <uc:WordControl>
+                        <uc:WordControl.GestureRecognizers>
+                            <PointerGestureRecognizer PointerPressed="OnWordClick"/>
+                        </uc:WordControl.GestureRecognizers>
+                    </uc:WordControl>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

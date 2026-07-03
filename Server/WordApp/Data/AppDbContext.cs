@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Word> Words => Set<Word>();
     public DbSet<Grammar> Grammars => Set<Grammar>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
@@ -23,5 +24,8 @@ public class AppDbContext : DbContext
         mb.Entity<Grammar>().Property(g => g.Explanation).HasMaxLength(1000);
         mb.Entity<Grammar>().Property(g => g.Note).HasMaxLength(500);
         mb.Entity<Grammar>().Property(g => g.Status).HasMaxLength(50);
+        mb.Entity<User>().HasKey(u => u.Id);
+        mb.Entity<User>().Property(u => u.UserId).HasMaxLength(100);
+        mb.Entity<User>().Property(u => u.Pw).HasMaxLength(200);
     }
 }

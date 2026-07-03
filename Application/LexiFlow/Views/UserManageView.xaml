@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.UserManageView"
+             Title="UserManageView"
+             Background="#222222">
+    <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center">
+        <Label Text="Sign up" Style="{StaticResource Title}" Margin="0,0,0,10"/>
+        <Label Text="ID"/>
+        <Entry x:Name="id" WidthRequest="300" Placeholder="ID" Margin="0,0,0,5"/>
+        <Label Text="PW"/>
+        <Entry x:Name="pw" WidthRequest="300" Placeholder="PW" IsPassword="True" Margin="0,0,0,5"/>
+        <Label Text="Sign up" HorizontalOptions="End">
+            <Label.GestureRecognizers>
+                <PointerGestureRecognizer PointerPressed="OnSignUpClick"/>
+            </Label.GestureRecognizers>
+        </Label>
+        
+        <Label Text="is first?" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" TextColor="DeepSkyBlue" TextDecorations="Underline" Margin="0,40,0,0">
+            <Label.GestureRecognizers>
+                <PointerGestureRecognizer PointerPressed="OnSignInClick"/>
+            </Label.GestureRecognizers>
+        </Label>
+    </VerticalStackLayout>
+</ContentPage>

@@ -15,7 +15,7 @@ namespace LexiFlow
             var window = new Window(new AppShell())
             {
                 Width = 1024,
-                Height = 768
+                Height = 550
             };
 
             var display = DeviceDisplay.MainDisplayInfo;
