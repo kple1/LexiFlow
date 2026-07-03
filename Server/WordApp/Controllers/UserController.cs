@@ -10,6 +10,8 @@ namespace WordApp.Controllers
     public class UserController : ControllerBase
     {
         public record ChangePwDto(string Pw);
+        public record RegisterDto(string UserId, string Pw);
+        public record LoginDto(string UserId, string Pw);
         private readonly AppDbContext _db;
         public UserController(AppDbContext db) => _db = db;
 
@@ -22,13 +24,33 @@ namespace WordApp.Controllers
             return Ok(q);
         }
 
+        // Sign up. Uses a DTO because User.Pw is [JsonIgnore], which would otherwise
+        // drop the incoming password on deserialization and store an empty hash.
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] RegisterDto dto)
         {
-            user.Pw = BCrypt.Net.BCrypt.HashPassword(user.Pw);
+            if (await _db.Users.AnyAsync(u => u.UserId == dto.UserId))
+                return Conflict("User ID already exists.");
+
+            var user = new User
+            {
+                UserId = dto.UserId,
+                Pw = BCrypt.Net.BCrypt.HashPassword(dto.Pw)
+            };
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+        }
+
+        // Sign in. Verifies the password server-side; the hash is never sent to clients.
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == dto.UserId);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Pw, user.Pw))
+                return Unauthorized();
+
+            return Ok(new { user.Id, user.UserId });
         }
 
         [HttpDelete("{id}")]

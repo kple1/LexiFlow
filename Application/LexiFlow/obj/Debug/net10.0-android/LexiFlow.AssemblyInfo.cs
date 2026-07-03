@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LexiFlow")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+4a27b7352698cd87fe35b0e6af2d15e2def3870e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+d6b151ee1ff274b6345f470cd04fa4bb2024cfd2")]
 [assembly: System.Reflection.AssemblyProductAttribute("LexiFlow")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LexiFlow")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

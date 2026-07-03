@@ -5,20 +5,20 @@
              Title="UserManageView"
              Background="#222222">
     <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center">
-        <Label Text="Sign up" Style="{StaticResource Title}" Margin="0,0,0,10"/>
+        <Label Text="Sign in" Style="{StaticResource Title}" Margin="0,0,0,10"/>
         <Label Text="ID"/>
         <Entry x:Name="id" WidthRequest="300" Placeholder="ID" Margin="0,0,0,5"/>
         <Label Text="PW"/>
         <Entry x:Name="pw" WidthRequest="300" Placeholder="PW" IsPassword="True" Margin="0,0,0,5"/>
-        <Label Text="Sign up" HorizontalOptions="End">
+        <Label Text="Sign in" HorizontalOptions="End">
             <Label.GestureRecognizers>
-                <PointerGestureRecognizer PointerPressed="OnSignUpClick"/>
+                <PointerGestureRecognizer PointerPressed="OnSignInClick"/>
             </Label.GestureRecognizers>
         </Label>
         
         <Label Text="is first?" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" TextColor="DeepSkyBlue" TextDecorations="Underline" Margin="0,40,0,0">
             <Label.GestureRecognizers>
-                <PointerGestureRecognizer PointerPressed="OnSignInClick"/>
+                <PointerGestureRecognizer PointerPressed="OnSignUpClick"/>
             </Label.GestureRecognizers>
         </Label>
     </VerticalStackLayout>

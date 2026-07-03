@@ -34,171 +34,89 @@ build_property.EnableCodeStyleSeverity =
 
 [D:/LexiFlow/Application/LexiFlow/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.App.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
-build_metadata.AdditionalFiles.TargetPath = App.xaml
-build_metadata.AdditionalFiles.RelativePath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.AppShell.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
-build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
-build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
-build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
-build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
-build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
-build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Views/GrammarView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.GrammarView.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.GrammarView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\GrammarView.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\GrammarView.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\GrammarView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\GrammarView.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Views/TestWordsView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.TestWordsView.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.TestWordsView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\TestWordsView.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\TestWordsView.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\TestWordsView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\TestWordsView.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Views/UserControls/WordControl.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.UserControls.WordControl.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.UserControls.WordControl.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\UserControls\WordControl.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\UserControls\WordControl.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\UserControls\WordControl.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\UserControls\WordControl.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Views/UserManageView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.UserManageView.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.UserManageView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\UserManageView.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\UserManageView.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\UserManageView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\UserManageView.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.LineInfo = 
 
 [D:/LexiFlow/Application/LexiFlow/Views/WordsView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.WordsView.xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.WordsView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\WordsView.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\WordsView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\WordsView.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\WordsView.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
-build_metadata.AdditionalFiles.LineInfo = 
-
-[D:/LexiFlow/Application/LexiFlow/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.obj.Debug.net10._0_windows10._0._19041._0.win_x64.Platforms.Windows.App.xaml
-build_metadata.AdditionalFiles.TargetPath = obj\Debug\net10.0-windows10.0.19041.0\win-x64\Platforms\Windows\App.xaml
-build_metadata.AdditionalFiles.RelativePath = obj\Debug\net10.0-windows10.0.19041.0\win-x64\Platforms\Windows\App.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 

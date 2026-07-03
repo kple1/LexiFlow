@@ -44,6 +44,10 @@
 		
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
+		<!-- Bundle the Windows App SDK runtime with the app so the unpackaged exe runs
+		     without a separately installed Windows App Runtime (fixes REGDB_E_CLASSNOTREG
+		     0x80040154 crash in Microsoft.UI.Xaml at startup). -->
+		<WindowsAppSDKSelfContained Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">true</WindowsAppSDKSelfContained>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
@@ -73,6 +77,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
@@ -83,13 +88,10 @@
 	  <Folder Include="Resources\AppIcon\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<MauiXaml Include="**/*.xaml" />
-
-		<Compile Update="**/*.xaml.cs">
-			<DependentUpon>%(Filename).xaml</DependentUpon>
-		</Compile>
-	</ItemGroup>
+	<!-- MAUI XAML (*.xaml) and their code-behind are auto-included by the SDK
+	     (EnableDefaultMauiItems). A manual "**/*.xaml" glob also scoops up the WinUI
+	     App.xaml copy under obj\, causing a duplicate InitializeComponent (CS0111),
+	     so it is intentionally omitted here. -->
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\UserManageView.xaml">
