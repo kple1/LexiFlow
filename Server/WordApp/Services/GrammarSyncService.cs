@@ -32,11 +32,12 @@ namespace WordApp.Services
                     {
                         if (existing.TryGetValue(w.Id, out var cur))
                         {
-                            cur.Explanation = w.Explanation;
-                            cur.Status = w.Status;
+                            cur.Title = w.Title;
                             cur.Category = w.Category;
-                            cur.Note = w.Note;
                             cur.Example = w.Example;
+                            cur.Explanation = w.Explanation;
+                            cur.Note = w.Note;
+                            cur.Status = w.Status;
                         }
                         else db.Grammars.Add(w);
                     }
