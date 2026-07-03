@@ -10,7 +10,7 @@ services:
       - dbdata:/var/opt/mssql
 
   api:
-    build: .
+    image: ghcr.io/kple1/lexiflow/wordapp:latest
     ports:
       - "5276:5276"
     environment:
@@ -18,7 +18,6 @@ services:
       ConnectionStrings__Default: "Server=db,1433;Database=WordDb;User Id=sa;Password=lexiflow123!;TrustServerCertificate=True"
     depends_on:
       - db
-    image: ghcr.io/kple1/lexiflow/wordapp:latest
 
 volumes:
   dbdata:

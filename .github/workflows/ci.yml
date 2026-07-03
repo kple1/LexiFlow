@@ -36,3 +36,18 @@ jobs:
           context: ./Server
           push: true
           tags: ${{ env.IMAGE }}:latest
+
+deploy:
+    needs: push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd ~/LexiFlow/Server
+            docker compose pull
+            docker compose up -d
