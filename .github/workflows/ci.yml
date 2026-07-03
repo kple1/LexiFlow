@@ -4,7 +4,7 @@ on:
     branches: [ main ]
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}/wordapp
+  IMAGE: ghcr.io/kple1/lexiflow/wordapp
 
 jobs:
   build:
