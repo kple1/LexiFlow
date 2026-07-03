@@ -7,83 +7,52 @@ namespace WordApp.Services;
 public class NotionService
 {
     private readonly HttpClient _http;
-    private readonly string _dataSourceId;
+    private readonly string _wordsSourceId;
+    private readonly string _grammarSourceId;
 
     public NotionService(HttpClient http, IConfiguration cfg)
     {
         _http = http;
-        _dataSourceId = cfg["Notion:DataSourceId"]!;
+        _wordsSourceId = cfg["Notion:WordsDataSourceId"]!;
+        _grammarSourceId = cfg["Notion:GrammarDataSourceId"]!;
         _http.BaseAddress = new Uri("https://api.notion.com/");
         _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {cfg["Notion:Token"]}");
         _http.DefaultRequestHeaders.Add("Notion-Version", "2025-09-03");
     }
 
-    // Notion 전체 단어 가져오기 (페이지네이션 포함)
-    public async Task<List<Grammar>> FetchAllAsyncGrammar(CancellationToken ct = default)
+    private async Task<List<T>> FetchAllCoreAsync<T>(
+    string sourceId, Func<JsonElement, T> parse, CancellationToken ct)
     {
-        var grammars = new List<Grammar>();
+        var items = new List<T>();
         string? cursor = null;
-
         do
         {
             var body = cursor is null
                 ? "{\"page_size\":100}"
                 : $"{{\"page_size\":100,\"start_cursor\":\"{cursor}\"}}";
 
-            using var req = new HttpRequestMessage(HttpMethod.Post,
-                $"v1/data_sources/{_dataSourceId}/query");
+            using var req = new HttpRequestMessage(HttpMethod.Post, $"v1/data_sources/{sourceId}/query");
             req.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
             using var res = await _http.SendAsync(req, ct);
             res.EnsureSuccessStatusCode();
 
             using var doc = JsonDocument.Parse(await res.Content.ReadAsStringAsync(ct));
             var root = doc.RootElement;
-
             foreach (var page in root.GetProperty("results").EnumerateArray())
-                grammars.Add(ParseGrammar(page));
+                items.Add(parse(page));
 
             cursor = root.GetProperty("has_more").GetBoolean()
                 ? root.GetProperty("next_cursor").GetString()
                 : null;
-        }
-        while (cursor is not null);
-
-        return grammars;
+        } while (cursor is not null);
+        return items;
     }
 
-    public async Task<List<Word>> FetchAllAsync(CancellationToken ct = default)
-    {
-        var words = new List<Word>();
-        string? cursor = null;
+    public Task<List<Word>> FetchAllAsync(CancellationToken ct = default)
+        => FetchAllCoreAsync(_wordsSourceId, Parse, ct);
 
-        do
-        {
-            var body = cursor is null
-                ? "{\"page_size\":100}"
-                : $"{{\"page_size\":100,\"start_cursor\":\"{cursor}\"}}";
-
-            using var req = new HttpRequestMessage(HttpMethod.Post,
-                $"v1/data_sources/{_dataSourceId}/query");
-            req.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
-            using var res = await _http.SendAsync(req, ct);
-            res.EnsureSuccessStatusCode();
-
-            using var doc = JsonDocument.Parse(await res.Content.ReadAsStringAsync(ct));
-            var root = doc.RootElement;
-
-            foreach (var page in root.GetProperty("results").EnumerateArray())
-                words.Add(Parse(page));
-
-            cursor = root.GetProperty("has_more").GetBoolean()
-                ? root.GetProperty("next_cursor").GetString()
-                : null;
-        }
-        while (cursor is not null);
-
-        return words;
-    }
+    public Task<List<Grammar>> FetchAllAsyncGrammar(CancellationToken ct = default)
+        => FetchAllCoreAsync(_grammarSourceId, ParseGrammar, ct);
 
     private static Grammar ParseGrammar(JsonElement page)
     {
