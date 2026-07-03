@@ -5,7 +5,7 @@ using WordApp.Data;
 namespace WordApp.Controllers
 {
     [ApiController]
-    [Route("[grammars]")]
+    [Route("grammars")]
     public class GrammarController : ControllerBase
     {
         private readonly AppDbContext _db;
