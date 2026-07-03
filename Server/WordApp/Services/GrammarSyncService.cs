@@ -38,6 +38,7 @@ namespace WordApp.Services
                             cur.Note = w.Note;
                             cur.Example = w.Example;
                         }
+                        else db.Grammars.Add(w);
                     }
 
                     var notionIds = fromNotion.Select(w => w.Id).ToHashSet();
