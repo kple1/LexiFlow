@@ -95,7 +95,7 @@ public class NotionService
             Category = Select(props, "Category"),
             Example = Text(props, "Example"),
             Explanation = Text(props, "Explanation"),
-            Note = Text(props, "Note") is { Length: > 0 } n ? n : null,
+            Note = Text(props, "Note"),
             Status = Select(props, "Status")
         };
     }
