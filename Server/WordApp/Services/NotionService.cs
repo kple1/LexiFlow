@@ -7,12 +7,14 @@ namespace WordApp.Services;
 public class NotionService
 {
     private readonly HttpClient _http;
-    private readonly string _dataSourceId;
+    private readonly string _wordsSourceId;
+    private readonly string _grammarSourceId;
 
     public NotionService(HttpClient http, IConfiguration cfg)
     {
         _http = http;
-        _dataSourceId = cfg["Notion:DataSourceId"]!;
+        _wordsSourceId = cfg["Notion:WordsSourceId"]!;
+        _grammarSourceId = cfg["Notion:GrammarSourceId"]!;
         _http.BaseAddress = new Uri("https://api.notion.com/");
         _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {cfg["Notion:Token"]}");
         _http.DefaultRequestHeaders.Add("Notion-Version", "2025-09-03");
@@ -31,7 +33,7 @@ public class NotionService
                 : $"{{\"page_size\":100,\"start_cursor\":\"{cursor}\"}}";
 
             using var req = new HttpRequestMessage(HttpMethod.Post,
-                $"v1/data_sources/{_dataSourceId}/query");
+                $"v1/data_sources/{_grammarSourceId}/query");
             req.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
             using var res = await _http.SendAsync(req, ct);
@@ -64,7 +66,7 @@ public class NotionService
                 : $"{{\"page_size\":100,\"start_cursor\":\"{cursor}\"}}";
 
             using var req = new HttpRequestMessage(HttpMethod.Post,
-                $"v1/data_sources/{_dataSourceId}/query");
+                $"v1/data_sources/{_wordsSourceId}/query");
             req.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
             using var res = await _http.SendAsync(req, ct);
