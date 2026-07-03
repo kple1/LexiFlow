@@ -11,6 +11,7 @@ Notion을 데이터 원본으로 사용하는 풀스택 영어 단어 학습 앱
   <img alt="SQL Server" src="https://img.shields.io/badge/SQL_Server-2022-CC2927?logo=microsoftsqlserver&logoColor=white">
   <img alt="Docker" src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white">
   <img alt="Google Cloud" src="https://img.shields.io/badge/Google_Cloud-Deployed-4285F4?logo=googlecloud&logoColor=white">
+  <img alt="CI/CD" src="https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?logo=githubactions&logoColor=white">
 </p>
 
 ---
@@ -22,6 +23,7 @@ Notion을 데이터 원본으로 사용하는 풀스택 영어 단어 학습 앱
 - **크로스플랫폼 앱** — .NET MAUI로 Android / Windows 지원
 - **컨테이너 배포** — Docker Compose로 API와 DB를 한 번에 실행
 - **클라우드 호스팅** — Google Cloud에 배포되어 어디서든 접속 가능
+- **CI/CD 자동화** — push하면 GitHub Actions가 빌드·이미지·배포를 자동 처리
 - **REST API** — 표준 HTTP 인터페이스로 클라이언트와 통신
 
 ---
@@ -286,6 +288,120 @@ _http = new HttpClient(handler)
 
 ---
 
+## 🔄 CI/CD (GitHub Actions)
+
+`main` 브랜치에 push하면 **빌드 검증 → 이미지 생성 → 서버 배포**가 자동으로 실행됩니다. 손으로 SSH 접속해 배포하던 과정을 자동화했습니다.
+
+```
+git push (main)
+        │
+        ▼
+┌───────────────┐   ┌──────────────────┐   ┌─────────────────────┐
+│    build      │──▶│    push-image    │──▶│       deploy        │
+│  빌드 검증(CI) │   │ 이미지 → ghcr.io │   │  VM 배포 (CD)       │
+└───────────────┘   └──────────────────┘   └─────────────────────┘
+```
+
+| 단계 | 역할 |
+| --- | --- |
+| **build** | .NET 프로젝트가 정상 빌드되는지 검증 (CI) |
+| **push-image** | Docker 이미지를 빌드해 GitHub Container Registry(ghcr.io)에 업로드 |
+| **deploy** | Compute Engine VM에 SSH 접속 → 이미지 pull → 컨테이너 재시작 (CD) |
+
+각 단계는 `needs`로 연결되어, 앞 단계가 성공해야 다음 단계가 실행됩니다. 빌드가 깨지면 배포까지 진행되지 않습니다.
+
+**배포 전략** — GitHub Actions가 이미지를 빌드해 레지스트리(ghcr.io)에 올리고, VM은 그 이미지를 pull만 하여 실행합니다. 빌드(러너)와 실행(VM)이 분리되어 VM이 빌드 부담을 지지 않습니다.
+
+### 워크플로우
+
+`.github/workflows/deploy.yml`
+
+```yaml
+name: CI/CD
+on:
+  push:
+    branches: [ main ]
+env:
+  IMAGE: ghcr.io/<owner>/<repo>/wordapp   # 반드시 소문자
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+      - run: dotnet build Server/WordApp/WordApp.csproj -c Release
+
+  push-image:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: ./Server
+          push: true
+          tags: ${{ env.IMAGE }}:latest
+
+  deploy:
+    needs: push-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd ~/LexiFlow/Server
+            docker compose pull
+            docker compose up -d
+```
+
+### 사전 설정
+
+**GitHub Secrets** (Settings → Secrets and variables → Actions)
+
+| Secret | 값 |
+| --- | --- |
+| `VM_HOST` | Compute Engine VM의 외부 IP |
+| `VM_USER` | SSH 사용자명 |
+| `VM_SSH_KEY` | SSH 개인키 전체 |
+
+> ghcr.io 인증은 `GITHUB_TOKEN`이 자동 제공되므로 별도 secret이 필요 없습니다.
+
+**SSH 키** — 배포는 GitHub Actions가 VM에 SSH로 접속해 수행합니다. **개인키는 Secret(`VM_SSH_KEY`)에, 공개키는 VM의 `~/.ssh/authorized_keys`에** 둡니다. 로컬에서 `ssh -i <개인키> <user>@<host>`가 되면 Actions에서도 동작합니다.
+
+**VM의 docker-compose.yml** — 레지스트리 방식이므로 `api`를 빌드가 아닌 이미지 참조로 설정합니다.
+
+```yaml
+  api:
+    image: ghcr.io/<owner>/<repo>/wordapp:latest   # build: . 에서 변경
+```
+
+### 트러블슈팅
+
+| 증상 | 원인 | 해결 |
+| --- | --- | --- |
+| `Failed to install dotnet 10.0.9` | .NET 10이 최신이라 정식 채널에 없음 | `dotnet-quality: 'preview'` 추가 |
+| `repository name must be lowercase` | ghcr.io 태그에 대문자 불가 | 이미지 이름을 소문자로 지정 |
+| `can't connect without a private SSH key` (secret이 `null`) | Secret 이름 불일치 | 워크플로우와 secret 이름 일치 |
+| `handshake failed: [none publickey]` | 개인키↔공개키 짝 불일치, 또는 공개키 미등록 | 공개키를 `authorized_keys`에 등록, 로컬 접속으로 검증 |
+
+> CD 실패의 대부분은 SSH 키 인증 문제입니다. 로컬에서 `ssh -i` 접속 테스트로 먼저 검증하세요. 개인키는 절대 공유·노출하지 않으며, 노출 시 즉시 폐기·재발급합니다.
+
+---
+
 ## 📄 라이선스
 
 이 프로젝트는 학습 목적으로 제작되었습니다.
@@ -293,5 +409,5 @@ _http = new HttpClient(handler)
 ---
 
 <p align="center">
-  <sub>Built with .NET MAUI · ASP.NET Core · SQL Server · Docker · Google Cloud</sub>
+  <sub>Built with .NET MAUI · ASP.NET Core · SQL Server · Docker · Google Cloud · GitHub Actions</sub>
 </p>
