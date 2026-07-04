@@ -19,7 +19,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    for (var i = 10; i > 0; i--)
+    {
+        try { db.Database.Migrate(); break; }
+        catch (Exception ex) when (i > 1)
+        {
+            app.Logger.LogWarning("DB 연결 대기중, {left}회 남음: {msg}", i - 1, ex.Message);
+            Thread.Sleep(5000);
+        }
+    }
 }
 
 if (app.Environment.IsDevelopment())
