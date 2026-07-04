@@ -17,7 +17,9 @@ services:
       ASPNETCORE_URLS: "http://0.0.0.0:5276"
       ConnectionStrings__Default: "Server=db,1433;Database=WordDb;User Id=sa;Password=lexiflow123!;TrustServerCertificate=True"
     depends_on:
-      - db
+      sqlserver:
+        condition: service_healthy
+    restart: on-failure
 
 volumes:
   dbdata:
