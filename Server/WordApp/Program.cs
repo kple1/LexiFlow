@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using WordApp.Auth;
 using WordApp.Data;
 using WordApp.Services;
 
@@ -13,7 +14,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddHttpClient<NotionService>();
 builder.Services.AddHostedService<WordSyncService>();
-builder.Services.AddHostedService<GrammarSyncService>();
+builder.Services.AddScoped<AdminAuthFilter>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

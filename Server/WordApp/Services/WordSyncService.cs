@@ -21,11 +21,16 @@ public class WordSyncService : BackgroundService
             try
             {
                 var fromNotion = await _notion.FetchAllAsync(ct);
+                foreach (var w in fromNotion)
+                    w.Source = "Notion";
 
                 using var scope = _sp.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                var existing = await db.Words.ToDictionaryAsync(w => w.Id, ct);
+                // 관리자 패널로 넣은 Manual 단어는 동기화 대상에서 완전히 제외
+                var existing = await db.Words
+                    .Where(w => w.Source == "Notion")
+                    .ToDictionaryAsync(w => w.Id, ct);
 
                 foreach (var w in fromNotion)
                 {
@@ -39,7 +44,7 @@ public class WordSyncService : BackgroundService
                     else db.Words.Add(w);
                 }
 
-                // Notion에서 삭제된 단어 제거
+                // Notion에서 삭제된 단어 제거 (Notion 출처만 대상)
                 var notionIds = fromNotion.Select(w => w.Id).ToHashSet();
                 db.Words.RemoveRange(existing.Values.Where(w => !notionIds.Contains(w.Id)));
 

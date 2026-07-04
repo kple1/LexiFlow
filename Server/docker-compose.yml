@@ -3,13 +3,13 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "lexiflow123!"
+      MSSQL_SA_PASSWORD: "${DB_SA_PASSWORD}"
     ports:
       - "1433:1433"
     volumes:
       - dbdata:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"lexiflow123!\" -C -Q \"SELECT 1\" || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"${DB_SA_PASSWORD}\" -C -Q \"SELECT 1\" || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -21,7 +21,10 @@ services:
       - "5276:5276"
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:5276"
-      ConnectionStrings__Default: "Server=db,1433;Database=WordDb;User Id=sa;Password=lexiflow123!;TrustServerCertificate=True"
+      ConnectionStrings__Default: "Server=db,1433;Database=WordDb;User Id=sa;Password=${DB_SA_PASSWORD};TrustServerCertificate=True"
+      Notion__Token: "${NOTION_TOKEN}"
+      Notion__WordsDataSourceId: "${NOTION_WORDS_DATA_SOURCE_ID}"
+      Admin__Token: "${ADMIN_TOKEN}"
     depends_on:
       db:
         condition: service_healthy

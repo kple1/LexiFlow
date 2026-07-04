@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     {
         mb.Entity<Word>().HasKey(w => w.Id);
         mb.Entity<Word>().Property(w => w.English).HasMaxLength(200);
+        mb.Entity<Word>().Property(w => w.Source).HasMaxLength(20).HasDefaultValue("Notion");
         mb.Entity<Grammar>().HasKey(g => g.Id);
         mb.Entity<Grammar>().Property(g => g.Title).HasMaxLength(200);
         mb.Entity<Grammar>().Property(g => g.Category).HasMaxLength(100);

@@ -1,0 +1,90 @@
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  margin: 0;
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+header {
+  background: #1d1d1f;
+  color: #fff;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+header h1 { font-size: 18px; margin: 0; }
+.tabs { display: flex; gap: 8px; }
+.tab-btn {
+  background: transparent;
+  border: 1px solid #555;
+  color: #ccc;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tab-btn.active { background: #fff; color: #1d1d1f; border-color: #fff; }
+
+main { padding: 24px; max-width: 960px; margin: 0 auto; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.entry-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.entry-form input, .entry-form select, .entry-form textarea {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.entry-form input[name="english"], .entry-form input[name="title"] { flex: 1 1 140px; }
+.entry-form input[name="meaning"] { flex: 1 1 140px; }
+.entry-form input[name="example"] { flex: 1 1 200px; }
+.entry-form textarea { flex: 1 1 100%; min-height: 60px; }
+.entry-form button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #0071e3;
+  color: #fff;
+  cursor: pointer;
+}
+.entry-form button.secondary { background: #999; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  vertical-align: top;
+}
+th { background: #fafafa; }
+tr.readonly { color: #999; }
+tr.readonly td:first-child::after {
+  content: " (Notion)";
+  font-size: 11px;
+}
+.row-actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #0071e3;
+  font-size: 13px;
+  margin-right: 8px;
+}
+.row-actions button.danger { color: #d70015; }
+.row-actions button:disabled { color: #ccc; cursor: not-allowed; }

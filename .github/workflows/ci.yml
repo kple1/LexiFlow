@@ -41,13 +41,40 @@ jobs:
     needs: push-image
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@v1.0.3
+      - uses: actions/checkout@v4
+
+      - name: Sync docker-compose.yml to VM
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
+          source: "Server/docker-compose.yml"
+          target: "~/LexiFlow/Server"
+          strip_components: 1
+
+      # docker-compose.yml only references ${VAR} placeholders (no secrets committed).
+      # This step (re)writes the real values into .env, which docker compose loads
+      # automatically from the same directory — the file itself never touches git.
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DB_SA_PASSWORD: ${{ secrets.DB_SA_PASSWORD }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_WORDS_DATA_SOURCE_ID: ${{ secrets.NOTION_WORDS_DATA_SOURCE_ID }}
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          envs: DB_SA_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN
           script: |
+            cat > ~/LexiFlow/Server/.env <<EOF
+            DB_SA_PASSWORD=$DB_SA_PASSWORD
+            NOTION_TOKEN=$NOTION_TOKEN
+            NOTION_WORDS_DATA_SOURCE_ID=$NOTION_WORDS_DATA_SOURCE_ID
+            ADMIN_TOKEN=$ADMIN_TOKEN
+            EOF
             cd ~/LexiFlow/Server
             docker compose pull
             docker compose up -d --force-recreate

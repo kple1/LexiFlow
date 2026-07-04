@@ -8,13 +8,11 @@ public class NotionService
 {
     private readonly HttpClient _http;
     private readonly string _wordsSourceId;
-    private readonly string _grammarSourceId;
 
     public NotionService(HttpClient http, IConfiguration cfg)
     {
         _http = http;
         _wordsSourceId = cfg["Notion:WordsDataSourceId"]!;
-        _grammarSourceId = cfg["Notion:GrammarDataSourceId"]!;
         _http.BaseAddress = new Uri("https://api.notion.com/");
         _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {cfg["Notion:Token"]}");
         _http.DefaultRequestHeaders.Add("Notion-Version", "2025-09-03");
@@ -50,24 +48,6 @@ public class NotionService
 
     public Task<List<Word>> FetchAllAsync(CancellationToken ct = default)
         => FetchAllCoreAsync(_wordsSourceId, Parse, ct);
-
-    public Task<List<Grammar>> FetchAllAsyncGrammar(CancellationToken ct = default)
-        => FetchAllCoreAsync(_grammarSourceId, ParseGrammar, ct);
-
-    private static Grammar ParseGrammar(JsonElement page)
-    {
-        var props = page.GetProperty("properties");
-        return new Grammar
-        {
-            Id = page.GetProperty("id").GetString()!,
-            Title = Title(props, "Title"),
-            Category = Select(props, "Category"),
-            Example = Text(props, "Example"),
-            Explanation = Text(props, "Explanation"),
-            Note = Text(props, "Note"),
-            Status = Select(props, "Status")
-        };
-    }
 
     private static Word Parse(JsonElement page)
     {

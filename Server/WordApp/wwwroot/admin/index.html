@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LexiFlow 관리자</title>
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header>
+    <h1>LexiFlow 관리자</h1>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="words">단어</button>
+      <button class="tab-btn" data-tab="grammars">문법</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="tab-words" class="tab-panel active">
+      <form id="word-form" class="entry-form">
+        <input type="hidden" name="id" />
+        <input name="english" placeholder="영단어" required />
+        <input name="meaning" placeholder="뜻" required />
+        <select name="status">
+          <option value="미분류">미분류</option>
+          <option value="외움">외움</option>
+          <option value="애매">애매</option>
+          <option value="모름">모름</option>
+        </select>
+        <input name="example" placeholder="예문 (선택)" />
+        <input name="note" placeholder="메모 (선택)" />
+        <button type="submit">추가</button>
+        <button type="button" id="word-cancel" class="secondary" hidden>취소</button>
+      </form>
+      <table id="word-table">
+        <thead>
+          <tr><th>영단어</th><th>뜻</th><th>상태</th><th>예문</th><th>출처</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="tab-grammars" class="tab-panel">
+      <form id="grammar-form" class="entry-form">
+        <input type="hidden" name="id" />
+        <input name="title" placeholder="제목" required />
+        <input name="category" placeholder="분류" />
+        <select name="status">
+          <option value="미분류">미분류</option>
+          <option value="외움">외움</option>
+          <option value="애매">애매</option>
+          <option value="모름">모름</option>
+        </select>
+        <input name="example" placeholder="예문 (선택)" />
+        <textarea name="explanation" placeholder="설명 (선택)"></textarea>
+        <input name="note" placeholder="메모 (선택)" />
+        <button type="submit">추가</button>
+        <button type="button" id="grammar-cancel" class="secondary" hidden>취소</button>
+      </form>
+      <table id="grammar-table">
+        <thead>
+          <tr><th>제목</th><th>분류</th><th>상태</th><th>설명</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>
