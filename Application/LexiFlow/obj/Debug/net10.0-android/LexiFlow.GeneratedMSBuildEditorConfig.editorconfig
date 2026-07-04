@@ -72,6 +72,16 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
+[D:/LexiFlow/Application/LexiFlow/Views/AccountView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.AccountView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AccountView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AccountView.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
 [D:/LexiFlow/Application/LexiFlow/Views/GrammarView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.GrammarView.xaml

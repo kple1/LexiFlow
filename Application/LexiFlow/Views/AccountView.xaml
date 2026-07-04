@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.AccountView"
+             Title="Account"
+             Background="#222222">
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12">
+        <Label Text="Account" Style="{StaticResource Title}" HorizontalOptions="Center"/>
+        <Label Text="Signed in as" TextColor="Gray" HorizontalOptions="Center"/>
+        <Label x:Name="userLabel" FontSize="20" HorizontalOptions="Center"/>
+
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="24" Margin="0,16,0,0">
+            <VerticalStackLayout>
+                <Label x:Name="masteredLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#4CAF50"/>
+                <Label Text="Mastered" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label x:Name="learningLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#F9A825"/>
+                <Label Text="Learning" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label x:Name="totalLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <Label Text="Studied" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+
+        <Button Text="Sign out" Clicked="OnSignOutClick" Margin="0,20,0,0" WidthRequest="200"/>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,74 +1,28 @@
-using LexiFlow.Services;
+using LexiFlow.ViewModels;
 
 namespace LexiFlow.Views;
 
 public partial class UserManageView : ContentPage
 {
-    private readonly ApiService _api;
-    public UserManageView(ApiService api)
+    private readonly UserManageViewModel _vm;
+
+    public UserManageView(UserManageViewModel vm)
     {
         InitializeComponent();
-        _api = api;
-    }
-
-    private async void OnSignUpClick(object sender, PointerEventArgs e)
-    {
-        if (!ValidateInput())
-            return;
-
-        try
-        {
-            var (ok, error) = await _api.SignUpAsync(id.Text, pw.Text);
-            if (!ok)
-            {
-                await DisplayAlert("", error ?? "Sign up failed.", "Confirm");
-                return;
-            }
-
-            await DisplayAlert("", "Sign up complete.", "Confirm");
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", $"Could not reach the server.\n{ex.Message}", "Confirm");
-        }
+        BindingContext = _vm = vm;
     }
 
     private async void OnSignInClick(object sender, PointerEventArgs e)
     {
-        if (!ValidateInput())
-            return;
-
-        try
-        {
-            bool ok = await _api.LoginAsync(id.Text, pw.Text);
-            if (!ok)
-            {
-                await DisplayAlert("", "Invalid user ID or password.", "Confirm");
-                return;
-            }
-
-            await DisplayAlert("", "Sign in successful.", "Confirm");
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", $"Could not reach the server.\n{ex.Message}", "Confirm");
-        }
+        var (ok, message) = await _vm.SignInAsync();
+        // On success the session swaps the root page automatically; just show the message.
+        if (!ok)
+            await DisplayAlert("", message, "Confirm");
     }
 
-    private bool ValidateInput()
+    private async void OnSignUpClick(object sender, PointerEventArgs e)
     {
-        if (string.IsNullOrEmpty(id.Text))
-        {
-            _ = DisplayAlert("", "Please enter a user ID.", "Confirm");
-            return false;
-        }
-
-        if (string.IsNullOrEmpty(pw.Text))
-        {
-            _ = DisplayAlert("", "Please enter a user PW.", "Confirm");
-            return false;
-        }
-
-        return true;
+        var (_, message) = await _vm.SignUpAsync();
+        await DisplayAlert("", message, "Confirm");
     }
 }

@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Word> Words => Set<Word>();
     public DbSet<Grammar> Grammars => Set<Grammar>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<WordProgress> WordProgresses => Set<WordProgress>();
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
@@ -27,5 +28,12 @@ public class AppDbContext : DbContext
         mb.Entity<User>().HasKey(u => u.Id);
         mb.Entity<User>().Property(u => u.UserId).HasMaxLength(100);
         mb.Entity<User>().Property(u => u.Pw).HasMaxLength(200);
+
+        mb.Entity<WordProgress>().HasKey(p => p.Id);
+        mb.Entity<WordProgress>().Property(p => p.UserId).HasMaxLength(100);
+        mb.Entity<WordProgress>().Property(p => p.WordId).HasMaxLength(200);
+        mb.Entity<WordProgress>().Property(p => p.Status).HasMaxLength(50);
+        // One progress row per (user, word); also the lookup key for upserts.
+        mb.Entity<WordProgress>().HasIndex(p => new { p.UserId, p.WordId }).IsUnique();
     }
 }

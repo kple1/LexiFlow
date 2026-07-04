@@ -21,11 +21,15 @@ namespace LexiFlow
                 });
 
             builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<SessionService>();
+
+            builder.Services.AddTransient<AppShell>();
 
             builder.Services.AddTransient<WordsView>();
             builder.Services.AddTransient<TestWordsView>();
             builder.Services.AddTransient<GrammarView>();
             builder.Services.AddTransient<UserManageView>();
+            builder.Services.AddTransient<AccountView>();
 
             builder.Services.AddTransient<WordsViewModel>();
             builder.Services.AddTransient<GrammarViewModel>();

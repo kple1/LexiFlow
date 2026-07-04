@@ -63,8 +63,9 @@
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 12"
                     Padding="20"
-                    Margin="24"
-                    WidthRequest="460"
+                    Margin="20"
+                    WidthRequest="{OnIdiom Phone=300, Default=460}"
+                    MaximumHeightRequest="{OnIdiom Phone=520, Default=640}"
                     VerticalOptions="Center"
                     HorizontalOptions="Center">
                 <!-- Absorb taps on the card so they don't close the panel -->

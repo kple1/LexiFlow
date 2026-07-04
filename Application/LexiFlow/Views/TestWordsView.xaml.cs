@@ -8,10 +8,12 @@ public partial class TestWordsView : ContentPage
 	private List<CorrectWordState> _words = [];
 	private int _page = 0;
 	private readonly ApiService _api;
-	public TestWordsView(ApiService api)
+	private readonly SessionService _session;
+	public TestWordsView(ApiService api, SessionService session)
 	{
 		InitializeComponent();
 		_api = api;
+		_session = session;
 	}
 
 	protected override async void OnAppearing()
@@ -20,13 +22,20 @@ public partial class TestWordsView : ContentPage
 		try
 		{
             var allWords = await _api.GetWordsAsync();
+            var progress = await LoadProgressMapAsync();
 
-			_words = [.. allWords
-				.OrderBy(_ => Random.Shared.Next())
-				.Take(10)
-				.Select(word => new CorrectWordState { Word = word, IsCorrect = false })];
+            // Spaced repetition: prefer words that are due for review over a plain shuffle.
+            var selected = ReviewScheduler.SelectForReview(allWords, progress, 10, DateTime.UtcNow);
+            _page = 0;
+            _words = [.. selected.Select(word => new CorrectWordState { Word = word, IsCorrect = false })];
 
-            display.Text = $"{_words[_page].Word.English}\n(01/10)";
+            if (_words.Count == 0)
+            {
+                display.Text = "No words to review.";
+                return;
+            }
+
+            display.Text = $"{_words[_page].Word.English}\n{Counter()}";
         }
         catch (Exception ex)
 		{
@@ -34,23 +43,75 @@ public partial class TestWordsView : ContentPage
 		}
 	}
 
+    // wordId -> progress for the signed-in user; empty when logged out or the server is unreachable.
+    private async Task<Dictionary<string, WordProgress>> LoadProgressMapAsync()
+    {
+        if (!_session.IsLoggedIn)
+            return [];
+        try
+        {
+            var list = await _api.GetProgressAsync(_session.CurrentUserId!);
+            return list
+                .GroupBy(p => p.WordId)
+                .ToDictionary(g => g.Key, g => g.First());
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    private string Counter() => $"({_page + 1:D2}/{_words.Count:D2})";
+
     private async void OnSubmitClick(object sender, EventArgs e)
     {
-		if (_words[_page].Word.Meaning == answer.Text)
+		var state = _words[_page];
+		if (state.Word.Meaning == answer.Text)
 		{
 			wrong.IsVisible = false;
-			_words[_page].IsCorrect = true;
+			state.IsCorrect = true;
+			// Mastered only if they never missed this word; otherwise it's still being learned.
+			RecordResult(state, correct: true, status: state.Missed ? "Learning" : "Mastered");
 			NextPage();
 		}
 		else
 		{
             wrong.IsVisible = true;
+			// Record a single "wrong" result the first time they miss this word.
+			if (!state.Missed)
+			{
+				state.Missed = true;
+				RecordResult(state, correct: false, status: "Learning");
+			}
         }
     }
 
     private async void OnCheckClick(object sender, EventArgs e)
     {
-		await DisplayAlert("", _words[_page].Word.Meaning, "Confirm");
+		var state = _words[_page];
+		// Revealing the answer counts as a miss, so it can't be Mastered on this round.
+		if (!state.Missed)
+		{
+			state.Missed = true;
+			RecordResult(state, correct: false, status: "Learning");
+		}
+		await DisplayAlert("", state.Word.Meaning, "Confirm");
+    }
+
+    // Fire-and-forget: don't block the quiz, and tolerate the server being offline
+    // (e.g. the progress endpoint isn't deployed yet).
+    private async void RecordResult(CorrectWordState state, bool correct, string status)
+    {
+		if (!_session.IsLoggedIn)
+			return;
+		try
+		{
+			await _api.UpsertProgressAsync(_session.CurrentUserId!, state.Word.Id, correct, status);
+		}
+		catch
+		{
+			// Ignore network/server errors; progress is best-effort.
+		}
     }
 
     private async void OnNextClick(object sender, EventArgs e)
@@ -76,7 +137,7 @@ public partial class TestWordsView : ContentPage
 				return;
 			}
         }
-        display.Text = $"{_words[_page].Word.English}\n({_page + 1:N0}/10)";
+        display.Text = $"{_words[_page].Word.English}\n{Counter()}";
         answer.Text = "";
     }
 

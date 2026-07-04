@@ -24,7 +24,7 @@
             <ShellContent ContentTemplate="{DataTemplate view:GrammarView}"/>
         </Tab>
         <Tab Icon="user.png" Title="Account" Shell.NavBarIsVisible="False">
-            <ShellContent ContentTemplate="{DataTemplate view:UserManageView}"/>
+            <ShellContent ContentTemplate="{DataTemplate view:AccountView}"/>
         </Tab>
     </TabBar>
 

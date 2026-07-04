@@ -28,6 +28,18 @@ public class ApiService
     public async Task<List<Grammar>> GetGrammarAsync()
         => await _http.GetFromJsonAsync<List<Grammar>>("grammars") ?? [];
 
+    // Per-user learning progress.
+    public async Task<List<WordProgress>> GetProgressAsync(string userId)
+        => await _http.GetFromJsonAsync<List<WordProgress>>($"users/{Uri.EscapeDataString(userId)}/progress") ?? [];
+
+    // Upserts one word's progress after a review. Status transitions are decided by the caller.
+    public async Task UpsertProgressAsync(string userId, string wordId, bool correct, string? status = null)
+    {
+        var body = new { WordId = wordId, Correct = correct, Status = status };
+        var resp = await _http.PostAsJsonAsync($"users/{Uri.EscapeDataString(userId)}/progress", body);
+        resp.EnsureSuccessStatusCode();
+    }
+
     // Sign in: server verifies the password (the hash is never sent to the client).
     public async Task<bool> LoginAsync(string userId, string pw)
     {

@@ -6,15 +6,16 @@
              Title="Words"
              BackgroundColor="#222222">
     <Grid RowDefinitions="Auto,*">
-        <HorizontalStackLayout Margin="5" Grid.Row="0" HeightRequest="30" HorizontalOptions="Center">
-            <Entry x:Name="search" Placeholder="Search words..." WidthRequest="300"
-                   Text="{Binding SearchText}"/>
-            <Image Source="search.png" Margin="10,0,0,0">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10" Padding="10,5">
+            <Entry x:Name="search" Grid.Column="0" Placeholder="Search words..."
+                   VerticalOptions="Center" Text="{Binding SearchText}"/>
+            <Image Grid.Column="1" Source="search.png" WidthRequest="28" HeightRequest="28"
+                   VerticalOptions="Center">
                 <Image.GestureRecognizers>
                     <PointerGestureRecognizer PointerPressed="OnSearchClick"/>
                 </Image.GestureRecognizers>
             </Image>
-        </HorizontalStackLayout>
+        </Grid>
 
         <CollectionView ItemsSource="{Binding Words}" Grid.Row="1">
             <CollectionView.ItemsLayout>
@@ -25,7 +26,7 @@
                 <DataTemplate>
                     <uc:WordControl>
                         <uc:WordControl.GestureRecognizers>
-                            <PointerGestureRecognizer PointerPressed="OnWordClick"/>
+                            <PointerGestureRecognizer PointerReleased="OnWordClick"/>
                         </uc:WordControl.GestureRecognizers>
                     </uc:WordControl>
                 </DataTemplate>
