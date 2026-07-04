@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.TestIdiomView"
+             Title="Idiom Quiz"
+             Background="#222222">
+    <Grid Padding="16">
+        <ScrollView x:Name="quizPanel">
+            <VerticalStackLayout Spacing="12" VerticalOptions="Center"
+                                 WidthRequest="{OnIdiom Phone=320, Default=480}"
+                                 HorizontalOptions="Center">
+                <Label x:Name="counter" TextColor="Gray" HorizontalOptions="Center"/>
+                <Label x:Name="titleLabel" FontSize="22" FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" TextColor="#F9F9F9"/>
+                <Label x:Name="categoryLabel" FontSize="13" TextColor="#7FB0FF" HorizontalOptions="Center"/>
+
+                <Button x:Name="showButton" Text="Show answer" Clicked="OnShowClick"
+                        BackgroundColor="#3A6DF0" TextColor="White" Margin="0,8,0,0"/>
+
+                <VerticalStackLayout x:Name="answerPanel" IsVisible="False" Spacing="8">
+                    <BoxView HeightRequest="1" Color="#444444"/>
+                    <Label Text="EXPLANATION" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                    <Label x:Name="explanationLabel" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                    <Label Text="EXAMPLE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                    <Label x:Name="exampleLabel" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                    <Label x:Name="noteLabel" TextColor="#B0B0B0" FontSize="13" LineBreakMode="WordWrap"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8" Margin="0,8,0,0">
+                        <Button Grid.Column="0" Text="Review again" Clicked="OnAgainClick"
+                                BackgroundColor="#B23A48" TextColor="White"/>
+                        <Button Grid.Column="1" Text="Got it" Clicked="OnGotItClick"
+                                BackgroundColor="#2E7D32" TextColor="White"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Label x:Name="doneLabel" IsVisible="False" Text="Done!" FontSize="24"
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="#F9F9F9"/>
+    </Grid>
+</ContentPage>

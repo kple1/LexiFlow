@@ -26,6 +26,9 @@
         <Tab Route="grammar" Icon="a.png" Title="Grammar" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:GrammarView}"/>
         </Tab>
+        <Tab Route="idiom" Icon="book.png" Title="Idioms" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:IdiomView}"/>
+        </Tab>
         <Tab Route="account" Icon="user.png" Title="Account" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:AccountView}"/>
         </Tab>

@@ -34,11 +34,14 @@ namespace LexiFlow
             builder.Services.AddTransient<TestWordsView>();
             builder.Services.AddTransient<GrammarView>();
             builder.Services.AddTransient<TestGrammarView>();
+            builder.Services.AddTransient<IdiomView>();
+            builder.Services.AddTransient<TestIdiomView>();
             builder.Services.AddTransient<UserManageView>();
             builder.Services.AddTransient<AccountView>();
 
             builder.Services.AddTransient<WordsViewModel>();
             builder.Services.AddTransient<GrammarViewModel>();
+            builder.Services.AddTransient<IdiomViewModel>();
             builder.Services.AddTransient<TestWordsViewModel>();
             builder.Services.AddTransient<UserManageViewModel>();
 #if DEBUG

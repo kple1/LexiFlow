@@ -45,10 +45,16 @@ public partial class HomeView : ContentPage
             var grammarProgress = await _api.GetGrammarProgressAsync(userId);
             var grammarMap = ToProgressMap(grammarProgress, p => p.GrammarId);
 
+            var idioms = await _api.GetIdiomAsync();
+            var idiomProgress = await _api.GetIdiomProgressAsync(userId);
+            var idiomMap = ToProgressMap(idiomProgress, p => p.IdiomId);
+
             var due = ReviewScheduler.CountDue(words, w => w.Id, wordMap, now)
-                    + ReviewScheduler.CountDue(grammars, g => g.Id, grammarMap, now);
+                    + ReviewScheduler.CountDue(grammars, g => g.Id, grammarMap, now)
+                    + ReviewScheduler.CountDue(idioms, i => i.Id, idiomMap, now);
             var mastered = wordProgress.Count(p => p.Status == "Mastered")
-                         + grammarProgress.Count(p => p.Status == "Mastered");
+                         + grammarProgress.Count(p => p.Status == "Mastered")
+                         + idiomProgress.Count(p => p.Status == "Mastered");
 
             dueLabel.Text = due.ToString();
             masteredLabel.Text = mastered.ToString();
@@ -73,4 +79,7 @@ public partial class HomeView : ContentPage
 
     private async void OnStartGrammarReviewClick(object sender, EventArgs e)
         => await Shell.Current.GoToAsync(nameof(Views.TestGrammarView));
+
+    private async void OnStartIdiomReviewClick(object sender, EventArgs e)
+        => await Shell.Current.GoToAsync(nameof(Views.TestIdiomView));
 }

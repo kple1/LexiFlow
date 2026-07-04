@@ -11,9 +11,11 @@ public class AppDbContext : DbContext
 
     public DbSet<Word> Words => Set<Word>();
     public DbSet<Grammar> Grammars => Set<Grammar>();
+    public DbSet<Idiom> Idioms => Set<Idiom>();
     public DbSet<User> Users => Set<User>();
     public DbSet<WordProgress> WordProgresses => Set<WordProgress>();
     public DbSet<GrammarProgress> GrammarProgresses => Set<GrammarProgress>();
+    public DbSet<IdiomProgress> IdiomProgresses => Set<IdiomProgress>();
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
@@ -27,6 +29,13 @@ public class AppDbContext : DbContext
         mb.Entity<Grammar>().Property(g => g.Explanation).HasMaxLength(1000);
         mb.Entity<Grammar>().Property(g => g.Note).HasMaxLength(500);
         mb.Entity<Grammar>().Property(g => g.Status).HasMaxLength(50);
+        mb.Entity<Idiom>().HasKey(i => i.Id);
+        mb.Entity<Idiom>().Property(i => i.Title).HasMaxLength(200);
+        mb.Entity<Idiom>().Property(i => i.Category).HasMaxLength(100);
+        mb.Entity<Idiom>().Property(i => i.Example).HasMaxLength(500);
+        mb.Entity<Idiom>().Property(i => i.Explanation).HasMaxLength(1000);
+        mb.Entity<Idiom>().Property(i => i.Note).HasMaxLength(500);
+        mb.Entity<Idiom>().Property(i => i.Status).HasMaxLength(50);
         mb.Entity<User>().HasKey(u => u.Id);
         mb.Entity<User>().Property(u => u.UserId).HasMaxLength(100);
         mb.Entity<User>().Property(u => u.Pw).HasMaxLength(200);
@@ -43,5 +52,11 @@ public class AppDbContext : DbContext
         mb.Entity<GrammarProgress>().Property(p => p.GrammarId).HasMaxLength(200);
         mb.Entity<GrammarProgress>().Property(p => p.Status).HasMaxLength(50);
         mb.Entity<GrammarProgress>().HasIndex(p => new { p.UserId, p.GrammarId }).IsUnique();
+
+        mb.Entity<IdiomProgress>().HasKey(p => p.Id);
+        mb.Entity<IdiomProgress>().Property(p => p.UserId).HasMaxLength(100);
+        mb.Entity<IdiomProgress>().Property(p => p.IdiomId).HasMaxLength(200);
+        mb.Entity<IdiomProgress>().Property(p => p.Status).HasMaxLength(50);
+        mb.Entity<IdiomProgress>().HasIndex(p => new { p.UserId, p.IdiomId }).IsUnique();
     }
 }

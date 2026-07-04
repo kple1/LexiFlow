@@ -37,6 +37,8 @@
                     BackgroundColor="#3A6DF0" TextColor="White"/>
             <Button Text="Start grammar review" Clicked="OnStartGrammarReviewClick"
                     BackgroundColor="#2B2B2B" TextColor="#F9F9F9"/>
+            <Button Text="Start idiom review" Clicked="OnStartIdiomReviewClick"
+                    BackgroundColor="#2B2B2B" TextColor="#F9F9F9"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

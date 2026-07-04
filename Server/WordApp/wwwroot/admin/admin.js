@@ -199,6 +199,79 @@ async function deleteGrammar(id) {
   if (result.ok) loadGrammars();
 }
 
+// ---- Idioms ----
+const idiomForm = document.getElementById("idiom-form");
+const idiomCancelBtn = document.getElementById("idiom-cancel");
+
+async function loadIdioms() {
+  const res = await api("/admin/api/idioms");
+  if (!res.ok) return;
+  const tbody = document.querySelector("#idiom-table tbody");
+  tbody.innerHTML = "";
+  for (const i of res.data) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${escapeHtml(i.title)}</td>
+      <td>${escapeHtml(i.category ?? "")}</td>
+      <td>${escapeHtml(i.status ?? "")}</td>
+      <td>${escapeHtml(i.explanation ?? "")}</td>
+      <td class="row-actions">
+        <button data-act="edit">수정</button>
+        <button data-act="delete" class="danger">삭제</button>
+      </td>`;
+    tr.querySelector('[data-act="edit"]').addEventListener("click", () => startEditIdiom(i));
+    tr.querySelector('[data-act="delete"]').addEventListener("click", () => deleteIdiom(i.id));
+    tbody.appendChild(tr);
+  }
+}
+
+function startEditIdiom(i) {
+  idiomForm.id.value = i.id;
+  idiomForm.title.value = i.title;
+  idiomForm.category.value = i.category ?? "";
+  idiomForm.status.value = i.status ?? "미분류";
+  idiomForm.example.value = i.example ?? "";
+  idiomForm.explanation.value = i.explanation ?? "";
+  idiomForm.note.value = i.note ?? "";
+  idiomForm.querySelector("button[type=submit]").textContent = "수정";
+  idiomCancelBtn.hidden = false;
+}
+
+function resetIdiomForm() {
+  idiomForm.reset();
+  idiomForm.id.value = "";
+  idiomForm.querySelector("button[type=submit]").textContent = "추가";
+  idiomCancelBtn.hidden = true;
+}
+
+idiomCancelBtn.addEventListener("click", resetIdiomForm);
+
+idiomForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id = idiomForm.id.value;
+  const dto = {
+    title: idiomForm.title.value,
+    category: idiomForm.category.value,
+    example: idiomForm.example.value,
+    explanation: idiomForm.explanation.value,
+    note: idiomForm.note.value,
+    status: idiomForm.status.value,
+  };
+  const result = id
+    ? await api(`/admin/api/idioms/${id}`, { method: "PUT", body: JSON.stringify(dto) })
+    : await api("/admin/api/idioms", { method: "POST", body: JSON.stringify(dto) });
+  if (result.ok) {
+    resetIdiomForm();
+    loadIdioms();
+  }
+});
+
+async function deleteIdiom(id) {
+  if (!confirm("이 숙어/구동사를 삭제할까요?")) return;
+  const result = await api(`/admin/api/idioms/${id}`, { method: "DELETE" });
+  if (result.ok) loadIdioms();
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
@@ -207,3 +280,4 @@ function escapeHtml(str) {
 
 loadWords();
 loadGrammars();
+loadIdioms();

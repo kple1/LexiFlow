@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:LexiFlow.Converters"
+             x:Class="LexiFlow.Views.IdiomView"
+             Title="Idioms"
+             Background="#222222">
+
+    <ContentPage.Resources>
+        <conv:StatusColorConverter x:Key="StatusColor"/>
+    </ContentPage.Resources>
+
+    <!-- Root Grid so the list is height-constrained and can scroll,
+         and so the detail panel can overlay on top of everything. -->
+    <Grid>
+
+        <!-- Main content -->
+        <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="10">
+            <!-- Category picker + Quiz launcher -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Picker Grid.Column="0"
+                        x:Name="CategoryPicker"
+                        Title="Select Category"
+                        ItemsSource="{Binding Categories}"
+                        SelectedItem="{Binding SelectedCategory}"
+                        BackgroundColor="#333333"
+                        TextColor="#F9F9F9"
+                        TitleColor="#F9F9F9"/>
+                <Button Grid.Column="1" Text="Quiz" Clicked="OnQuizClick"
+                        BackgroundColor="#3A6DF0" TextColor="White" Padding="16,0"/>
+            </Grid>
+
+            <!-- Idiom List (scrollable) -->
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding FilteredIdioms}"
+                            SelectionMode="None"
+                            BackgroundColor="#222222">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="#555555" StrokeThickness="1" Padding="12" Margin="0,4"
+                                StrokeShape="RoundRectangle 6">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ShowIdiomDetailCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <StackLayout Grid.Column="0" Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#F9F9F9"/>
+                                    <Label Text="{Binding Category}"
+                                           FontSize="12"
+                                           TextColor="#B0B0B0"/>
+                                </StackLayout>
+                                <Border Grid.Column="1" IsVisible="{Binding HasUserStatus}"
+                                        VerticalOptions="Center" Padding="8,2" StrokeThickness="0"
+                                        BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="{Binding UserStatus}" FontSize="11" TextColor="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Detail panel overlay (custom dialog) -->
+        <Grid IsVisible="{Binding IsDetailVisible}"
+              BackgroundColor="#CC000000">
+            <!-- Tap the dimmed background to close -->
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseDetailCommand}"/>
+            </Grid.GestureRecognizers>
+
+            <Border BackgroundColor="#2B2B2B"
+                    Stroke="#555555"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20"
+                    Margin="20"
+                    WidthRequest="{OnIdiom Phone=300, Default=460}"
+                    MaximumHeightRequest="{OnIdiom Phone=520, Default=640}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center">
+                <!-- Absorb taps on the card so they don't close the panel -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer/>
+                </Border.GestureRecognizers>
+
+                <ScrollView>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Idiom Detail"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#F9F9F9"
+                               HorizontalOptions="Center"
+                               Margin="0,0,0,6"/>
+
+                        <!-- Title -->
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="IDIOM" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                            <Label Text="{Binding SelectedIdiom.Title}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="1" Color="#444444"/>
+
+                        <!-- Category -->
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="CATEGORY" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                            <Label Text="{Binding SelectedIdiom.Category}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="1" Color="#444444"/>
+
+                        <!-- Example -->
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="EXAMPLE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                            <Label Text="{Binding SelectedIdiom.Example}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="1" Color="#444444"/>
+
+                        <!-- Explanation -->
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="EXPLANATION" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                            <Label Text="{Binding SelectedIdiom.Explanation}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="1" Color="#444444"/>
+
+                        <!-- Note -->
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="NOTE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+                            <Label Text="{Binding SelectedIdiom.Note}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+
+                        <Button Text="Close"
+                                Command="{Binding CloseDetailCommand}"
+                                BackgroundColor="#3A6DF0"
+                                TextColor="White"
+                                Margin="0,10,0,0"
+                                HorizontalOptions="Fill"/>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

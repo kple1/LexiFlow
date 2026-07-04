@@ -50,6 +50,19 @@ public class ApiService
         resp.EnsureSuccessStatusCode();
     }
 
+    public async Task<List<Idiom>> GetIdiomAsync()
+        => await _http.GetFromJsonAsync<List<Idiom>>("idioms") ?? [];
+
+    public async Task<List<IdiomProgress>> GetIdiomProgressAsync(string userId)
+        => await _http.GetFromJsonAsync<List<IdiomProgress>>($"users/{Uri.EscapeDataString(userId)}/idiom-progress") ?? [];
+
+    public async Task UpsertIdiomProgressAsync(string userId, string idiomId, bool correct, string? status = null)
+    {
+        var body = new { IdiomId = idiomId, Correct = correct, Status = status };
+        var resp = await _http.PostAsJsonAsync($"users/{Uri.EscapeDataString(userId)}/idiom-progress", body);
+        resp.EnsureSuccessStatusCode();
+    }
+
     // Sign in: server verifies the password (the hash is never sent to the client).
     public async Task<bool> LoginAsync(string userId, string pw)
     {
