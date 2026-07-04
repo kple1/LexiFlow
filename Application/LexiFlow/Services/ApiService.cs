@@ -40,6 +40,16 @@ public class ApiService
         resp.EnsureSuccessStatusCode();
     }
 
+    public async Task<List<GrammarProgress>> GetGrammarProgressAsync(string userId)
+        => await _http.GetFromJsonAsync<List<GrammarProgress>>($"users/{Uri.EscapeDataString(userId)}/grammar-progress") ?? [];
+
+    public async Task UpsertGrammarProgressAsync(string userId, string grammarId, bool correct, string? status = null)
+    {
+        var body = new { GrammarId = grammarId, Correct = correct, Status = status };
+        var resp = await _http.PostAsJsonAsync($"users/{Uri.EscapeDataString(userId)}/grammar-progress", body);
+        resp.EnsureSuccessStatusCode();
+    }
+
     // Sign in: server verifies the password (the hash is never sent to the client).
     public async Task<bool> LoginAsync(string userId, string pw)
     {

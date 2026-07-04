@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.HomeView"
+             Title="Home"
+             Background="#222222">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20" VerticalOptions="Center"
+                             WidthRequest="{OnIdiom Phone=340, Default=520}"
+                             HorizontalOptions="Center">
+            <Label Text="LexiFlow" FontSize="28" FontAttributes="Bold"
+                   TextColor="#F9F9F9" HorizontalOptions="Center"/>
+            <Label x:Name="greetingLabel" TextColor="Gray" HorizontalOptions="Center"/>
+
+            <Border BackgroundColor="#2B2B2B" StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12" Padding="20" Margin="0,6">
+                <Grid ColumnDefinitions="*,*,*">
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label x:Name="dueLabel" Text="0" FontSize="26" FontAttributes="Bold"
+                               TextColor="#F9A825" HorizontalOptions="Center"/>
+                        <Label Text="Due today" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label x:Name="masteredLabel" Text="0" FontSize="26" FontAttributes="Bold"
+                               TextColor="#4CAF50" HorizontalOptions="Center"/>
+                        <Label Text="Mastered" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="2">
+                        <Label x:Name="streakLabel" Text="0" FontSize="26" FontAttributes="Bold"
+                               TextColor="#3A6DF0" HorizontalOptions="Center"/>
+                        <Label Text="Day streak" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <Button Text="Start word review" Clicked="OnStartWordReviewClick"
+                    BackgroundColor="#3A6DF0" TextColor="White"/>
+            <Button Text="Start grammar review" Clicked="OnStartGrammarReviewClick"
+                    BackgroundColor="#2B2B2B" TextColor="#F9F9F9"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

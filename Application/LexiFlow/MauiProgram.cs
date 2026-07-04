@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using LexiFlow.ViewModels;
+using Plugin.LocalNotification;
 
 namespace LexiFlow
 {
@@ -15,6 +16,7 @@ namespace LexiFlow
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("RobotoSerif_28pt-Regular.ttf", "RobotoSerif");
@@ -22,12 +24,16 @@ namespace LexiFlow
 
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddSingleton<SessionService>();
+            builder.Services.AddSingleton<StreakService>();
+            builder.Services.AddSingleton<NotificationService>();
 
             builder.Services.AddTransient<AppShell>();
 
+            builder.Services.AddTransient<HomeView>();
             builder.Services.AddTransient<WordsView>();
             builder.Services.AddTransient<TestWordsView>();
             builder.Services.AddTransient<GrammarView>();
+            builder.Services.AddTransient<TestGrammarView>();
             builder.Services.AddTransient<UserManageView>();
             builder.Services.AddTransient<AccountView>();
 

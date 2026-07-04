@@ -92,6 +92,26 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
+[D:/LexiFlow/Application/LexiFlow/Views/HomeView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.HomeView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\HomeView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\HomeView.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/LexiFlow/Application/LexiFlow/Views/TestGrammarView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.TestGrammarView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\TestGrammarView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\TestGrammarView.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
 [D:/LexiFlow/Application/LexiFlow/Views/TestWordsView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.TestWordsView.xaml
@@ -117,6 +137,16 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.UserManageView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\UserManageView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\UserManageView.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/LexiFlow/Application/LexiFlow/Views/WordDetailView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = LexiFlow.Views.WordDetailView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\WordDetailView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\WordDetailView.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 

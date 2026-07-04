@@ -9,11 +9,13 @@ namespace LexiFlow.ViewModels;
 public partial class GrammarViewModel : ObservableObject
 {
     private readonly ApiService _api;
+    private readonly SessionService _session;
     private List<Grammar> _allGrammars = [];
 
-    public GrammarViewModel(ApiService api)
+    public GrammarViewModel(ApiService api, SessionService session)
     {
         _api = api;
+        _session = session;
     }
 
     public ObservableCollection<Grammar> FilteredGrammars { get; } = [];
@@ -38,6 +40,12 @@ public partial class GrammarViewModel : ObservableObject
 
             _allGrammars = await _api.GetGrammarAsync();
 
+            // Overlay this user's progress as a status badge on each grammar point.
+            var statusByGrammar = await LoadProgressMapAsync();
+            foreach (var g in _allGrammars)
+                if (statusByGrammar.TryGetValue(g.Id, out var status))
+                    g.UserStatus = status;
+
             var uniqueCategories = _allGrammars
                 .Select(g => g.Category)
                 .Distinct()
@@ -55,6 +63,24 @@ public partial class GrammarViewModel : ObservableObject
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlert("Error", ex.Message, "Confirm");
+        }
+    }
+
+    // grammarId -> status for the signed-in user; empty when logged out or server unavailable.
+    private async Task<Dictionary<string, string>> LoadProgressMapAsync()
+    {
+        if (!_session.IsLoggedIn)
+            return [];
+        try
+        {
+            var progress = await _api.GetGrammarProgressAsync(_session.CurrentUserId!);
+            return progress
+                .GroupBy(p => p.GrammarId)
+                .ToDictionary(g => g.Key, g => g.First().Status);
+        }
+        catch
+        {
+            return [];
         }
     }
 

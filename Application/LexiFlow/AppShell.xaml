@@ -14,16 +14,19 @@
     </Shell.Resources>
 
     <TabBar>
-        <Tab Icon="book.png" Title="Words" Shell.NavBarIsVisible="False">
+        <Tab Route="home" Icon="book.png" Title="Home" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:HomeView}"/>
+        </Tab>
+        <Tab Route="words" Icon="book.png" Title="Words" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:WordsView}"/>
         </Tab>
-        <Tab Icon="test.png" Title="WordTest" Shell.NavBarIsVisible="False">
+        <Tab Route="wordtest" Icon="test.png" Title="WordTest" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:TestWordsView}"/>
         </Tab>
-        <Tab Icon="a.png" Title="Grammar" Shell.NavBarIsVisible="False">
+        <Tab Route="grammar" Icon="a.png" Title="Grammar" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:GrammarView}"/>
         </Tab>
-        <Tab Icon="user.png" Title="Account" Shell.NavBarIsVisible="False">
+        <Tab Route="account" Icon="user.png" Title="Account" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:AccountView}"/>
         </Tab>
     </TabBar>

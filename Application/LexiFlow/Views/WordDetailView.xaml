@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.WordDetailView"
+             Title="Word"
+             Background="#222222">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="14">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Label x:Name="englishLabel" FontSize="30" FontAttributes="Bold"
+                       TextColor="#F9F9F9" VerticalOptions="Center"/>
+                <Button Text="🔊" FontSize="22" Clicked="OnListenClick"
+                        BackgroundColor="Transparent" TextColor="#7FB0FF" Padding="6,0"/>
+            </HorizontalStackLayout>
+
+            <Label x:Name="meaningLabel" FontSize="18" TextColor="#B0B0B0" HorizontalOptions="Center"/>
+
+            <Border x:Name="statusBadge" IsVisible="False" HorizontalOptions="Center"
+                    Padding="10,3" StrokeThickness="0" StrokeShape="RoundRectangle 10">
+                <Label x:Name="statusLabel" FontSize="12" TextColor="White"/>
+            </Border>
+
+            <BoxView HeightRequest="1" Color="#444444" Margin="0,6"/>
+
+            <Label Text="EXAMPLE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+            <Label x:Name="exampleLabel" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+
+            <Label x:Name="noteHeader" Text="NOTE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
+            <Label x:Name="noteLabel" FontSize="15" TextColor="#B0B0B0" LineBreakMode="WordWrap"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

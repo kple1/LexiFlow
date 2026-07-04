@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:LexiFlow.Converters"
              x:Class="LexiFlow.Views.GrammarView"
              Title="Grammar"
              Background="#222222">
+
+    <ContentPage.Resources>
+        <conv:StatusColorConverter x:Key="StatusColor"/>
+    </ContentPage.Resources>
 
     <!-- Root Grid so the list is height-constrained and can scroll,
          and so the detail panel can overlay on top of everything. -->
@@ -11,15 +16,19 @@
 
         <!-- Main content -->
         <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="10">
-            <!-- Category ComboBox -->
-            <Picker Grid.Row="0"
-                    x:Name="CategoryPicker"
-                    Title="Select Category"
-                    ItemsSource="{Binding Categories}"
-                    SelectedItem="{Binding SelectedCategory}"
-                    BackgroundColor="#333333"
-                    TextColor="#F9F9F9"
-                    TitleColor="#F9F9F9"/>
+            <!-- Category picker + Quiz launcher -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Picker Grid.Column="0"
+                        x:Name="CategoryPicker"
+                        Title="Select Category"
+                        ItemsSource="{Binding Categories}"
+                        SelectedItem="{Binding SelectedCategory}"
+                        BackgroundColor="#333333"
+                        TextColor="#F9F9F9"
+                        TitleColor="#F9F9F9"/>
+                <Button Grid.Column="1" Text="Quiz" Clicked="OnQuizClick"
+                        BackgroundColor="#3A6DF0" TextColor="White" Padding="16,0"/>
+            </Grid>
 
             <!-- Grammar List (scrollable) -->
             <CollectionView Grid.Row="1"
@@ -35,15 +44,23 @@
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ShowGrammarDetailCommand}"
                                     CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
-                            <StackLayout Spacing="4">
-                                <Label Text="{Binding Title}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="#F9F9F9"/>
-                                <Label Text="{Binding Category}"
-                                       FontSize="12"
-                                       TextColor="#B0B0B0"/>
-                            </StackLayout>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <StackLayout Grid.Column="0" Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#F9F9F9"/>
+                                    <Label Text="{Binding Category}"
+                                           FontSize="12"
+                                           TextColor="#B0B0B0"/>
+                                </StackLayout>
+                                <Border Grid.Column="1" IsVisible="{Binding HasUserStatus}"
+                                        VerticalOptions="Center" Padding="8,2" StrokeThickness="0"
+                                        BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="{Binding UserStatus}" FontSize="11" TextColor="White"/>
+                                </Border>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

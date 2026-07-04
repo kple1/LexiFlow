@@ -28,13 +28,9 @@ public partial class WordsView : ContentPage
             _vm.LoadWordsCommand.Execute(null);
     }
 
-    private void OnWordClick(object sender, PointerEventArgs e)
+    private async void OnWordClick(object sender, PointerEventArgs e)
     {
-        var control = sender as WordControl;
-        var word = control.BindingContext as Word;
-        var example = word.Example;
-
-        if (_vm.WordInformationCommand.CanExecute(example))
-            _vm.WordInformationCommand.Execute(example);
+        if (sender is WordControl { BindingContext: Word word })
+            await Navigation.PushAsync(new WordDetailView(word));
     }
 }

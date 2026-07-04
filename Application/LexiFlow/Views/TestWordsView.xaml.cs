@@ -9,11 +9,13 @@ public partial class TestWordsView : ContentPage
 	private int _page = 0;
 	private readonly ApiService _api;
 	private readonly SessionService _session;
-	public TestWordsView(ApiService api, SessionService session)
+	private readonly StreakService _streak;
+	public TestWordsView(ApiService api, SessionService session, StreakService streak)
 	{
 		InitializeComponent();
 		_api = api;
 		_session = session;
+		_streak = streak;
 	}
 
 	protected override async void OnAppearing()
@@ -25,7 +27,8 @@ public partial class TestWordsView : ContentPage
             var progress = await LoadProgressMapAsync();
 
             // Spaced repetition: prefer words that are due for review over a plain shuffle.
-            var selected = ReviewScheduler.SelectForReview(allWords, progress, 10, DateTime.UtcNow);
+            var progressById = progress.ToDictionary(kv => kv.Key, kv => (ILearningProgress)kv.Value);
+            var selected = ReviewScheduler.SelectForReview(allWords, w => w.Id, progressById, 10, DateTime.UtcNow);
             _page = 0;
             _words = [.. selected.Select(word => new CorrectWordState { Word = word, IsCorrect = false })];
 
@@ -102,6 +105,7 @@ public partial class TestWordsView : ContentPage
     // (e.g. the progress endpoint isn't deployed yet).
     private async void RecordResult(CorrectWordState state, bool correct, string status)
     {
+		_streak.RegisterStudyToday();
 		if (!_session.IsLoggedIn)
 			return;
 		try
