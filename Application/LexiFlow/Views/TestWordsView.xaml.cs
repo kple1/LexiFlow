@@ -68,13 +68,14 @@ public partial class TestWordsView : ContentPage
 
     private async void OnSubmitClick(object sender, EventArgs e)
     {
-		var state = _words[_page];
+        var state = _words[_page];
 		if (state.Word.Meaning == answer.Text)
 		{
 			wrong.IsVisible = false;
 			state.IsCorrect = true;
-			// Mastered only if they never missed this word; otherwise it's still being learned.
-			RecordResult(state, correct: true, status: state.Missed ? "Learning" : "Mastered");
+            // Mastered only if they never missed this word; otherwise it's still being learned.
+            answer.Focus();
+            RecordResult(state, correct: true, status: state.Missed ? "Learning" : "Mastered");
 			NextPage();
 		}
 		else
@@ -91,7 +92,8 @@ public partial class TestWordsView : ContentPage
 
     private async void OnCheckClick(object sender, EventArgs e)
     {
-		var state = _words[_page];
+        answer.Focus();
+        var state = _words[_page];
 		// Revealing the answer counts as a miss, so it can't be Mastered on this round.
 		if (!state.Missed)
 		{
@@ -120,7 +122,8 @@ public partial class TestWordsView : ContentPage
 
     private async void OnNextClick(object sender, EventArgs e)
     {
-		NextPage();
+        answer.Focus();
+        NextPage();
     }
 
 	private async void NextPage()
@@ -147,6 +150,7 @@ public partial class TestWordsView : ContentPage
 
     private void OnEntryCompleted(object sender, EventArgs e)
     {
-		NextPage();
+		answer.Focus();
+        NextPage();
     }
 }
