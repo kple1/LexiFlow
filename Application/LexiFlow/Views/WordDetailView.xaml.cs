@@ -34,7 +34,10 @@ public partial class WordDetailView : ContentPage
     {
         try
         {
-            await TextToSpeech.Default.SpeakAsync(_word.English);
+            var locales = await TextToSpeech.Default.GetLocalesAsync();
+            var englishLocale = locales.FirstOrDefault(l => l.Language.StartsWith("en", StringComparison.OrdinalIgnoreCase));
+
+            await TextToSpeech.Default.SpeakAsync(_word.English, new SpeechOptions { Locale = englishLocale });
         }
         catch (Exception ex)
         {

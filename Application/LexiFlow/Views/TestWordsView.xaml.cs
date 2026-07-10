@@ -66,27 +66,42 @@ public partial class TestWordsView : ContentPage
 
     private string Counter() => $"({_page + 1:D2}/{_words.Count:D2})";
 
-    private async void OnSubmitClick(object sender, EventArgs e)
+    private async void OnSubmitClick(object sender, EventArgs e) => await CheckAnswerAsync();
+
+    // Pressing Enter in the answer box submits — same as the Submit button.
+    // (Previously this just skipped to the next word without checking the answer.)
+    private async void OnEntryCompleted(object sender, EventArgs e) => await CheckAnswerAsync();
+
+    // Grade the typed answer and tell the user whether it's right or wrong.
+    private async Task CheckAnswerAsync()
     {
         var state = _words[_page];
-		if (state.Word.Meaning == answer.Text)
-		{
-			wrong.IsVisible = false;
-			state.IsCorrect = true;
+        var input = (answer.Text ?? "").Trim();
+        var expected = (state.Word.Meaning ?? "").Trim();
+
+        if (input.Length == 0)
+            return; // ignore empty submissions
+
+        if (input == expected)
+        {
+            wrong.IsVisible = false;
+            state.IsCorrect = true;
             // Mastered only if they never missed this word; otherwise it's still being learned.
-            answer.Focus();
             RecordResult(state, correct: true, status: state.Missed ? "Learning" : "Mastered");
-			NextPage();
-		}
-		else
-		{
+            await DisplayAlert("정답", "정답입니다! 🎉", "다음");
+            NextPage();
+        }
+        else
+        {
             wrong.IsVisible = true;
-			// Record a single "wrong" result the first time they miss this word.
-			if (!state.Missed)
-			{
-				state.Missed = true;
-				RecordResult(state, correct: false, status: "Learning");
-			}
+            // Record a single "wrong" result the first time they miss this word.
+            if (!state.Missed)
+            {
+                state.Missed = true;
+                RecordResult(state, correct: false, status: "Learning");
+            }
+            await DisplayAlert("오답", "틀렸습니다. 다시 시도해 보세요.", "확인");
+            answer.Focus();
         }
     }
 
@@ -120,13 +135,14 @@ public partial class TestWordsView : ContentPage
 		}
     }
 
-    private async void OnNextClick(object sender, EventArgs e)
+    // Explicit skip control — moves on without grading.
+    private void OnNextClick(object sender, EventArgs e)
     {
         answer.Focus();
         NextPage();
     }
 
-	private async void NextPage()
+	private void NextPage()
 	{
         wrong.IsVisible = false;
 
@@ -146,11 +162,5 @@ public partial class TestWordsView : ContentPage
         }
         display.Text = $"{_words[_page].Word.English}\n{Counter()}";
         answer.Text = "";
-    }
-
-    private void OnEntryCompleted(object sender, EventArgs e)
-    {
-		answer.Focus();
-        NextPage();
     }
 }
