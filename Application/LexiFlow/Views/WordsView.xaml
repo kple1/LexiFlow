@@ -1,36 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:uc="clr-namespace:LexiFlow.Views.UserControls"
-             xmlns:vm="clr-namespace:LexiFlow.ViewModels"
+             xmlns:conv="clr-namespace:LexiFlow.Converters"
              x:Class="LexiFlow.Views.WordsView"
-             Title="Words"
-             BackgroundColor="#222222">
-    <Grid RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10" Padding="10,5">
-            <Entry x:Name="search" Grid.Column="0" Placeholder="Search words..."
-                   VerticalOptions="Center" Text="{Binding SearchText}"/>
-            <Image Grid.Column="1" Source="search.png" WidthRequest="28" HeightRequest="28"
-                   VerticalOptions="Center">
-                <Image.GestureRecognizers>
-                    <PointerGestureRecognizer PointerPressed="OnSearchClick"/>
-                </Image.GestureRecognizers>
-            </Image>
+             x:Name="wordsPage"
+             Title="단어">
+    <ContentPage.Resources>
+        <conv:StatusColorConverter x:Key="StatusColor"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*"
+          RowSpacing="16"
+          Padding="{OnIdiom Phone='20,24,20,96', Default='40,32,40,48'}"
+          HorizontalOptions="Fill"
+          MaximumWidthRequest="900">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="WORD LIBRARY" Style="{StaticResource EyebrowLabel}"/>
+                <Label Text="나의 단어장" Style="{StaticResource Title}"/>
+                <Label Text="찾아보고, 들어보고, 기억을 쌓아 가세요." Style="{StaticResource Body}"/>
+            </VerticalStackLayout>
+            <Button Grid.Column="1"
+                    Text="복습 시작"
+                    HeightRequest="44"
+                    VerticalOptions="End"
+                    Clicked="OnStartReviewClick"/>
         </Grid>
 
-        <CollectionView ItemsSource="{Binding Words}" Grid.Row="1">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="3"/>
-            </CollectionView.ItemsLayout>
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <Border BackgroundColor="{StaticResource Surface}"
+                    Stroke="{StaticResource Stroke}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="5,0">
+                <Entry x:Name="searchEntry"
+                       Style="{StaticResource FieldEntry}"
+                       BackgroundColor="Transparent"
+                       Placeholder="영어 또는 뜻으로 검색"
+                       Text="{Binding SearchText}"
+                       ReturnType="Search"
+                       Completed="OnSearchCompleted"/>
+            </Border>
+            <Button Grid.Column="1"
+                    Text="검색"
+                    WidthRequest="84"
+                    Command="{Binding LoadWordsCommand}"
+                    IsEnabled="{Binding IsNotBusy}"/>
+        </Grid>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <uc:WordControl>
-                        <uc:WordControl.GestureRecognizers>
-                            <PointerGestureRecognizer PointerReleased="OnWordClick"/>
-                        </uc:WordControl.GestureRecognizers>
-                    </uc:WordControl>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+            <Label Text="{Binding ResultSummary}" Style="{StaticResource MutedLabel}" VerticalOptions="Center"/>
+            <ActivityIndicator Grid.Column="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Primary}"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <CollectionView ItemsSource="{Binding Words}"
+                            SelectionMode="None"
+                            IsVisible="{Binding IsNotBusy}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="{OnIdiom Phone=1, Default=2}"
+                                     HorizontalItemSpacing="12"
+                                     VerticalItemSpacing="12"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="10" Padding="20">
+                        <Label Text="⌕" FontSize="38" TextColor="{StaticResource TextMuted}" HorizontalTextAlignment="Center"/>
+                        <Label Text="조건에 맞는 단어가 없어요" Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
+                        <Label Text="다른 검색어로 찾아보세요." Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource CardBorder}" Padding="18" Margin="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnWordTapped"/>
+                            </Border.GestureRecognizers>
+                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="7" ColumnSpacing="12">
+                                <Label Text="{Binding English}" FontFamily="RobotoSerif" FontSize="22" LineBreakMode="TailTruncation"/>
+                                <Border Grid.Column="1"
+                                        IsVisible="{Binding HasUserStatus}"
+                                        BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="9,3"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding UserStatus}" FontSize="10" FontAttributes="Bold" TextColor="White"/>
+                                </Border>
+                                <Label Grid.Row="1" Text="{Binding Meaning}" Style="{StaticResource MutedLabel}" LineBreakMode="TailTruncation"/>
+                                <Label Grid.Row="1" Grid.Column="1" Text="›" FontSize="24" TextColor="{StaticResource TextMuted}" VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Border IsVisible="{Binding HasError}"
+                    BackgroundColor="{StaticResource DangerSoft}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 16"
+                    Padding="20"
+                    VerticalOptions="Start">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Danger}"/>
+                    <Button Text="다시 시도" Command="{Binding LoadWordsCommand}" Style="{StaticResource SecondaryButton}"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

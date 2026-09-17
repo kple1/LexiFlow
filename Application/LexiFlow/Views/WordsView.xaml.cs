@@ -1,36 +1,34 @@
 using LexiFlow.Models;
-using LexiFlow.Services;
 using LexiFlow.ViewModels;
-using LexiFlow.Views.UserControls;
 
 namespace LexiFlow.Views;
 
 public partial class WordsView : ContentPage
 {
-    private WordsViewModel _vm;
-    public WordsView(WordsViewModel vm)
+    private readonly WordsViewModel _viewModel;
+
+    public WordsView(WordsViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = _vm = vm;
+        BindingContext = _viewModel = viewModel;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
-        if (_vm.LoadWordsCommand.CanExecute(null))
-            _vm.LoadWordsCommand.Execute(null);
+        if (_viewModel.Words.Count == 0)
+            await _viewModel.LoadWordsCommand.ExecuteAsync(null);
     }
 
-    private void OnSearchClick(object sender, PointerEventArgs e)
-    {
-        if (_vm.LoadWordsCommand.CanExecute(null))
-            _vm.LoadWordsCommand.Execute(null);
-    }
+    private async void OnSearchCompleted(object? sender, EventArgs e)
+        => await _viewModel.LoadWordsCommand.ExecuteAsync(null);
 
-    private async void OnWordClick(object sender, PointerEventArgs e)
+    private async void OnWordTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is WordControl { BindingContext: Word word })
+        if (sender is TapGestureRecognizer { BindingContext: Word word })
             await Navigation.PushAsync(new WordDetailView(word));
     }
+
+    private async void OnStartReviewClick(object? sender, EventArgs e)
+        => await Shell.Current.GoToAsync("//learn");
 }

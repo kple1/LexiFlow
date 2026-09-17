@@ -25,7 +25,10 @@ namespace LexiFlow
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddSingleton<SessionService>();
             builder.Services.AddSingleton<StreakService>();
+            builder.Services.AddSingleton<LearningMetricsService>();
             builder.Services.AddSingleton<NotificationService>();
+            builder.Services.AddSingleton<ArchiveService>();
+            builder.Services.AddSingleton<SentenceCatalogService>();
 
             builder.Services.AddTransient<AppShell>();
 
@@ -38,6 +41,7 @@ namespace LexiFlow
             builder.Services.AddTransient<TestIdiomView>();
             builder.Services.AddTransient<UserManageView>();
             builder.Services.AddTransient<AccountView>();
+            builder.Services.AddTransient<ArchiveView>();
 
             builder.Services.AddTransient<WordsViewModel>();
             builder.Services.AddTransient<GrammarViewModel>();

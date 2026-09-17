@@ -12,14 +12,13 @@ public partial class IdiomView : ContentPage
         BindingContext = _viewModel = viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.LoadIdiomsCommand.Execute(null);
+        if (_viewModel.FilteredIdioms.Count == 0)
+            await _viewModel.LoadIdiomsCommand.ExecuteAsync(null);
     }
 
-    private async void OnQuizClick(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync(nameof(TestIdiomView));
-    }
+    private async void OnQuizClick(object? sender, EventArgs e)
+        => await Shell.Current.GoToAsync(nameof(TestIdiomView));
 }

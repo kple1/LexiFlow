@@ -3,146 +3,118 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:LexiFlow.Converters"
              x:Class="LexiFlow.Views.IdiomView"
-             Title="Idioms"
-             Background="#222222">
-
+             Title="표현">
     <ContentPage.Resources>
         <conv:StatusColorConverter x:Key="StatusColor"/>
     </ContentPage.Resources>
 
-    <!-- Root Grid so the list is height-constrained and can scroll,
-         and so the detail panel can overlay on top of everything. -->
     <Grid>
-
-        <!-- Main content -->
-        <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="10">
-            <!-- Category picker + Quiz launcher -->
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                <Picker Grid.Column="0"
-                        x:Name="CategoryPicker"
-                        Title="Select Category"
-                        ItemsSource="{Binding Categories}"
-                        SelectedItem="{Binding SelectedCategory}"
-                        BackgroundColor="#333333"
-                        TextColor="#F9F9F9"
-                        TitleColor="#F9F9F9"/>
-                <Button Grid.Column="1" Text="Quiz" Clicked="OnQuizClick"
-                        BackgroundColor="#3A6DF0" TextColor="White" Padding="16,0"/>
+        <Grid RowDefinitions="Auto,Auto,Auto,*"
+              RowSpacing="16"
+              Padding="{OnIdiom Phone='20,24,20,96', Default='40,32,40,48'}"
+              HorizontalOptions="Fill"
+              MaximumWidthRequest="900">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="EXPRESSION LIBRARY" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Success}"/>
+                    <Label Text="표현 라이브러리" Style="{StaticResource Title}"/>
+                    <Label Text="교과서 밖의 자연스러운 영어를 상황과 함께 익혀요." Style="{StaticResource Body}"/>
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="복습 시작" HeightRequest="44" VerticalOptions="End" BackgroundColor="{StaticResource Success}" Clicked="OnQuizClick"/>
             </Grid>
 
-            <!-- Idiom List (scrollable) -->
-            <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding FilteredIdioms}"
-                            SelectionMode="None"
-                            BackgroundColor="#222222">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Stroke="#555555" StrokeThickness="1" Padding="12" Margin="0,4"
-                                StrokeShape="RoundRectangle 6">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ShowIdiomDetailCommand}"
-                                    CommandParameter="{Binding .}"/>
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                <StackLayout Grid.Column="0" Spacing="4">
-                                    <Label Text="{Binding Title}"
-                                           FontSize="16"
-                                           FontAttributes="Bold"
-                                           TextColor="#F9F9F9"/>
-                                    <Label Text="{Binding Category}"
-                                           FontSize="12"
-                                           TextColor="#B0B0B0"/>
-                                </StackLayout>
-                                <Border Grid.Column="1" IsVisible="{Binding HasUserStatus}"
-                                        VerticalOptions="Center" Padding="8,2" StrokeThickness="0"
-                                        BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}"
-                                        StrokeShape="RoundRectangle 8">
-                                    <Label Text="{Binding UserStatus}" FontSize="11" TextColor="White"/>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <Picker Grid.Row="1"
+                    Title="카테고리 선택"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}"
+                    Style="{StaticResource AppPicker}"/>
+
+            <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                <Label Text="{Binding ResultSummary}" Style="{StaticResource MutedLabel}" VerticalOptions="Center"/>
+                <ActivityIndicator Grid.Column="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Success}"/>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <CollectionView ItemsSource="{Binding FilteredIdioms}" SelectionMode="None" IsVisible="{Binding IsNotBusy}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center" Spacing="10" Padding="20">
+                            <Label Text="❞" FontSize="40" TextColor="{StaticResource TextMuted}" HorizontalTextAlignment="Center"/>
+                            <Label Text="이 카테고리에는 표현 카드가 없어요" Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource CardBorder}" Padding="18" Margin="0,0,0,10">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ShowIdiomDetailCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="6" ColumnSpacing="12">
+                                    <Label Text="{Binding Title}" FontFamily="RobotoSerif" FontSize="20" LineBreakMode="TailTruncation"/>
+                                    <Border Grid.Column="1" IsVisible="{Binding HasUserStatus}" VerticalOptions="Center" Padding="9,3" StrokeThickness="0" BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}" StrokeShape="RoundRectangle 10">
+                                        <Label Text="{Binding UserStatus}" FontSize="10" FontAttributes="Bold" TextColor="White"/>
+                                    </Border>
+                                    <HorizontalStackLayout Grid.Row="1" Spacing="7">
+                                        <Label Text="{Binding Category}" Style="{StaticResource MutedLabel}" TextColor="{StaticResource Success}"/>
+                                        <Label Text="· 탭해서 자세히" Style="{StaticResource MutedLabel}"/>
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="1" Grid.Column="1" Text="›" FontSize="24" TextColor="{StaticResource TextMuted}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Border IsVisible="{Binding HasError}" BackgroundColor="{StaticResource DangerSoft}" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="20" VerticalOptions="Start">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Danger}"/>
+                        <Button Text="다시 시도" Command="{Binding LoadIdiomsCommand}" Style="{StaticResource SecondaryButton}"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
         </Grid>
 
-        <!-- Detail panel overlay (custom dialog) -->
-        <Grid IsVisible="{Binding IsDetailVisible}"
-              BackgroundColor="#CC000000">
-            <!-- Tap the dimmed background to close -->
+        <Grid IsVisible="{Binding IsDetailVisible}" BackgroundColor="#D90B1120">
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding CloseDetailCommand}"/>
             </Grid.GestureRecognizers>
-
-            <Border BackgroundColor="#2B2B2B"
-                    Stroke="#555555"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 12"
-                    Padding="20"
-                    Margin="20"
-                    WidthRequest="{OnIdiom Phone=300, Default=460}"
-                    MaximumHeightRequest="{OnIdiom Phone=520, Default=640}"
+            <Border Style="{StaticResource CardBorder}"
+                    Padding="{OnIdiom Phone=22, Default=28}"
+                    Margin="24"
+                    WidthRequest="{OnIdiom Phone=330, Default=560}"
+                    MaximumHeightRequest="680"
                     VerticalOptions="Center"
                     HorizontalOptions="Center">
-                <!-- Absorb taps on the card so they don't close the panel -->
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer/>
                 </Border.GestureRecognizers>
-
                 <ScrollView>
-                    <VerticalStackLayout Spacing="12">
-                        <Label Text="Idiom Detail"
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#F9F9F9"
-                               HorizontalOptions="Center"
-                               Margin="0,0,0,6"/>
-
-                        <!-- Title -->
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="IDIOM" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-                            <Label Text="{Binding SelectedIdiom.Title}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="표현 자세히" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Success}" VerticalOptions="Center"/>
+                            <Button Grid.Column="1" Text="×" Command="{Binding CloseDetailCommand}" Style="{StaticResource GhostButton}" WidthRequest="42" HeightRequest="42" Padding="0" FontSize="20"/>
+                        </Grid>
+                        <Label Text="{Binding SelectedIdiom.Title}" FontFamily="RobotoSerif" FontSize="28"/>
+                        <Border BackgroundColor="{StaticResource SuccessSoft}" StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="10,5" HorizontalOptions="Start">
+                            <Label Text="{Binding SelectedIdiom.Category}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource Success}"/>
+                        </Border>
+                        <BoxView HeightRequest="1" Color="{StaticResource Stroke}"/>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="뜻과 쓰임" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Success}"/>
+                            <Label Text="{Binding SelectedIdiom.Explanation}" Style="{StaticResource Body}" TextColor="{StaticResource TextPrimary}" LineBreakMode="WordWrap"/>
                         </VerticalStackLayout>
-                        <BoxView HeightRequest="1" Color="#444444"/>
-
-                        <!-- Category -->
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="CATEGORY" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-                            <Label Text="{Binding SelectedIdiom.Category}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="이렇게 써요" Style="{StaticResource EyebrowLabel}"/>
+                            <Label Text="{Binding SelectedIdiom.Example}" FontSize="17" LineBreakMode="WordWrap"/>
                         </VerticalStackLayout>
-                        <BoxView HeightRequest="1" Color="#444444"/>
-
-                        <!-- Example -->
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="EXAMPLE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-                            <Label Text="{Binding SelectedIdiom.Example}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
-                        </VerticalStackLayout>
-                        <BoxView HeightRequest="1" Color="#444444"/>
-
-                        <!-- Explanation -->
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="EXPLANATION" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-                            <Label Text="{Binding SelectedIdiom.Explanation}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
-                        </VerticalStackLayout>
-                        <BoxView HeightRequest="1" Color="#444444"/>
-
-                        <!-- Note -->
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="NOTE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-                            <Label Text="{Binding SelectedIdiom.Note}" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
-                        </VerticalStackLayout>
-
-                        <Button Text="Close"
-                                Command="{Binding CloseDetailCommand}"
-                                BackgroundColor="#3A6DF0"
-                                TextColor="White"
-                                Margin="0,10,0,0"
-                                HorizontalOptions="Fill"/>
+                        <Border BackgroundColor="{StaticResource SurfaceMuted}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="13">
+                            <Label Text="{Binding SelectedIdiom.Note}" Style="{StaticResource MutedLabel}" LineBreakMode="WordWrap"/>
+                        </Border>
+                        <Button Text="닫기" Command="{Binding CloseDetailCommand}" BackgroundColor="{StaticResource Success}"/>
                     </VerticalStackLayout>
                 </ScrollView>
             </Border>
         </Grid>
-
     </Grid>
 </ContentPage>

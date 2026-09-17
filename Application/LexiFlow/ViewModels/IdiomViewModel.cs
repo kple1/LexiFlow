@@ -1,8 +1,8 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LexiFlow.Models;
 using LexiFlow.Services;
-using System.Collections.ObjectModel;
 
 namespace LexiFlow.ViewModels;
 
@@ -24,35 +24,50 @@ public partial class IdiomViewModel : ObservableObject
     [ObservableProperty]
     private string _selectedCategory = "전체";
 
-    partial void OnSelectedCategoryChanged(string value)
-    {
-        FilterIdioms();
-    }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+    private bool _isBusy;
+
+    public bool IsNotBusy => !IsBusy;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasError))]
+    private string _errorMessage = "";
+
+    public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
+
+    [ObservableProperty]
+    private string _resultSummary = "표현 카드를 불러오는 중이에요";
+
+    partial void OnSelectedCategoryChanged(string value) => FilterIdioms();
 
     [RelayCommand]
-    private async void LoadIdioms()
+    private async Task LoadIdiomsAsync()
     {
+        if (IsBusy)
+            return;
+
+        IsBusy = true;
+        ErrorMessage = "";
+
         try
         {
-            FilteredIdioms.Clear();
+            var idiomTask = _api.GetIdiomAsync();
+            var progressTask = LoadProgressMapAsync();
+            await Task.WhenAll(idiomTask, progressTask);
+
+            _allIdioms = await idiomTask;
+            var statusByIdiom = await progressTask;
+            foreach (var idiom in _allIdioms)
+                idiom.UserStatus = statusByIdiom.GetValueOrDefault(idiom.Id);
+
             Categories.Clear();
             Categories.Add("전체");
-
-            _allIdioms = await _api.GetIdiomAsync();
-
-            // Overlay this user's progress as a status badge on each idiom.
-            var statusByIdiom = await LoadProgressMapAsync();
-            foreach (var i in _allIdioms)
-                if (statusByIdiom.TryGetValue(i.Id, out var status))
-                    i.UserStatus = status;
-
-            var uniqueCategories = _allIdioms
-                .Select(i => i.Category)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToList();
-
-            foreach (var category in uniqueCategories)
+            foreach (var category in _allIdioms
+                         .Select(idiom => idiom.Category)
+                         .Where(category => !string.IsNullOrWhiteSpace(category))
+                         .Distinct()
+                         .OrderBy(category => category))
             {
                 Categories.Add(category);
             }
@@ -60,23 +75,30 @@ public partial class IdiomViewModel : ObservableObject
             SelectedCategory = "전체";
             FilterIdioms();
         }
-        catch (Exception ex)
+        catch
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "Confirm");
+            _allIdioms = [];
+            FilteredIdioms.Clear();
+            ResultSummary = "표현 카드를 불러오지 못했어요";
+            ErrorMessage = "네트워크를 확인한 뒤 다시 시도해 주세요.";
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
-    // idiomId -> status for the signed-in user; empty when logged out or server unavailable.
     private async Task<Dictionary<string, string>> LoadProgressMapAsync()
     {
         if (!_session.IsLoggedIn)
             return [];
+
         try
         {
             var progress = await _api.GetIdiomProgressAsync(_session.CurrentUserId!);
             return progress
-                .GroupBy(p => p.IdiomId)
-                .ToDictionary(g => g.Key, g => g.First().Status);
+                .GroupBy(item => item.IdiomId)
+                .ToDictionary(group => group.Key, group => group.First().Status);
         }
         catch
         {
@@ -87,15 +109,16 @@ public partial class IdiomViewModel : ObservableObject
     private void FilterIdioms()
     {
         FilteredIdioms.Clear();
-
         var filtered = SelectedCategory == "전체"
             ? _allIdioms
-            : _allIdioms.Where(i => i.Category == SelectedCategory).ToList();
+            : _allIdioms.Where(idiom => idiom.Category == SelectedCategory).ToList();
 
         foreach (var idiom in filtered)
-        {
             FilteredIdioms.Add(idiom);
-        }
+
+        ResultSummary = SelectedCategory == "전체"
+            ? $"전체 {FilteredIdioms.Count}개 표현"
+            : $"{SelectedCategory} · {FilteredIdioms.Count}개";
     }
 
     [ObservableProperty]
@@ -105,9 +128,9 @@ public partial class IdiomViewModel : ObservableObject
     private bool _isDetailVisible;
 
     [RelayCommand]
-    private void ShowIdiomDetail(Idiom idiom)
+    private void ShowIdiomDetail(Idiom? idiom)
     {
-        if (idiom == null)
+        if (idiom is null)
             return;
 
         SelectedIdiom = idiom;

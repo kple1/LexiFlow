@@ -2,7 +2,7 @@
 
 > **Lexicon + Flow** — 머릿속 단어들이 자연스럽게 흘러나오는 상태.
 
-Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영어 학습 앱입니다. 단어(Word)는 Notion과 관리자 패널을 함께 쓰는 하이브리드 방식이고, 문법(Grammar)과 숙어/구동사(Idiom)는 관리자 패널로만 관리합니다. 서버가 데이터를 동기화·저장하고, 모바일/데스크톱 앱이 REST API로 불러와 학습·퀴즈·진행도 추적을 제공합니다.
+Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영어 학습 앱입니다. 핵심 학습 경험은 **문장 뜻 고르기와 빈칸 직접 쓰기**이며, 문장 속 파란 단어를 누르면 뜻을 확인하고 개인 Archive에 저장할 수 있습니다. 서버는 단어·문법·숙어 콘텐츠와 학습 진행도를 동기화하고, .NET MAUI 앱은 오늘의 목표·XP·레벨·연속 학습일을 하나의 흐름으로 보여줍니다.
 
 <p align="left">
   <img alt=".NET" src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white">
@@ -16,9 +16,37 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 
 ---
 
+## 📸 실제 앱 화면
+
+아래 이미지는 목업이 아닌 **Windows용 LexiFlow 실제 실행 화면**입니다.
+
+<p align="center">
+  <img src="docs/screenshots/home.jpg" alt="오늘의 목표, XP, 연속 학습일, 복습 대기와 레벨 진행도를 보여주는 LexiFlow 홈 화면" width="100%">
+  <br>
+  <sub>오늘 — 목표, XP, 복습 대기, 레벨 진행도를 한눈에 확인</sub>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/sentence-learning.jpg" alt="문장 뜻을 보고 빈칸에 영어 단어를 직접 입력하며 파란 단어를 눌러 뜻을 확인하는 LexiFlow 문장 학습 화면" width="100%">
+  <br>
+  <sub>문장 학습 — 뜻 고르기와 빈칸 쓰기, 문장 속 단어 즉시 조회</sub>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/archive.jpg" alt="문장에서 눌러 본 단어와 뜻, 예문, 조회 횟수를 모아 보여주는 LexiFlow Archive 화면" width="100%">
+  <br>
+  <sub>Archive — 궁금해서 눌러 본 단어와 문맥을 자동 저장</sub>
+</p>
+
+---
+
 ## ✨ 주요 특징
 
-- **3가지 학습 콘텐츠** — 단어(Word) / 문법(Grammar) / 숙어·구동사(Idiom), 각각 목록·상세·자기채점 퀴즈 화면 제공
+- **문장 중심 학습** — 매 세션 10문제를 무작위로 구성하고, 문장 뜻 고르기와 빈칸 직접 쓰기를 번갈아 제공
+- **틀린 문장 다시 만나기** — 오답은 학습 큐 뒤로 다시 보내 정답을 맞힐 때까지 자연스럽게 반복
+- **클릭해서 뜻 보기 + Archive** — 문장 속 파란 단어를 누르면 한국어 뜻을 바로 보여주고 사용자별 로컬 Archive에 문맥·조회 횟수와 함께 저장
+- **게임형 성장 흐름** — 오늘의 목표, XP, 레벨, 연속 학습일, 복습 대기를 홈에서 추적
+- **보조 학습 콘텐츠** — 서버의 단어·문법·숙어 데이터를 목록과 복습 화면에서 함께 활용
 - **단어는 Notion + 관리자 패널 하이브리드** — Notion에서 관리하던 단어는 그대로 자동 동기화되고, 관리자 패널로 넣은 단어는 동기화가 건드리지 않음
 - **문법/숙어는 관리자 패널 전용** — Notion 연동 없이 웹 관리자 패널에서 직접 추가·수정·삭제
 - **관리자 웹 패널** — 서버에 내장된 정적 웹 페이지(`/admin/`)에서 토큰 인증 후 콘텐츠 CRUD
@@ -43,9 +71,9 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 | **관리자 패널** | 단어(Manual)/문법/숙어를 직접 추가·수정·삭제 | 서버 내장 웹 페이지 |
 | **서버 (Web API)** | Notion 동기화, 관리자 CRUD, 앱에 REST API 제공 | Oracle Cloud |
 | **PostgreSQL** | 서버가 읽고 쓰는 저장소 | Oracle Cloud |
-| **MAUI 앱** | 서버 API를 호출해 학습 화면을 표시 | 사용자 기기 |
+| **MAUI 앱** | 문장 학습, 진행도·XP, 사용자별 로컬 Archive를 제공 | 사용자 기기 |
 
-> **설계 원칙:** 앱은 오직 서버의 REST API만 호출합니다. 앱이 DB나 Notion에 직접 접근하지 않아, 데이터 흐름이 단순하고 각 계층이 독립적입니다.
+> **설계 원칙:** 계정·콘텐츠·서버 진행도는 REST API를 통해서만 다루고, 앱이 DB나 Notion에 직접 접근하지 않습니다. 문장 카탈로그와 개인 Archive·XP 같은 기기 전용 상태는 MAUI `Preferences`에 사용자별로 분리해 저장합니다.
 
 > **클라우드 배포의 이점:** 서버가 클라우드에서 24시간 실행되므로, 개인 PC를 켜두지 않아도 됩니다. 앱은 와이파이·LTE 등 네트워크 환경과 무관하게 언제 어디서든 서버에 접속할 수 있습니다.
 
@@ -131,12 +159,15 @@ LexiFlow/
     └── LexiFlow/
         ├── Services/
         │   ├── ApiService.cs                 # 서버 API 호출
+        │   ├── SentenceCatalogService.cs     # 뜻 고르기/빈칸 쓰기 문장 카탈로그
+        │   ├── ArchiveService.cs             # 눌러 본 단어를 사용자별 로컬 저장
+        │   ├── LearningMetricsService.cs     # 일일 목표, XP, 레벨 지표
         │   ├── ReviewScheduler.cs            # 제네릭 스페이스드 리피티션
         │   ├── StreakService.cs              # 연속 학습일수 추적
         │   └── NotificationService.cs        # 복습 리마인드 알림
         ├── ViewModels/                   # Words/Grammar/Idiom ViewModel
-        ├── Views/                        # 목록/상세/퀴즈 화면 (Word/Grammar/Idiom)
-        ├── Models/
+        ├── Views/                        # 홈/문장 학습/Archive/계정 + 보조 콘텐츠
+        ├── Models/                       # 콘텐츠, 문장 문제, Archive 모델
         └── Platforms/Android/
             └── AndroidManifest.xml       # 권한, 네트워크 설정
 ```

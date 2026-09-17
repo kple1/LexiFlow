@@ -1,82 +1,107 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LexiFlow.Models;
 using LexiFlow.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 
-namespace LexiFlow.ViewModels
+namespace LexiFlow.ViewModels;
+
+public partial class WordsViewModel : ObservableObject
 {
-    public partial class WordsViewModel : ObservableObject
+    private readonly ApiService _api;
+    private readonly SessionService _session;
+
+    public WordsViewModel(ApiService api, SessionService session)
     {
-        private readonly ApiService _api;
-        private readonly SessionService _session;
-        public WordsViewModel(ApiService api, SessionService session)
+        _api = api;
+        _session = session;
+    }
+
+    public ObservableCollection<Word> Words { get; } = [];
+
+    [ObservableProperty]
+    private string _searchText = "";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+    private bool _isBusy;
+
+    public bool IsNotBusy => !IsBusy;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasError))]
+    private string _errorMessage = "";
+
+    public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
+
+    [ObservableProperty]
+    private string _resultSummary = "단어를 불러오는 중이에요";
+
+    [RelayCommand]
+    private async Task LoadWordsAsync()
+    {
+        if (IsBusy)
+            return;
+
+        IsBusy = true;
+        ErrorMessage = "";
+
+        try
         {
-            _api = api;
-            _session = session;
+            var wordsTask = _api.GetWordsAsync();
+            var progressTask = LoadProgressMapAsync();
+            await Task.WhenAll(wordsTask, progressTask);
+
+            var result = await wordsTask;
+            var query = SearchText.Trim();
+            if (query.Length > 0)
+            {
+                result = result
+                    .Where(word =>
+                        word.English.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        word.Meaning.Contains(query, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            var statusByWord = await progressTask;
+            Words.Clear();
+            foreach (var word in result)
+            {
+                word.UserStatus = statusByWord.GetValueOrDefault(word.Id);
+                Words.Add(word);
+            }
+
+            ResultSummary = query.Length == 0
+                ? $"전체 {Words.Count}개 단어"
+                : $"‘{query}’ 검색 결과 {Words.Count}개";
         }
-
-        public ObservableCollection<Word> Words { get; set; } = [];
-
-        [ObservableProperty]
-        private string _searchText;
-
-        [RelayCommand]
-        private async void LoadWords()
+        catch
         {
-            try
-            {
-                Words.Clear();
-
-                var result = await _api.GetWordsAsync();
-                if (!string.IsNullOrEmpty(_searchText))
-                {
-                    result = result.Where(x => x.English.Contains(_searchText) || x.Meaning.Contains(_searchText)).ToList();
-                }
-
-                // Overlay this user's progress as a status badge on each word.
-                var statusByWord = await LoadProgressMapAsync();
-
-                foreach (var a in result)
-                {
-                    if (statusByWord.TryGetValue(a.Id, out var status))
-                        a.UserStatus = status;
-                    Words.Add(a);
-                }
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Error", ex.Message, "Confirm");
-            }
+            Words.Clear();
+            ResultSummary = "단어를 불러오지 못했어요";
+            ErrorMessage = "네트워크를 확인한 뒤 다시 시도해 주세요.";
         }
-
-        // Returns wordId -> status for the signed-in user; empty if logged out or the
-        // progress endpoint is unavailable (e.g. server not yet redeployed).
-        private async Task<Dictionary<string, string>> LoadProgressMapAsync()
+        finally
         {
-            if (!_session.IsLoggedIn)
-                return [];
-
-            try
-            {
-                var progress = await _api.GetProgressAsync(_session.CurrentUserId!);
-                return progress
-                    .GroupBy(p => p.WordId)
-                    .ToDictionary(g => g.Key, g => g.First().Status);
-            }
-            catch
-            {
-                return [];
-            }
+            IsBusy = false;
         }
+    }
 
-        [RelayCommand]
-        private async void WordInformation(string example)
+    private async Task<Dictionary<string, string>> LoadProgressMapAsync()
+    {
+        if (!_session.IsLoggedIn)
+            return [];
+
+        try
         {
-            await Shell.Current.DisplayAlert("", example, "Confirm");
+            var progress = await _api.GetProgressAsync(_session.CurrentUserId!);
+            return progress
+                .GroupBy(item => item.WordId)
+                .ToDictionary(group => group.Key, group => group.First().Status);
+        }
+        catch
+        {
+            return [];
         }
     }
 }

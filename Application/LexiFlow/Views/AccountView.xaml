@@ -2,28 +2,118 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LexiFlow.Views.AccountView"
-             Title="Account"
-             Background="#222222">
-    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12">
-        <Label Text="Account" Style="{StaticResource Title}" HorizontalOptions="Center"/>
-        <Label Text="Signed in as" TextColor="Gray" HorizontalOptions="Center"/>
-        <Label x:Name="userLabel" FontSize="20" HorizontalOptions="Center"/>
+             Title="나">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="{OnIdiom Phone='20,24,20,112', Default='40,32,40,72'}"
+                                 Spacing="20"
+                                 HorizontalOptions="Fill"
+                                 MaximumWidthRequest="760">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="MY FLOW" Style="{StaticResource EyebrowLabel}"/>
+                    <Label Text="나의 학습" Style="{StaticResource Title}"/>
+                    <Label Text="쌓아 온 작은 성취를 한눈에 확인하세요." Style="{StaticResource Body}"/>
+                </VerticalStackLayout>
 
-        <HorizontalStackLayout HorizontalOptions="Center" Spacing="24" Margin="0,16,0,0">
-            <VerticalStackLayout>
-                <Label x:Name="masteredLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#4CAF50"/>
-                <Label Text="Mastered" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-            </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label x:Name="learningLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#F9A825"/>
-                <Label Text="Learning" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-            </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label x:Name="totalLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center"/>
-                <Label Text="Studied" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-            </VerticalStackLayout>
-        </HorizontalStackLayout>
+                <Border Style="{StaticResource CardBorder}"
+                        BackgroundColor="{StaticResource PrimarySoft}"
+                        Stroke="{StaticResource Primary}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border BackgroundColor="{StaticResource Primary}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 30"
+                                WidthRequest="60"
+                                HeightRequest="60">
+                            <Label x:Name="avatarLabel"
+                                   Text="L"
+                                   FontSize="25"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label x:Name="userLabel" Text="-" FontSize="22" FontAttributes="Bold"/>
+                            <Label x:Name="accountLevelLabel" Text="LEVEL 1 · 0 XP" Style="{StaticResource MutedLabel}" TextColor="{StaticResource Primary}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
 
-        <Button Text="Sign out" Clicked="OnSignOutClick" Margin="0,20,0,0" WidthRequest="200"/>
-    </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Border Grid.Column="0" Style="{StaticResource SoftCardBorder}" Padding="12,16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="streakLabel" Text="0일" Style="{StaticResource StatValueLabel}" FontSize="21"/>
+                            <Label Text="연속 학습" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource SoftCardBorder}" Padding="12,16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="masteredLabel" Text="0" Style="{StaticResource StatValueLabel}" FontSize="21" TextColor="{StaticResource Success}"/>
+                            <Label Text="마스터" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource SoftCardBorder}" Padding="12,16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="learningLabel" Text="0" Style="{StaticResource StatValueLabel}" FontSize="21" TextColor="{StaticResource Warning}"/>
+                            <Label Text="학습 중" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="13">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="오늘의 목표" Style="{StaticResource SubTitle}"/>
+                                <Label x:Name="dailyGoalLabel" Text="0 / 10문제" Style="{StaticResource MutedLabel}"/>
+                            </VerticalStackLayout>
+                            <Label x:Name="dailyGoalStatusLabel" Grid.Column="1" Text="시작 전" Style="{StaticResource EyebrowLabel}" VerticalOptions="Center"/>
+                        </Grid>
+                        <ProgressBar x:Name="dailyGoalProgress" Style="{StaticResource LearningProgressBar}" ProgressColor="{StaticResource Success}"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label x:Name="levelProgressLabel" Text="다음 레벨까지 200 XP" Style="{StaticResource MutedLabel}"/>
+                            <Label x:Name="totalLabel" Grid.Column="1" Text="총 0개 학습" Style="{StaticResource MutedLabel}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="errorBorder"
+                        IsVisible="False"
+                        BackgroundColor="{StaticResource DangerSoft}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="14">
+                    <Label Text="서버 학습 기록 일부를 불러오지 못했어요. 기기의 XP 기록은 안전합니다."
+                           Style="{StaticResource MutedLabel}"
+                           TextColor="{StaticResource Danger}"/>
+                </Border>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="학습 설정" Style="{StaticResource SubTitle}"/>
+                    <Border Style="{StaticResource CardBorder}">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                                <Label Text="매일 오전 9시 복습 알림" FontSize="16" FontAttributes="Bold"/>
+                                <Label x:Name="reminderStatusLabel" Text="알림 권한은 원할 때만 요청해요." Style="{StaticResource MutedLabel}"/>
+                            </VerticalStackLayout>
+                            <Button x:Name="reminderButton"
+                                    Grid.Column="1"
+                                    Text="켜기"
+                                    Style="{StaticResource SecondaryButton}"
+                                    HeightRequest="42"
+                                    Clicked="OnEnableReminderClick"/>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button Text="로그아웃"
+                        Style="{StaticResource DangerButton}"
+                        Clicked="OnSignOutClick"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid x:Name="loadingOverlay" IsVisible="False" BackgroundColor="#660B1120">
+            <ActivityIndicator IsRunning="True" Color="{StaticResource Primary}" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+    </Grid>
 </ContentPage>

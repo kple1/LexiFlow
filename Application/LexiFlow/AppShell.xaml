@@ -3,33 +3,31 @@
     x:Class="LexiFlow.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:LexiFlow"
     xmlns:view="clr-namespace:LexiFlow.Views"
-    Title="LexiFlow">
+    Title="LexiFlow"
+    FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="#0D1527"
+    Shell.TabBarForegroundColor="#5B8CFF"
+    Shell.TabBarTitleColor="#5B8CFF"
+    Shell.TabBarUnselectedColor="#71809B">
     <Shell.Resources>
         <Style TargetType="Shell" ApplyToDerivedTypes="True">
-            <Setter Property="Shell.BackgroundColor" Value="#222222"/>
-            <Setter Property="Shell.ForegroundColor" Value="#F9F9F9"/>
+            <Setter Property="Shell.BackgroundColor" Value="#0D1527"/>
+            <Setter Property="Shell.ForegroundColor" Value="#F8FAFC"/>
         </Style>
     </Shell.Resources>
 
     <TabBar>
-        <Tab Route="home" Icon="book.png" Title="Home" Shell.NavBarIsVisible="False">
+        <Tab Route="home" Icon="daily.png" Title="오늘" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:HomeView}"/>
         </Tab>
-        <Tab Route="words" Icon="book.png" Title="Words" Shell.NavBarIsVisible="False">
-            <ShellContent ContentTemplate="{DataTemplate view:WordsView}"/>
-        </Tab>
-        <Tab Route="wordtest" Icon="test.png" Title="WordTest" Shell.NavBarIsVisible="False">
+        <Tab Route="learn" Icon="test.png" Title="학습" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:TestWordsView}"/>
         </Tab>
-        <Tab Route="grammar" Icon="a.png" Title="Grammar" Shell.NavBarIsVisible="False">
-            <ShellContent ContentTemplate="{DataTemplate view:GrammarView}"/>
+        <Tab Route="archive" Icon="book.png" Title="Archive" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:ArchiveView}"/>
         </Tab>
-        <Tab Route="idiom" Icon="book.png" Title="Idioms" Shell.NavBarIsVisible="False">
-            <ShellContent ContentTemplate="{DataTemplate view:IdiomView}"/>
-        </Tab>
-        <Tab Route="account" Icon="user.png" Title="Account" Shell.NavBarIsVisible="False">
+        <Tab Route="account" Icon="user.png" Title="나" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:AccountView}"/>
         </Tab>
     </TabBar>

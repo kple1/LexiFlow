@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.ArchiveView"
+             Title="Archive">
+    <Grid RowDefinitions="Auto,Auto,Auto,*"
+          RowSpacing="16"
+          Padding="{OnIdiom Phone='20,24,20,96', Default='40,32,40,48'}"
+          HorizontalOptions="Fill"
+          MaximumWidthRequest="860">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="MY ARCHIVE" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Accent}"/>
+                <Label Text="눌러본 단어" Style="{StaticResource Title}"/>
+                <Label Text="문장에서 궁금해 눌렀던 단어가 자동으로 모여요." Style="{StaticResource Body}"/>
+            </VerticalStackLayout>
+            <Button Grid.Column="1"
+                    Text="문장 학습"
+                    HeightRequest="44"
+                    VerticalOptions="End"
+                    Clicked="OnPracticeClick"/>
+        </Grid>
+
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource Surface}"
+                Stroke="{StaticResource Stroke}"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                Padding="5,0">
+            <Entry x:Name="searchEntry"
+                   Style="{StaticResource FieldEntry}"
+                   BackgroundColor="Transparent"
+                   Placeholder="저장한 단어 검색"
+                   TextChanged="OnSearchTextChanged"/>
+        </Border>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+            <Label x:Name="summaryLabel" Text="저장된 단어 0개" Style="{StaticResource MutedLabel}"/>
+            <Border Grid.Column="1" BackgroundColor="{StaticResource PrimarySoft}" StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="9,4">
+                <Label Text="단어를 누르면 자동 저장" FontSize="11" TextColor="{StaticResource Primary}"/>
+            </Border>
+        </Grid>
+
+        <CollectionView x:Name="archiveList" Grid.Row="3" SelectionMode="None">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" Spacing="12" Padding="24">
+                    <Border BackgroundColor="{StaticResource PrimarySoft}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 32"
+                            WidthRequest="64"
+                            HeightRequest="64"
+                            HorizontalOptions="Center">
+                        <Label Text="A"
+                               FontFamily="RobotoSerif"
+                               FontSize="28"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+                    <Label Text="아직 저장한 단어가 없어요" Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
+                    <Label Text="문장 학습에서 궁금한 단어를 누르면 뜻과 예문이 여기에 쌓입니다."
+                           Style="{StaticResource MutedLabel}"
+                           HorizontalTextAlignment="Center"/>
+                    <Button Text="첫 문장 시작" Clicked="OnPracticeClick" Margin="0,8,0,0"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource CardBorder}" Padding="18" Margin="0,0,0,10">
+                        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="7" ColumnSpacing="14">
+                            <Label Text="{Binding Word}" FontFamily="RobotoSerif" FontSize="23"/>
+                            <Button Grid.Column="1"
+                                    Text="삭제"
+                                    Style="{StaticResource GhostButton}"
+                                    HeightRequest="36"
+                                    Padding="11,0"
+                                    FontSize="11"
+                                    CommandParameter="{Binding Word}"
+                                    Clicked="OnRemoveClick"/>
+                            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Meaning}" FontSize="16" TextColor="{StaticResource Primary}"/>
+                            <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                <Label Text="{Binding Sentence}" Style="{StaticResource MutedLabel}" LineBreakMode="TailTruncation"/>
+                                <Label Grid.Column="1" Text="{Binding Lookups, StringFormat='조회 {0}회'}" FontSize="11" TextColor="{StaticResource TextMuted}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

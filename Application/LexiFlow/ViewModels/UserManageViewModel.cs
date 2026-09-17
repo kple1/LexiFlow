@@ -21,7 +21,10 @@ public partial class UserManageViewModel : ObservableObject
     private string _password = "";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
+
+    public bool IsNotBusy => !IsBusy;
 
     // Signs in and, on success, persists the session (which swaps the app to the tabs).
     // Returns a message for the view to surface to the user.
@@ -35,14 +38,14 @@ public partial class UserManageViewModel : ObservableObject
             IsBusy = true;
             bool ok = await _api.LoginAsync(UserId, Password);
             if (!ok)
-                return (false, "Invalid user ID or password.");
+                return (false, "아이디 또는 비밀번호가 올바르지 않습니다.");
 
             await _session.SignInAsync(UserId);
-            return (true, "Sign in successful.");
+            return (true, "로그인되었습니다.");
         }
         catch (Exception ex)
         {
-            return (false, $"Could not reach the server.\n{ex.Message}");
+            return (false, $"서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.\n{ex.Message}");
         }
         finally
         {
@@ -60,12 +63,12 @@ public partial class UserManageViewModel : ObservableObject
             IsBusy = true;
             var (ok, apiError) = await _api.SignUpAsync(UserId, Password);
             return ok
-                ? (true, "Sign up complete. You can now sign in.")
-                : (false, apiError ?? "Sign up failed.");
+                ? (true, "가입이 완료되었습니다. 이제 로그인해 주세요.")
+                : (false, apiError ?? "가입하지 못했습니다.");
         }
         catch (Exception ex)
         {
-            return (false, $"Could not reach the server.\n{ex.Message}");
+            return (false, $"서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.\n{ex.Message}");
         }
         finally
         {
@@ -77,13 +80,13 @@ public partial class UserManageViewModel : ObservableObject
     {
         if (string.IsNullOrEmpty(UserId))
         {
-            error = "Please enter a user ID.";
+            error = "아이디를 입력해 주세요.";
             return false;
         }
 
         if (string.IsNullOrEmpty(Password))
         {
-            error = "Please enter a password.";
+            error = "비밀번호를 입력해 주세요.";
             return false;
         }
 

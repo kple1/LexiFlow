@@ -12,17 +12,30 @@ public partial class UserManageView : ContentPage
         BindingContext = _vm = vm;
     }
 
-    private async void OnSignInClick(object sender, PointerEventArgs e)
+    private async void OnSignInClick(object sender, EventArgs e)
+        => await SignInAsync();
+
+    private async void OnPasswordCompleted(object sender, EventArgs e)
+        => await SignInAsync();
+
+    private async Task SignInAsync()
     {
         var (ok, message) = await _vm.SignInAsync();
-        // On success the session swaps the root page automatically; just show the message.
         if (!ok)
-            await DisplayAlert("", message, "Confirm");
+            ShowMessage(message, success: false);
     }
 
-    private async void OnSignUpClick(object sender, PointerEventArgs e)
+    private async void OnSignUpClick(object sender, EventArgs e)
     {
-        var (_, message) = await _vm.SignUpAsync();
-        await DisplayAlert("", message, "Confirm");
+        var (ok, message) = await _vm.SignUpAsync();
+        ShowMessage(message, ok);
+    }
+
+    private void ShowMessage(string message, bool success)
+    {
+        messageCard.IsVisible = true;
+        messageCard.BackgroundColor = Color.FromArgb(success ? "#163A2A" : "#45202B");
+        messageLabel.TextColor = Color.FromArgb(success ? "#86EFAC" : "#FDA4AF");
+        messageLabel.Text = message;
     }
 }

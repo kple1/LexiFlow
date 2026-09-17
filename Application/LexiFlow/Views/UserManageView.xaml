@@ -2,29 +2,124 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LexiFlow.Views.UserManageView"
-             Title="Sign in"
-             Background="#222222">
+             Title="LexiFlow"
+             BackgroundColor="{StaticResource AppBackground}">
     <Grid>
-        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="LexiFlow" Style="{StaticResource Title}" HorizontalOptions="Center" Margin="0,0,0,20"/>
-            <Label Text="ID"/>
-            <Entry x:Name="id" WidthRequest="300" Placeholder="ID" Margin="0,0,0,5" Text="{Binding UserId}"/>
-            <Label Text="PW"/>
-            <Entry x:Name="pw" WidthRequest="300" Placeholder="PW" IsPassword="True" Margin="0,0,0,5" Text="{Binding Password}"/>
-            <Label Text="Sign in" HorizontalOptions="End">
-                <Label.GestureRecognizers>
-                    <PointerGestureRecognizer PointerPressed="OnSignInClick"/>
-                </Label.GestureRecognizers>
-            </Label>
+        <!-- Soft ambient shapes keep the screen lively without image assets. -->
+        <Ellipse WidthRequest="440" HeightRequest="440" Fill="#1D4ED8" Opacity="0.13"
+                 HorizontalOptions="Start" VerticalOptions="End" TranslationX="-170" TranslationY="170"/>
+        <Ellipse WidthRequest="360" HeightRequest="360" Fill="#7C3AED" Opacity="0.12"
+                 HorizontalOptions="End" VerticalOptions="Start" TranslationX="150" TranslationY="-150"/>
 
-            <Label Text="First time? Sign up" VerticalOptions="Center" HorizontalOptions="Center" TextColor="DeepSkyBlue" TextDecorations="Underline" Margin="0,40,0,0">
-                <Label.GestureRecognizers>
-                    <PointerGestureRecognizer PointerPressed="OnSignUpClick"/>
-                </Label.GestureRecognizers>
-            </Label>
-        </VerticalStackLayout>
+        <ScrollView>
+            <VerticalStackLayout Padding="{OnIdiom Phone='24,32', Default='48,36'}"
+                                 Spacing="22"
+                                 MaximumWidthRequest="500"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                <Border BackgroundColor="{StaticResource PrimarySoft}"
+                        StrokeThickness="0" Padding="12,6"
+                        StrokeShape="RoundRectangle 18"
+                        HorizontalOptions="Center">
+                    <Label Text="하루 10개, 꾸준히 오래 기억하기"
+                           Style="{StaticResource EyebrowLabel}"
+                           CharacterSpacing="0.4"/>
+                </Border>
 
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
-                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="LexiFlow" Style="{StaticResource Title}"
+                           FontSize="46" HorizontalOptions="Center"/>
+                    <Label Text="외운 단어가 필요한 순간 자연스럽게 나오도록"
+                           Style="{StaticResource Body}"
+                           FontSize="16"
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Border Grid.Column="0" Style="{StaticResource SoftCardBorder}" Padding="10">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="10" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                            <Label Text="일일 목표" Style="{StaticResource MutedLabel}" FontSize="11" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource SoftCardBorder}" Padding="10">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="3" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                            <Label Text="학습 영역" Style="{StaticResource MutedLabel}" FontSize="11" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource SoftCardBorder}" Padding="10">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="∞" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                            <Label Text="복습 흐름" Style="{StaticResource MutedLabel}" FontSize="11" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Border Style="{StaticResource CardBorder}" Padding="26">
+                    <VerticalStackLayout Spacing="15">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="다시 만나서 반가워요" Style="{StaticResource SubTitle}"/>
+                            <Label Text="계정에 로그인하고 오늘의 학습을 이어가세요."
+                                   Style="{StaticResource MutedLabel}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="아이디" Style="{StaticResource EyebrowLabel}"/>
+                            <Entry Placeholder="아이디 입력"
+                                   Style="{StaticResource FieldEntry}"
+                                   Text="{Binding UserId}"
+                                   ReturnType="Next"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="7">
+                            <Label Text="비밀번호" Style="{StaticResource EyebrowLabel}"/>
+                            <Entry Placeholder="비밀번호 입력"
+                                   Style="{StaticResource FieldEntry}"
+                                   IsPassword="True"
+                                   Text="{Binding Password}"
+                                   ReturnType="Go"
+                                   Completed="OnPasswordCompleted"/>
+                        </VerticalStackLayout>
+
+                        <Border x:Name="messageCard" IsVisible="False"
+                                StrokeThickness="0" Padding="12,9"
+                                StrokeShape="RoundRectangle 12">
+                            <Label x:Name="messageLabel" FontSize="13" LineBreakMode="WordWrap"/>
+                        </Border>
+
+                        <Button Text="로그인하고 학습 시작"
+                                Style="{StaticResource PrimaryButton}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Clicked="OnSignInClick"/>
+
+                        <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
+                            <BoxView Grid.Column="0" HeightRequest="1" Color="{StaticResource Stroke}" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="처음이신가요?" Style="{StaticResource MutedLabel}"/>
+                            <BoxView Grid.Column="2" HeightRequest="1" Color="{StaticResource Stroke}" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Button Text="새 계정 만들기"
+                                Style="{StaticResource SecondaryButton}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Clicked="OnSignUpClick"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="학습 기록은 계정에 안전하게 이어집니다."
+                       Style="{StaticResource MutedLabel}"
+                       FontSize="11" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid IsVisible="{Binding IsBusy}" BackgroundColor="#660B1120">
+            <Border Style="{StaticResource CardBorder}" Padding="22"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <HorizontalStackLayout Spacing="12">
+                    <ActivityIndicator IsRunning="True" Color="{StaticResource Primary}"/>
+                    <Label Text="서버와 연결하는 중…" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

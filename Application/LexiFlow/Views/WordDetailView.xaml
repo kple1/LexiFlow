@@ -2,31 +2,70 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LexiFlow.Views.WordDetailView"
-             Title="Word"
-             Background="#222222">
+             Title="단어 상세">
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="14">
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Label x:Name="englishLabel" FontSize="30" FontAttributes="Bold"
-                       TextColor="#F9F9F9" VerticalOptions="Center"/>
-                <Button Text="🔊" FontSize="22" Clicked="OnListenClick"
-                        BackgroundColor="Transparent" TextColor="#7FB0FF" Padding="6,0"/>
-            </HorizontalStackLayout>
+        <VerticalStackLayout Padding="{OnIdiom Phone='20,24,20,60', Default='40,32,40,60'}"
+                             Spacing="18"
+                             HorizontalOptions="Fill"
+                             MaximumWidthRequest="680">
+            <Label Text="WORD DETAIL" Style="{StaticResource EyebrowLabel}"/>
 
-            <Label x:Name="meaningLabel" FontSize="18" TextColor="#B0B0B0" HorizontalOptions="Center"/>
-
-            <Border x:Name="statusBadge" IsVisible="False" HorizontalOptions="Center"
-                    Padding="10,3" StrokeThickness="0" StrokeShape="RoundRectangle 10">
-                <Label x:Name="statusLabel" FontSize="12" TextColor="White"/>
+            <Border Style="{StaticResource CardBorder}"
+                    BackgroundColor="{StaticResource PrimarySoft}"
+                    Stroke="{StaticResource Primary}"
+                    Padding="{OnIdiom Phone=24, Default=34}">
+                <VerticalStackLayout Spacing="13">
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Label x:Name="englishLabel"
+                               FontFamily="RobotoSerif"
+                               FontSize="{OnIdiom Phone=38, Default=46}"
+                               VerticalOptions="Center"/>
+                        <Button Text="🔊"
+                                FontSize="20"
+                                Clicked="OnListenClick"
+                                BackgroundColor="#33FFFFFF"
+                                WidthRequest="48"
+                                HeightRequest="48"
+                                Padding="0"
+                                CornerRadius="24"/>
+                    </HorizontalStackLayout>
+                    <Label x:Name="meaningLabel"
+                           FontSize="20"
+                           TextColor="{StaticResource TextSecondary}"
+                           HorizontalTextAlignment="Center"/>
+                    <Border x:Name="statusBadge"
+                            IsVisible="False"
+                            HorizontalOptions="Center"
+                            Padding="10,4"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 10">
+                        <Label x:Name="statusLabel" FontSize="11" FontAttributes="Bold" TextColor="White"/>
+                    </Border>
+                </VerticalStackLayout>
             </Border>
 
-            <BoxView HeightRequest="1" Color="#444444" Margin="0,6"/>
+            <Border x:Name="speechErrorBorder"
+                    IsVisible="False"
+                    BackgroundColor="{StaticResource DangerSoft}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="13">
+                <Label x:Name="speechErrorLabel" Style="{StaticResource MutedLabel}" TextColor="{StaticResource Danger}"/>
+            </Border>
 
-            <Label Text="EXAMPLE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-            <Label x:Name="exampleLabel" FontSize="15" TextColor="#F9F9F9" LineBreakMode="WordWrap"/>
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="EXAMPLE" Style="{StaticResource EyebrowLabel}"/>
+                    <Label x:Name="exampleLabel" FontSize="17" LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Border>
 
-            <Label x:Name="noteHeader" Text="NOTE" FontSize="11" FontAttributes="Bold" TextColor="#7FB0FF"/>
-            <Label x:Name="noteLabel" FontSize="15" TextColor="#B0B0B0" LineBreakMode="WordWrap"/>
+            <Border x:Name="noteCard" Style="{StaticResource SoftCardBorder}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="MEMORY NOTE" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Accent}"/>
+                    <Label x:Name="noteLabel" Style="{StaticResource Body}" LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
