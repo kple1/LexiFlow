@@ -37,8 +37,13 @@ jobs:
           push: true
           tags: ${{ env.IMAGE }}:latest
 
+  # 배포는 DEPLOY_ENABLED 저장소 변수가 'true'일 때만 돈다.
+  # AWS 이전 중에는 꺼 둔다 — VM_HOST가 아직 구 서버를 가리키는데, 지금 코드는
+  # Postgres용이라 그대로 배포하면 구 서버의 SQL Server 스택이 내려간다.
+  # 새 서버가 준비되면 VM_HOST/VM_USER/VM_SSH_KEY를 새 값으로 바꾸고 이 변수를 켠다.
   deploy:
     needs: push-image
+    if: vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +64,7 @@ jobs:
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3
         env:
-          DB_SA_PASSWORD: ${{ secrets.DB_SA_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_WORDS_DATA_SOURCE_ID: ${{ secrets.NOTION_WORDS_DATA_SOURCE_ID }}
           ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
@@ -67,10 +72,10 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          envs: DB_SA_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN
+          envs: DB_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN
           script: |
             cat > ~/LexiFlow/Server/.env <<EOF
-            DB_SA_PASSWORD=$DB_SA_PASSWORD
+            DB_PASSWORD=$DB_PASSWORD
             NOTION_TOKEN=$NOTION_TOKEN
             NOTION_WORDS_DATA_SOURCE_ID=$NOTION_WORDS_DATA_SOURCE_ID
             ADMIN_TOKEN=$ADMIN_TOKEN
