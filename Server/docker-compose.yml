@@ -1,19 +1,21 @@
 services:
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:17-alpine
     environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "${DB_SA_PASSWORD}"
-    ports:
-      - "1433:1433"
+      POSTGRES_DB: worddb
+      POSTGRES_USER: worddb
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    # 포트를 호스트로 열지 않는다. API는 같은 compose 네트워크에서 db:5432로 접근한다.
+    # 외부에서 직접 붙어야 할 때만 SSH 터널을 쓴다.
     volumes:
-      - dbdata:/var/opt/mssql
+      - dbdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"${DB_SA_PASSWORD}\" -C -Q \"SELECT 1\" || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U worddb -d worddb"]
       interval: 10s
       timeout: 5s
       retries: 12
-      start_period: 40s
+      start_period: 10s
+    restart: unless-stopped
 
   api:
     image: ghcr.io/kple1/lexiflow/wordapp:latest
@@ -21,14 +23,14 @@ services:
       - "5276:5276"
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:5276"
-      ConnectionStrings__Default: "Server=db,1433;Database=WordDb;User Id=sa;Password=${DB_SA_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=worddb;Username=worddb;Password=${DB_PASSWORD}"
       Notion__Token: "${NOTION_TOKEN}"
       Notion__WordsDataSourceId: "${NOTION_WORDS_DATA_SOURCE_ID}"
       Admin__Token: "${ADMIN_TOKEN}"
     depends_on:
       db:
         condition: service_healthy
-    restart: on-failure
+    restart: unless-stopped
 
 volumes:
   dbdata:
