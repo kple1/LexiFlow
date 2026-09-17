@@ -37,14 +37,15 @@ jobs:
           push: true
           tags: ${{ env.IMAGE }}:latest
 
-  # 배포는 DEPLOY_ENABLED 저장소 변수가 'true'일 때만 돈다.
-  # AWS 이전 중에는 꺼 둔다 — VM_HOST가 아직 구 서버를 가리키는데, 지금 코드는
-  # Postgres용이라 그대로 배포하면 구 서버의 SQL Server 스택이 내려간다.
-  # 새 서버가 준비되면 VM_HOST/VM_USER/VM_SSH_KEY를 새 값으로 바꾸고 이 변수를 켠다.
+  # 배포는 DEPLOY_ENABLED 저장소 변수가 'true'이고 VM 시크릿이 현재 서버를
+  # 가리킬 때만 실행한다.
   deploy:
     needs: push-image
     if: vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
 
@@ -68,12 +69,15 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_WORDS_DATA_SOURCE_ID: ${{ secrets.NOTION_WORDS_DATA_SOURCE_ID }}
           ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          envs: DB_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN
+          envs: DB_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN,GHCR_USER,GHCR_TOKEN
           script: |
+            set -e
             cat > ~/LexiFlow/Server/.env <<EOF
             DB_PASSWORD=$DB_PASSWORD
             NOTION_TOKEN=$NOTION_TOKEN
@@ -81,5 +85,7 @@ jobs:
             ADMIN_TOKEN=$ADMIN_TOKEN
             EOF
             cd ~/LexiFlow/Server
+            printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
             docker compose pull
             docker compose up -d --force-recreate

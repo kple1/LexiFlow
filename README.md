@@ -8,9 +8,9 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
   <img alt=".NET" src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white">
   <img alt="MAUI" src="https://img.shields.io/badge/.NET_MAUI-Client-512BD4">
   <img alt="ASP.NET Core" src="https://img.shields.io/badge/ASP.NET_Core-Web_API-512BD4">
-  <img alt="SQL Server" src="https://img.shields.io/badge/SQL_Server-2022-CC2927?logo=microsoftsqlserver&logoColor=white">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white">
   <img alt="Docker" src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white">
-  <img alt="Google Cloud" src="https://img.shields.io/badge/Google_Cloud-Deployed-4285F4?logo=googlecloud&logoColor=white">
+  <img alt="Oracle Cloud" src="https://img.shields.io/badge/Oracle_Cloud-Deployed-F80000?logo=oracle&logoColor=white">
   <img alt="CI/CD" src="https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?logo=githubactions&logoColor=white">
 </p>
 
@@ -25,20 +25,20 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 - **스페이스드 리피티션 + 스트릭** — 마지막 복습 시각과 진행 상태를 기반으로 복습 대상을 골라주고, 연속 학습일수를 추적
 - **크로스플랫폼 앱** — .NET MAUI로 Android / Windows 지원
 - **컨테이너 배포** — Docker Compose로 API와 DB를 한 번에 실행, 시크릿은 `.env`로 분리
-- **클라우드 호스팅 + CI/CD** — Google Cloud에 배포, push 한 번으로 빌드·이미지·compose 동기화·배포까지 자동화
+- **클라우드 호스팅 + CI/CD** — Oracle Cloud에 배포, push 한 번으로 빌드·이미지·compose 동기화·배포까지 자동화
 
 ---
 
 ## 🏗️ 아키텍처
 
-데이터는 두 갈래로 서버에 들어옵니다: Notion(단어만, polling)과 관리자 패널(단어/문법/숙어, 직접 입력). 서버와 데이터베이스는 **Google Cloud**에 컨테이너로 배포되어 있습니다.
+데이터는 두 갈래로 서버에 들어옵니다: Notion(단어만, polling)과 관리자 패널(단어/문법/숙어, 직접 입력). 서버와 데이터베이스는 **Oracle Cloud**에 컨테이너로 배포되어 있습니다.
 
 ```
                                     ┌───────────────────────────────────────────────┐
-                                    │                 Google Cloud                   │
+                                    │                 Oracle Cloud                   │
                                     │                                                 │
   ┌─────────────┐                  │   ┌──────────────────┐      ┌───────────────┐   │
-  │   Notion    │ ──polling(10초)──┼──▶│  ASP.NET Core    │─────▶│     MSSQL     │   │
+  │   Notion    │ ──polling(10초)──┼──▶│  ASP.NET Core    │─────▶│  PostgreSQL   │   │
   │ (단어 원본,  │   Word만 동기화   │   │  Web API (서버)  │EFCore│   (WordDb)    │   │
   │  하이브리드) │                  │   └──────────────────┘upsert└───────────────┘   │
   └─────────────┘                  │            ▲   │      [Docker Compose]           │
@@ -60,8 +60,8 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 | --- | --- | --- |
 | **Notion** | 단어(Word) 콘텐츠의 선택적 원본 | 외부 SaaS |
 | **관리자 패널** | 단어(Manual)/문법/숙어를 직접 추가·수정·삭제 | 서버 내장 웹 페이지 |
-| **서버 (Web API)** | Notion 동기화, 관리자 CRUD, 앱에 REST API 제공 | Google Cloud |
-| **MSSQL** | 서버가 읽고 쓰는 저장소 | Google Cloud |
+| **서버 (Web API)** | Notion 동기화, 관리자 CRUD, 앱에 REST API 제공 | Oracle Cloud |
+| **PostgreSQL** | 서버가 읽고 쓰는 저장소 | Oracle Cloud |
 | **MAUI 앱** | 서버 API를 호출해 학습 화면을 표시 | 사용자 기기 |
 
 > **설계 원칙:** 앱은 오직 서버의 REST API만 호출합니다. 앱이 DB나 Notion에 직접 접근하지 않아, 데이터 흐름이 단순하고 각 계층이 독립적입니다.
@@ -84,7 +84,7 @@ Notion API는 변경 알림(webhook)을 제공하지 않기 때문에, 서버가
 
 서버가 정적으로 서빙하는 웹 페이지로, 별도 앱 재빌드 없이 브라우저에서 바로 콘텐츠를 관리할 수 있습니다.
 
-- **접속**: `http://<서버 주소>:5276/admin/`
+- **접속**: `http://lexiflow.duckdns.org:5276/admin/`
 - **인증**: 최초 접속 시 관리자 토큰을 입력하면 세션 동안 저장되어, 이후 요청에 `X-Admin-Token` 헤더로 자동 첨부됩니다. 토큰은 서버의 `Admin:Token` 설정(환경변수 `Admin__Token`)과 일치해야 합니다.
 - **탭 구성**: 단어 / 문법 / 숙어 — 각각 목록 조회, 추가, 수정, 삭제 지원
 - **Notion 출처 단어는 읽기 전용** — 목록에서 흐리게 표시되며 수정·삭제 버튼이 비활성화됩니다. Notion 쪽에서 고치지 않고 여기서 고쳐도 다음 동기화 때 되돌아가기 때문입니다.
@@ -103,14 +103,14 @@ Notion API는 변경 알림(webhook)을 제공하지 않기 때문에, 서버가
 
 **서버**
 - ASP.NET Core Web API — REST 엔드포인트 + 관리자 CRUD API
-- Entity Framework Core (SQL Server) — ORM, 마이그레이션
+- Entity Framework Core + Npgsql — ORM, PostgreSQL 마이그레이션
 - BackgroundService — Notion 단어 동기화 워커
 - BCrypt.Net — 비밀번호 해시
 - Notion API — 단어(Word) 데이터 소스 연동
 - 정적 파일(HTML/CSS/JS, 빌드 스텝 없음) — 관리자 패널 UI
 
 **데이터 / 인프라**
-- SQL Server 2022 — 데이터 저장
+- PostgreSQL 17 — 데이터 저장
 - Docker & Docker Compose — 컨테이너 배포, 시크릿은 `.env`로 분리
 
 ---
@@ -143,7 +143,7 @@ LexiFlow/
 │   │   ├── wwwroot/admin/                    # 관리자 패널 정적 웹 페이지
 │   │   └── Program.cs                        # 앱 시작점 (DI, 미들웨어)
 │   ├── Dockerfile                       # 멀티스테이지 빌드
-│   ├── docker-compose.yml               # API + SQL Server (${VAR}로 시크릿 분리)
+│   ├── docker-compose.yml               # API + PostgreSQL (${VAR}로 시크릿 분리)
 │   └── .env.example                     # 로컬 .env 템플릿 (실제 값은 gitignore)
 │
 └── Application/                         # .NET MAUI 클라이언트
@@ -228,7 +228,7 @@ cp .env.example .env
 `.env` 내용을 채웁니다 (커밋되지 않음):
 
 ```
-DB_SA_PASSWORD=원하는-강력한-비밀번호
+DB_PASSWORD=원하는-강력한-비밀번호
 NOTION_TOKEN=ntn_xxx
 NOTION_WORDS_DATA_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ADMIN_TOKEN=관리자-패널-접속-토큰
@@ -236,7 +236,7 @@ ADMIN_TOKEN=관리자-패널-접속-토큰
 
 ### 2. 서버 실행 (Docker — 권장)
 
-Docker Compose를 사용하면 API 서버와 SQL Server를 한 번에 실행합니다. 대상 머신에 SQL Server를 설치할 필요가 없습니다.
+Docker Compose를 사용하면 API 서버와 PostgreSQL을 한 번에 실행합니다. 대상 머신에 PostgreSQL을 설치할 필요가 없습니다.
 
 ```bash
 cd Server
@@ -245,7 +245,7 @@ docker compose up --build
 
 - API: `http://localhost:5276`
 - 관리자 패널: `http://localhost:5276/admin/`
-- SQL Server: `localhost:1433`
+- PostgreSQL: Compose 내부 전용 `db:5432` (호스트에 미노출)
 
 동작 확인:
 
@@ -255,11 +255,11 @@ curl http://localhost:5276/words
 
 ### 3. 서버 실행 (로컬 — Docker 없이)
 
-로컬에 SQL Server가 설치되어 있다면, `appsettings.json`에는 실제 값을 넣지 말고 `dotnet user-secrets`로 주입합니다 (최초 1회):
+로컬에 PostgreSQL이 설치되어 있다면, `appsettings.json`에는 실제 값을 넣지 말고 `dotnet user-secrets`로 주입합니다 (최초 1회):
 
 ```bash
 cd Server/WordApp
-dotnet user-secrets set "ConnectionStrings:Default" "Server=localhost;Database=WordDb;User Id=sa;Password=...;TrustServerCertificate=True"
+dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Database=worddb;Username=worddb;Password=..."
 dotnet user-secrets set "Notion:Token" "ntn_xxx"
 dotnet user-secrets set "Notion:WordsDataSourceId" "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 dotnet user-secrets set "Admin:Token" "관리자-패널-접속-토큰"
@@ -276,7 +276,7 @@ dotnet run --urls "http://0.0.0.0:5276"
 ```csharp
 _http = new HttpClient(handler)
 {
-    BaseAddress = new Uri("http://<서버 주소>:5276/")
+    BaseAddress = new Uri("http://lexiflow.duckdns.org:5276/")
 };
 ```
 
@@ -284,7 +284,7 @@ _http = new HttpClient(handler)
 | --- | --- |
 | Windows 데스크톱 | `localhost` |
 | Android 에뮬레이터 | `10.0.2.2` |
-| 실기기 / 원격 접속 | PC의 LAN IP 또는 배포된 서버 IP |
+| 실기기 / 원격 접속 | PC의 LAN IP 또는 `lexiflow.duckdns.org` |
 
 ```bash
 cd Application/LexiFlow
@@ -338,25 +338,25 @@ bin/Release/net10.0-windows10.0.19041.0/publish/
 
 | 항목 | 환경변수 | 설명 |
 | --- | --- | --- |
-| DB 연결 문자열 | `ConnectionStrings__Default` | SQL Server 연결 문자열 |
-| DB sa 비밀번호 | `DB_SA_PASSWORD` | `docker-compose.yml`에서 `${DB_SA_PASSWORD}`로 참조 |
+| DB 연결 문자열 | `ConnectionStrings__Default` | PostgreSQL 연결 문자열 |
+| DB 비밀번호 | `DB_PASSWORD` | `docker-compose.yml`에서 `${DB_PASSWORD}`로 참조 |
 | Notion API 토큰 | `Notion__Token` | Notion 통합(integration) 토큰. Word 동기화에만 사용 |
 | Notion Data Source ID | `Notion__WordsDataSourceId` | 단어 데이터베이스 식별자 |
 | 관리자 패널 토큰 | `Admin__Token` | `/admin` 패널·API 접근용 공유 비밀번호 |
 | 동기화 주기 | — | `WordSyncService`에 고정값 10초 |
 
-> Docker 환경에서는 연결 문자열의 서버 주소로 서비스 이름(`Server=db`)을 사용합니다. 컨테이너 간에는 서비스 이름으로 통신합니다.
+> Docker 환경에서는 연결 문자열의 호스트로 서비스 이름(`Host=db`)을 사용합니다. 컨테이너 간에는 서비스 이름으로 통신합니다.
 
 ---
 
-## ☁️ 배포 (Google Cloud)
+## ☁️ 배포 (Oracle Cloud)
 
-이 프로젝트는 Docker 컨테이너로 패키징되어 **Google Cloud**에 배포됩니다. 서버와 데이터베이스가 클라우드에서 상시 실행되므로, 클라이언트 앱은 네트워크 환경과 무관하게 언제든 접속할 수 있습니다.
+이 프로젝트는 Docker 컨테이너로 패키징되어 **Oracle Cloud**에 배포됩니다. 서버와 데이터베이스가 클라우드에서 상시 실행되므로, 클라이언트 앱은 네트워크 환경과 무관하게 언제든 접속할 수 있습니다.
 
 **배포 흐름**
 
 ```
-로컬 개발  →  docker compose 검증  →  이미지 빌드  →  Google Cloud 배포  →  앱이 클라우드 서버에 접속
+로컬 개발  →  docker compose 검증  →  이미지 빌드  →  Oracle Cloud 배포  →  앱이 클라우드 서버에 접속
 ```
 
 **로컬에서 먼저 검증하는 이유**
@@ -370,11 +370,11 @@ bin/Release/net10.0-windows10.0.19041.0/publish/
 ```csharp
 _http = new HttpClient(handler)
 {
-    BaseAddress = new Uri("http://<배포된-서버-IP>:<포트>/")
+    BaseAddress = new Uri("http://lexiflow.duckdns.org:5276/")
 };
 ```
 
-> **네트워크 확인 팁:** 앱을 다시 빌드하기 전에, 기기의 브라우저에서 `http://<서버-IP>:<포트>/words`에 접속해 JSON이 반환되는지 먼저 확인하세요. 이 한 번의 테스트로 문제가 네트워크에 있는지 앱 코드에 있는지 빠르게 구분할 수 있습니다.
+> **네트워크 확인 팁:** 앱을 다시 빌드하기 전에, 기기의 브라우저에서 `http://lexiflow.duckdns.org:5276/words`에 접속해 JSON이 반환되는지 먼저 확인하세요. 이 한 번의 테스트로 문제가 네트워크에 있는지 앱 코드에 있는지 빠르게 구분할 수 있습니다.
 
 ---
 
@@ -446,7 +446,11 @@ jobs:
 
   deploy:
     needs: push-image
+    if: vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
 
@@ -463,23 +467,28 @@ jobs:
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3
         env:
-          DB_SA_PASSWORD: ${{ secrets.DB_SA_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_WORDS_DATA_SOURCE_ID: ${{ secrets.NOTION_WORDS_DATA_SOURCE_ID }}
           ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          envs: DB_SA_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN
+          envs: DB_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN,GHCR_USER,GHCR_TOKEN
           script: |
+            set -e
             cat > ~/LexiFlow/Server/.env <<EOF
-            DB_SA_PASSWORD=$DB_SA_PASSWORD
+            DB_PASSWORD=$DB_PASSWORD
             NOTION_TOKEN=$NOTION_TOKEN
             NOTION_WORDS_DATA_SOURCE_ID=$NOTION_WORDS_DATA_SOURCE_ID
             ADMIN_TOKEN=$ADMIN_TOKEN
             EOF
             cd ~/LexiFlow/Server
+            printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
             docker compose pull
             docker compose up -d --force-recreate
 ```
@@ -490,10 +499,10 @@ jobs:
 
 | Secret | 값 |
 | --- | --- |
-| `VM_HOST` | Compute Engine VM의 외부 IP |
+| `VM_HOST` | Oracle Cloud VM의 외부 IP |
 | `VM_USER` | SSH 사용자명 |
 | `VM_SSH_KEY` | SSH 개인키 전체 |
-| `DB_SA_PASSWORD` | SQL Server sa 비밀번호 (VM에 이미 초기화된 볼륨이 있다면 그 값과 동일해야 함) |
+| `DB_PASSWORD` | PostgreSQL `worddb` 사용자 비밀번호 (기존 볼륨의 실제 값과 동일해야 함) |
 | `NOTION_TOKEN` | Notion 통합 토큰 |
 | `NOTION_WORDS_DATA_SOURCE_ID` | 단어 Notion 데이터베이스 식별자 |
 | `ADMIN_TOKEN` | 관리자 패널 접근 토큰 |
@@ -502,7 +511,7 @@ jobs:
 
 **SSH 키** — 배포는 GitHub Actions가 VM에 SSH로 접속해 수행합니다. **개인키는 Secret(`VM_SSH_KEY`)에, 공개키는 VM의 `~/.ssh/authorized_keys`에** 둡니다. 로컬에서 `ssh -i <개인키> <user>@<host>`가 되면 Actions에서도 동작합니다.
 
-**DB_SA_PASSWORD 주의사항** — `MSSQL_SA_PASSWORD`는 SQL Server 컨테이너가 **최초 초기화될 때만** 적용됩니다. VM에 이미 데이터가 든 볼륨이 있다면, 이 시크릿 값은 반드시 그 볼륨을 초기화했을 때의 실제 비밀번호와 같아야 합니다. 다르면 healthcheck에서 로그인에 실패해 `db` 컨테이너가 unhealthy로 뜨고 배포가 실패합니다.
+**DB_PASSWORD 주의사항** — `POSTGRES_PASSWORD`는 PostgreSQL 데이터 볼륨을 **최초 초기화할 때만** 적용됩니다. VM에 데이터가 든 기존 볼륨이 있다면, 시크릿만 바꿔도 실제 DB 비밀번호는 바뀌지 않습니다. 이 경우 `worddb` 역할의 비밀번호도 함께 변경해야 합니다.
 
 ### 트러블슈팅
 
@@ -512,7 +521,7 @@ jobs:
 | `repository name must be lowercase` | ghcr.io 태그에 대문자 불가 | 이미지 이름을 소문자로 지정 |
 | `can't connect without a private SSH key` (secret이 `null`) | Secret 이름 불일치 | 워크플로우와 secret 이름 일치 |
 | `handshake failed: [none publickey]` | 개인키↔공개키 짝 불일치, 또는 공개키 미등록 | 공개키를 `authorized_keys`에 등록, 로컬 접속으로 검증 |
-| `dependency db failed to start` (`db` unhealthy) | `DB_SA_PASSWORD` 시크릿이 VM의 기존 SQL 볼륨 비밀번호와 다름 | 시크릿을 볼륨 초기화 당시 값과 동일하게 맞추거나, 볼륨을 재초기화 |
+| API의 DB 인증 실패 | `DB_PASSWORD` 시크릿이 기존 PostgreSQL 볼륨의 실제 비밀번호와 다름 | 시크릿과 `worddb` 역할의 비밀번호를 일치시킴 |
 
 > CD 실패의 대부분은 SSH 키 인증 문제이거나 DB 비밀번호 불일치입니다. 로컬에서 `ssh -i` 접속 테스트로 먼저 검증하세요. 개인키/토큰은 절대 공유·노출하지 않으며, 노출 시 즉시 폐기·재발급합니다.
 
@@ -525,5 +534,5 @@ jobs:
 ---
 
 <p align="center">
-  <sub>Built with .NET MAUI · ASP.NET Core · SQL Server · Docker · Google Cloud · GitHub Actions</sub>
+  <sub>Built with .NET MAUI · ASP.NET Core · PostgreSQL · Docker · Oracle Cloud · GitHub Actions</sub>
 </p>

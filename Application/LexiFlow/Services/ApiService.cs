@@ -18,7 +18,7 @@ public class ApiService
 
         _http = new HttpClient(handler)
         {
-            BaseAddress = new Uri("http://34.158.213.95:5276/")
+            BaseAddress = new Uri("http://lexiflow.duckdns.org:5276/")
             //BaseAddress = new Uri("http://localhost:5276/")
         };
     }
