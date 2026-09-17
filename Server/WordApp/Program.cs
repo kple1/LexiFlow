@@ -11,7 +11,7 @@ if (string.IsNullOrEmpty(urls))
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddHttpClient<NotionService>();
 builder.Services.AddHostedService<WordSyncService>();
 builder.Services.AddScoped<AdminAuthFilter>();

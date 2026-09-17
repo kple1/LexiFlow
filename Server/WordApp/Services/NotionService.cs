@@ -60,7 +60,9 @@ public class NotionService
             Status = Select(props, "Status"),
             Example = Text(props, "Example"),
             Note = Text(props, "Note") is { Length: > 0 } n ? n : null,
-            NotionCreated = page.GetProperty("created_time").GetDateTime()
+            // Npgsql은 timestamptz 컬럼에 UTC가 아닌 DateTime을 넣으면 예외를 던진다.
+            // Notion은 항상 Z(UTC) 형식으로 주지만, 오프셋 형식이 와도 안전하도록 변환해 둔다.
+            NotionCreated = page.GetProperty("created_time").GetDateTime().ToUniversalTime()
         };
     }
 
