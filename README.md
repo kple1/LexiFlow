@@ -33,28 +33,9 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 
 데이터는 두 갈래로 서버에 들어옵니다: Notion(단어만, polling)과 관리자 패널(단어/문법/숙어, 직접 입력). 서버와 데이터베이스는 **Oracle Cloud**에 컨테이너로 배포되어 있습니다.
 
-```
-                                    ┌───────────────────────────────────────────────┐
-                                    │                 Oracle Cloud                   │
-                                    │                                                 │
-  ┌─────────────┐                  │   ┌──────────────────┐      ┌───────────────┐   │
-  │   Notion    │ ──polling(10초)──┼──▶│  ASP.NET Core    │─────▶│  PostgreSQL   │   │
-  │ (단어 원본,  │   Word만 동기화   │   │  Web API (서버)  │EFCore│   (WordDb)    │   │
-  │  하이브리드) │                  │   └──────────────────┘upsert└───────────────┘   │
-  └─────────────┘                  │            ▲   │      [Docker Compose]           │
-                                    │            │   │ GET /words,/grammars,/idioms    │
-  ┌─────────────┐  토큰 인증        │  admin API │   │ (REST / JSON)                   │
-  │  관리자 패널 │──────────────────┘            │   │                                 │
-  │  (브라우저)  │  단어(Manual)/문법/숙어 CRUD    │   │                                 │
-  └─────────────┘                                │   ▼                                │
-                                    └─────────────┼───────────────────────────────────┘
-                                                  │  ▲ 인터넷을 통해 어디서든 접속
-                                                  ▼
-                                          ┌──────────────────┐
-                                          │   .NET MAUI 앱   │
-                                          │   (클라이언트)   │
-                                          └──────────────────┘
-```
+<p align="center">
+  <img src="docs/architecture.svg" alt="LexiFlow 운영 아키텍처: Notion과 관리자 패널, MAUI 앱, Oracle Cloud의 API와 PostgreSQL, GitHub Actions 배포 흐름" width="100%">
+</p>
 
 | 계층 | 역할 | 위치 |
 | --- | --- | --- |
@@ -353,11 +334,20 @@ bin/Release/net10.0-windows10.0.19041.0/publish/
 
 이 프로젝트는 Docker 컨테이너로 패키징되어 **Oracle Cloud**에 배포됩니다. 서버와 데이터베이스가 클라우드에서 상시 실행되므로, 클라이언트 앱은 네트워크 환경과 무관하게 언제든 접속할 수 있습니다.
 
+| 운영 항목 | 현재 구성 |
+| --- | --- |
+| 리전 / VM | Japan East (Tokyo) · Ubuntu 24.04 · Always Free |
+| 공개 주소 | `http://lexiflow.duckdns.org:5276` |
+| 런타임 | Docker Compose (`api` + `postgres:17-alpine`) |
+| 데이터베이스 | PostgreSQL 17 · 호스트 포트 미노출 |
+| 배포 | GitHub Actions → private GHCR → SSH 배포 |
+| 이전 서버 | GCP 서울 VM 및 부팅 디스크 제거 완료 (2026-09-17) |
+
 **배포 흐름**
 
-```
-로컬 개발  →  docker compose 검증  →  이미지 빌드  →  Oracle Cloud 배포  →  앱이 클라우드 서버에 접속
-```
+<p align="center">
+  <img src="docs/deployment-pipeline.svg" alt="main 브랜치 push부터 Oracle Cloud 배포까지의 GitHub Actions 파이프라인" width="100%">
+</p>
 
 **로컬에서 먼저 검증하는 이유**
 
@@ -381,16 +371,6 @@ _http = new HttpClient(handler)
 ## 🔄 CI/CD (GitHub Actions)
 
 `main` 브랜치에 push하면 **빌드 검증 → 이미지 생성 → compose 동기화 → 서버 배포**가 자동으로 실행됩니다. 손으로 SSH 접속해 배포하거나 compose 파일을 옮기던 과정을 자동화했습니다.
-
-```
-git push (main)
-        │
-        ▼
-┌───────────────┐   ┌──────────────────┐   ┌─────────────────────────────┐
-│    build      │──▶│    push-image    │──▶│           deploy            │
-│  빌드 검증(CI) │   │ 이미지 → ghcr.io │   │ compose 동기화 + VM 배포(CD) │
-└───────────────┘   └──────────────────┘   └─────────────────────────────┘
-```
 
 | 단계 | 역할 |
 | --- | --- |

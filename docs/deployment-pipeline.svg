@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">LexiFlow CI/CD pipeline</title>
+  <desc id="desc">A push to main triggers a build, pushes a private image to GHCR, deploys over SSH, and restarts Docker Compose on Oracle Cloud.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08111f"/><stop offset="1" stop-color="#17213a"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5 0 10z" fill="#38bdf8"/></marker>
+    <style>
+      .title { font: 700 25px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #f8fafc; }
+      .step { font: 700 17px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #f8fafc; }
+      .text { font: 400 13px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #cbd5e1; }
+      .number { font: 800 13px Inter, Arial, sans-serif; fill: #082f49; }
+    </style>
+  </defs>
+  <rect width="1200" height="300" rx="22" fill="url(#bg)"/>
+  <text x="42" y="48" class="title">Deployment Pipeline</text>
+  <text x="42" y="73" class="text">main 브랜치가 운영 배포의 단일 진입점입니다.</text>
+
+  <g>
+    <rect x="42" y="112" width="190" height="118" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="68" cy="138" r="14" fill="#38bdf8"/><text x="68" y="143" text-anchor="middle" class="number">1</text>
+    <text x="91" y="144" class="step">Push to main</text><text x="66" y="178" class="text">소스 변경 시작점</text><text x="66" y="201" class="text">DEPLOY_ENABLED=true</text>
+
+    <rect x="274" y="112" width="190" height="118" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="300" cy="138" r="14" fill="#38bdf8"/><text x="300" y="143" text-anchor="middle" class="number">2</text>
+    <text x="323" y="144" class="step">Build</text><text x="298" y="178" class="text">.NET 10 Release</text><text x="298" y="201" class="text">컴파일 검증</text>
+
+    <rect x="506" y="112" width="190" height="118" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="532" cy="138" r="14" fill="#38bdf8"/><text x="532" y="143" text-anchor="middle" class="number">3</text>
+    <text x="555" y="144" class="step">Push image</text><text x="530" y="178" class="text">Docker build</text><text x="530" y="201" class="text">private GHCR</text>
+
+    <rect x="738" y="112" width="190" height="118" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="764" cy="138" r="14" fill="#38bdf8"/><text x="764" y="143" text-anchor="middle" class="number">4</text>
+    <text x="787" y="144" class="step">Deploy</text><text x="762" y="178" class="text">compose + .env 동기화</text><text x="762" y="201" class="text">SSH · 임시 GHCR 인증</text>
+
+    <rect x="970" y="112" width="188" height="118" rx="16" fill="#13233a" stroke="#f97316"/>
+    <circle cx="996" cy="138" r="14" fill="#fb923c"/><text x="996" y="143" text-anchor="middle" class="number">5</text>
+    <text x="1019" y="144" class="step">Oracle VM</text><text x="994" y="178" class="text">docker compose pull</text><text x="994" y="201" class="text">API 재기동</text>
+  </g>
+  <path d="M232 171H274" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/><path d="M464 171H506" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/><path d="M696 171H738" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/><path d="M928 171H970" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="600" y="267" text-anchor="middle" class="text">빌드 실패 시 배포 중단 · 배포 후 서버의 GHCR 로그인 정보 자동 제거</text>
+</svg>

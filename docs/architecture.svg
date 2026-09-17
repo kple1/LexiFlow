@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">LexiFlow production architecture</title>
+  <desc id="desc">Notion, the administrator browser, and MAUI clients connect to an ASP.NET Core API and PostgreSQL database on Oracle Cloud. GitHub Actions builds an image in GHCR and deploys it to the server.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08111f"/>
+      <stop offset="1" stop-color="#111c33"/>
+    </linearGradient>
+    <linearGradient id="cloud" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17233c"/>
+      <stop offset="1" stop-color="#101a2f"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#020617" flood-opacity="0.42"/>
+    </filter>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-violet" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/>
+    </marker>
+    <style>
+      .title { font: 700 30px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #f8fafc; }
+      .subtitle { font: 400 15px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #94a3b8; }
+      .section { font: 700 14px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #7dd3fc; letter-spacing: 1.5px; }
+      .card-title { font: 700 18px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #f8fafc; }
+      .card-text { font: 400 13px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #cbd5e1; }
+      .label { font: 600 12px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #bae6fd; }
+      .pill { font: 700 11px Inter, Pretendard, "Noto Sans KR", Arial, sans-serif; fill: #e0f2fe; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" rx="24" fill="url(#background)"/>
+  <circle cx="1040" cy="40" r="180" fill="#7c3aed" opacity="0.08"/>
+  <circle cx="160" cy="690" r="210" fill="#0ea5e9" opacity="0.06"/>
+
+  <text x="48" y="56" class="title">LexiFlow Architecture</text>
+  <text x="48" y="84" class="subtitle">Oracle Cloud Tokyo · Docker Compose · PostgreSQL · .NET MAUI</text>
+
+  <text x="48" y="136" class="section">DATA &amp; CLIENTS</text>
+  <g filter="url(#shadow)">
+    <rect x="48" y="158" width="240" height="108" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="82" cy="192" r="17" fill="#f8fafc"/>
+    <text x="76" y="199" font-family="Arial" font-size="20" font-weight="700" fill="#0f172a">N</text>
+    <text x="110" y="194" class="card-title">Notion</text>
+    <text x="72" y="226" class="card-text">Word 원본 · 10초 polling</text>
+    <text x="72" y="248" class="card-text">Notion 출처만 자동 동기화</text>
+
+    <rect x="48" y="306" width="240" height="108" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="82" cy="340" r="17" fill="#f59e0b" opacity="0.9"/>
+    <text x="76" y="347" font-family="Arial" font-size="18" font-weight="700" fill="#111827">A</text>
+    <text x="110" y="342" class="card-title">관리자 패널</text>
+    <text x="72" y="374" class="card-text">Word · Grammar · Idiom CRUD</text>
+    <text x="72" y="396" class="card-text">X-Admin-Token 인증</text>
+
+    <rect x="48" y="472" width="240" height="122" rx="16" fill="#172033" stroke="#334155"/>
+    <circle cx="82" cy="506" r="17" fill="#8b5cf6" opacity="0.95"/>
+    <text x="76" y="513" font-family="Arial" font-size="17" font-weight="700" fill="#f8fafc">M</text>
+    <text x="110" y="508" class="card-title">.NET MAUI</text>
+    <text x="72" y="540" class="card-text">Android · Windows</text>
+    <text x="72" y="562" class="card-text">학습 · 퀴즈 · 진행도</text>
+  </g>
+
+  <rect x="342" y="112" width="566" height="520" rx="24" fill="url(#cloud)" stroke="#f97316" stroke-width="2"/>
+  <text x="378" y="154" class="section" fill="#fdba74">ORACLE CLOUD · TOKYO</text>
+  <text x="378" y="180" class="subtitle">Ubuntu 24.04 · Always Free VM · Docker Compose</text>
+
+  <g filter="url(#shadow)">
+    <rect x="392" y="224" width="246" height="174" rx="18" fill="#12243a" stroke="#38bdf8"/>
+    <rect x="416" y="246" width="90" height="24" rx="12" fill="#0369a1"/>
+    <text x="461" y="263" text-anchor="middle" class="pill">API :5276</text>
+    <text x="416" y="304" class="card-title">ASP.NET Core</text>
+    <text x="416" y="334" class="card-text">REST API · 사용자 · 진행도</text>
+    <text x="416" y="357" class="card-text">Notion sync · Admin API</text>
+    <text x="416" y="380" class="card-text">EF Core migrations</text>
+
+    <rect x="684" y="224" width="176" height="174" rx="18" fill="#13233a" stroke="#60a5fa"/>
+    <ellipse cx="772" cy="262" rx="42" ry="14" fill="#2563eb" opacity="0.9"/>
+    <path d="M730 262v39c0 8 19 14 42 14s42-6 42-14v-39" fill="#1d4ed8" opacity="0.78"/>
+    <text x="708" y="346" class="card-title">PostgreSQL 17</text>
+    <text x="708" y="375" class="card-text">Docker 내부 전용</text>
+
+    <rect x="426" y="468" width="396" height="92" rx="18" fill="#111f35" stroke="#22d3ee"/>
+    <circle cx="468" cy="514" r="20" fill="#0891b2"/>
+    <path d="M458 514h20M468 504v20" stroke="#ecfeff" stroke-width="3" stroke-linecap="round"/>
+    <text x="504" y="505" class="card-title">DuckDNS</text>
+    <text x="504" y="532" class="card-text">lexiflow.duckdns.org → Oracle VM</text>
+  </g>
+
+  <text x="954" y="136" class="section">DELIVERY</text>
+  <g filter="url(#shadow)">
+    <rect x="948" y="158" width="204" height="108" rx="16" fill="#172033" stroke="#a78bfa"/>
+    <circle cx="982" cy="192" r="17" fill="#f8fafc"/>
+    <path d="M974 192a8 8 0 0 1 16 0v6h-16z" fill="#111827"/>
+    <text x="1010" y="194" class="card-title">GitHub Actions</text>
+    <text x="972" y="226" class="card-text">build · push-image · deploy</text>
+    <text x="972" y="248" class="card-text">main push 자동 배포</text>
+
+    <rect x="948" y="320" width="204" height="108" rx="16" fill="#172033" stroke="#a78bfa"/>
+    <circle cx="982" cy="354" r="17" fill="#7c3aed"/>
+    <path d="M974 347h16v14h-16z" fill="none" stroke="#f5f3ff" stroke-width="2"/>
+    <text x="1010" y="356" class="card-title">GHCR</text>
+    <text x="972" y="388" class="card-text">private WordApp image</text>
+    <text x="972" y="410" class="card-text">임시 토큰으로 pull</text>
+  </g>
+
+  <path d="M288 212 C338 212 342 275 392 275" fill="none" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="314" y="204" class="label">sync</text>
+  <path d="M288 360 C338 360 346 330 392 330" fill="none" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="306" y="350" class="label">admin API</text>
+  <path d="M288 533 L426 515" fill="none" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="314" y="548" class="label">REST / JSON</text>
+  <path d="M624 468 L516 398" fill="none" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <path d="M638 311 L684 311" fill="none" stroke="#60a5fa" stroke-width="3" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)"/>
+  <text x="648" y="296" class="label">EF Core</text>
+
+  <path d="M1050 266 L1050 320" fill="none" stroke="#a78bfa" stroke-width="3" marker-end="url(#arrow-violet)"/>
+  <path d="M948 374 C916 374 908 342 860 342" fill="none" stroke="#a78bfa" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-violet)"/>
+  <text x="870" y="328" class="label" fill="#ddd6fe">pull + SSH deploy</text>
+
+  <rect x="390" y="584" width="470" height="26" rx="13" fill="#0f172a" stroke="#334155"/>
+  <text x="625" y="602" text-anchor="middle" class="card-text">PostgreSQL 포트는 외부에 노출하지 않음 · 비밀값은 .env로 주입</text>
+</svg>
