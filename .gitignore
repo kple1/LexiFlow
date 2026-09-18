@@ -2,3 +2,10 @@
 bin/
 obj/
 .env
+__pycache__/
+*.pyc
+*.dump
+*.dpapi
+*.cms
+Server/backup/config.json
+Server/backup/recovery-*.pem

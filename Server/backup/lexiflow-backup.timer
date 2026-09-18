@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily LexiFlow backup at 03:00 Asia/Seoul
+
+[Timer]
+OnCalendar=*-*-* 18:00:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+Unit=lexiflow-backup.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=LexiFlow backup health metric publisher
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubuntu
+Group=ubuntu
+UMask=0077
+ExecStart=/home/ubuntu/.local/share/lexiflow-monitor-venv/bin/python /home/ubuntu/LexiFlow/Server/backup/monitor.py
+TimeoutStartSec=3min
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+Nice=10
