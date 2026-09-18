@@ -1,57 +1,73 @@
 namespace LexiFlow.Services;
 
-// Holds the current sign-in state and persists it across app restarts.
-// The login endpoint only returns success/failure (no token), so we persist
-// the user id itself as the session key.
+using System.Text.Json;
+using LexiFlow.Models;
+
+// The user id is display/context data, never proof of authentication.
 public class SessionService
 {
-    private const string UserIdKey = "session_user_id";
+    private const string StorageKey = "session_credentials_v2";
+    private SessionCredentials? _credentials;
+    private string? _legacyOwner;
+    public string? CurrentUserId => _credentials?.UserId;
+    public int? CurrentAccountId => _credentials?.Id;
+    public string StorageId => CurrentAccountId?.ToString() ?? "guest";
+    public string? AccessToken => IsLoggedIn ? _credentials!.AccessToken : null;
+    public bool IsLoggedIn => _credentials is { } value && value.ExpiresAt > DateTimeOffset.UtcNow;
 
-    public string? CurrentUserId { get; private set; }
-    public bool IsLoggedIn => !string.IsNullOrEmpty(CurrentUserId);
-
-    // Raised whenever the sign-in state changes so the app can swap its root page.
     public event EventHandler? StateChanged;
 
-    // Loads any persisted session on startup. Safe to call before login.
     public async Task RestoreAsync()
     {
+        _credentials = null;
+        _legacyOwner = null;
         try
         {
-            CurrentUserId = await SecureStorage.GetAsync(UserIdKey);
+            // Legacy id-only sessions deliberately do not grant access.
+            _legacyOwner = await SecureStorage.GetAsync("session_user_id");
+            var json = await SecureStorage.GetAsync(StorageKey);
+            if (json is not null)
+            {
+                var value = JsonSerializer.Deserialize<SessionCredentials>(json);
+                if (IsValid(value)) _credentials = value;
+                else SecureStorage.Remove(StorageKey);
+            }
         }
-        catch
-        {
-            // SecureStorage can be unavailable on some platforms/configs; treat as logged out.
-            CurrentUserId = null;
-        }
+        catch { /* A missing/corrupt secure store means signed out. */ }
     }
 
-    public async Task SignInAsync(string userId)
+    public async Task SignInAsync(SessionCredentials value)
     {
-        CurrentUserId = userId;
-        try
-        {
-            await SecureStorage.SetAsync(UserIdKey, userId);
-        }
+        if (!IsValid(value)) throw new InvalidOperationException("The server did not return a valid session.");
+        LocalAccountData.MigrateLegacy(value.Id, value.UserId, _legacyOwner);
+        _credentials = value;
+        _legacyOwner = null;
+        try { SecureStorage.Remove("session_user_id"); } catch { }
+        try { await SecureStorage.SetAsync(StorageKey, JsonSerializer.Serialize(value)); }
         catch
         {
-            // Non-fatal: the session still works for this app run even if it can't persist.
+            // Do not retain an older account's session if saving the new one fails.
+            try { SecureStorage.Remove(StorageKey); } catch { }
         }
         StateChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void Invalidate(string? rejectedToken)
+    {
+        // A delayed response from a previous login must not log out a new session.
+        if (_credentials?.AccessToken == rejectedToken) SignOut();
     }
 
     public void SignOut()
     {
-        CurrentUserId = null;
-        try
-        {
-            SecureStorage.Remove(UserIdKey);
-        }
-        catch
-        {
-            // Ignore: nothing more we can do to clear it.
-        }
+        _credentials = null;
+        try { SecureStorage.Remove(StorageKey); SecureStorage.Remove("session_user_id"); }
+        catch { }
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    private static bool IsValid(SessionCredentials? value)
+        => value is { Id: > 0 } && !string.IsNullOrWhiteSpace(value.UserId)
+            && value.AccessToken is { Length: 64 } && value.AccessToken.All(char.IsAsciiHexDigit)
+            && value.ExpiresAt > DateTimeOffset.UtcNow && value.ExpiresAt <= DateTimeOffset.UtcNow.AddDays(8);
 }

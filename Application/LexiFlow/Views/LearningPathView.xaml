@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.LearningPathView" Title="학습 코스">
+    <ScrollView x:Name="courseScroll">
+        <VerticalStackLayout Padding="24,24,24,40" Spacing="22" MaximumWidthRequest="1080" HorizontalOptions="Fill">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="LEARNING JOURNEY" Style="{StaticResource EyebrowLabel}"/>
+                    <Label Text="오늘도 한 걸음." FontSize="30" FontAttributes="Bold"/>
+                    <Label x:Name="progressLabel" Text="학습 경로를 준비하고 있어요" Style="{StaticResource MutedLabel}"/>
+                </VerticalStackLayout>
+                <Border Grid.Column="1" BackgroundColor="{StaticResource WarningSoft}" StrokeThickness="0" StrokeShape="RoundRectangle 14" Padding="14,9" VerticalOptions="Center">
+                    <Label x:Name="starsLabel" Text="★ 0" TextColor="#FBBF24" FontSize="16" FontAttributes="Bold"/>
+                </Border>
+            </Grid>
+            <ProgressBar x:Name="courseProgress" Style="{StaticResource LearningProgressBar}" HeightRequest="6"/>
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout x:Name="unitTabs" Spacing="10"/>
+            </ScrollView>
+            <Grid x:Name="courseLayout" RowDefinitions="Auto,Auto" RowSpacing="20" ColumnSpacing="24">
+                <Border x:Name="pathCard" Grid.Row="1" Style="{StaticResource CardBorder}" Padding="24">
+                    <VerticalStackLayout Spacing="18">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label x:Name="unitEyebrow" Style="{StaticResource EyebrowLabel}"/>
+                            <Label x:Name="unitProgressLabel" Grid.Column="1" Style="{StaticResource MutedLabel}"/>
+                        </Grid>
+                        <Label x:Name="unitTitle" FontSize="24" FontAttributes="Bold"/>
+                        <Label x:Name="unitTip" Style="{StaticResource MutedLabel}"/>
+                        <VerticalStackLayout x:Name="stageList" Spacing="0" Margin="0,6,0,0"/>
+                        <Label Text="단계를 선택하면 배울 내용을 볼 수 있어요." FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                    </VerticalStackLayout>
+                </Border>
+                <VerticalStackLayout x:Name="detailColumn" Spacing="18">
+                    <Border BackgroundColor="#192C4C" Stroke="#385D92" StrokeThickness="1" StrokeShape="RoundRectangle 22" Padding="24">
+                        <VerticalStackLayout Spacing="14">
+                            <Label x:Name="selectedEyebrow" Text="YOUR NEXT STEP" Style="{StaticResource EyebrowLabel}" TextColor="#93B7FF"/>
+                            <Label x:Name="selectedTitle" Text="준비 중" FontSize="25" FontAttributes="Bold"/>
+                            <Button x:Name="continueButton" Text="학습 시작  →" Clicked="OnContinueClick" IsEnabled="False"/>
+                            <Label x:Name="selectedDescription" Style="{StaticResource Body}"/>
+                            <FlexLayout x:Name="wordChips" Wrap="Wrap"/>
+                            <Label x:Name="selectedMeta" FontSize="12" TextColor="#A7BEDF"/>
+                            <Label x:Name="selectionHint" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="조금 더 연습할까요?" FontSize="15" FontAttributes="Bold"/>
+                        <Button Text="↻  내 단어로 맞춤 복습" Style="{StaticResource SecondaryButton}" Clicked="OnReviewClick"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Text="어순 맞추기" FontSize="13" Style="{StaticResource GhostButton}" Clicked="OnArrangePracticeClick"/>
+                            <Button Grid.Column="1" Text="문장 쓰기" FontSize="13" Style="{StaticResource GhostButton}" Clicked="OnWritingPracticeClick"/>
+                        </Grid>
+                        <Label Text="Archive와 오답 단어를 중심으로 10문제" FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Grid>
+            <Label x:Name="statusLabel" IsVisible="False" Style="{StaticResource MutedLabel}"/>
+            <Button x:Name="retryButton" Text="예문 다시 불러오기" IsVisible="False" Clicked="OnRetryClick" Style="{StaticResource GhostButton}"/>
+            <ActivityIndicator x:Name="loading" IsRunning="False" IsVisible="False" Color="{StaticResource Primary}"/>
+            <Label Text="별은 첫 시도 정답률 기준 · 90% 이상 ★★★ · 70% 이상 ★★ · 코스 진행은 이 기기에 저장돼요."
+                   FontSize="12" TextColor="{StaticResource TextMuted}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

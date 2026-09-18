@@ -29,6 +29,8 @@ namespace LexiFlow
             builder.Services.AddSingleton<NotificationService>();
             builder.Services.AddSingleton<ArchiveService>();
             builder.Services.AddSingleton<SentenceCatalogService>();
+            builder.Services.AddSingleton<CourseService>();
+            builder.Services.AddTransient<LearningPathView>();
 
             builder.Services.AddTransient<AppShell>();
 

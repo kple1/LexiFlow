@@ -106,6 +106,19 @@
                     </Border>
                 </VerticalStackLayout>
 
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout x:Name="securityActions" Spacing="12">
+                        <Label Text="계정 보안" Style="{StaticResource SubTitle}"/>
+                        <Label Text="비밀번호 변경과 탈퇴는 현재 비밀번호를 다시 확인해요." Style="{StaticResource MutedLabel}"/>
+                        <Entry x:Name="currentPasswordEntry" IsPassword="True" Placeholder="현재 비밀번호"
+                               Style="{StaticResource FieldEntry}" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
+                        <Entry x:Name="newPasswordEntry" IsPassword="True" Placeholder="새 비밀번호 (12자 이상)"
+                               Style="{StaticResource FieldEntry}" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
+                        <Button Text="비밀번호 변경" Style="{StaticResource SecondaryButton}" Clicked="OnChangePasswordClick"/>
+                        <Label Text="비밀번호를 변경하면 모든 기기에서 다시 로그인해야 해요." Style="{StaticResource MutedLabel}"/>
+                        <Button Text="계정 및 학습 데이터 삭제" Style="{StaticResource DangerButton}" Clicked="OnDeleteAccountClick"/>
+                    </VerticalStackLayout>
+                </Border>
                 <Button Text="로그아웃"
                         Style="{StaticResource DangerButton}"
                         Clicked="OnSignOutClick"/>

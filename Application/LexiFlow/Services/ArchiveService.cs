@@ -83,9 +83,6 @@ public sealed class ArchiveService
 
     private string StorageKey()
     {
-        var user = string.IsNullOrWhiteSpace(_session.CurrentUserId)
-            ? "guest"
-            : _session.CurrentUserId.Trim().ToLowerInvariant();
-        return $"sentence_archive_{user}_v1";
+        return LocalAccountData.Key(_session, "archive");
     }
 }

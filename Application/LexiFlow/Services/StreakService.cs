@@ -1,10 +1,10 @@
 namespace LexiFlow.Services;
 
 // Tracks a consecutive-day study streak locally (no backend needed).
-public class StreakService
+public class StreakService(SessionService session)
 {
-    private const string LastDateKey = "streak_last_date";
-    private const string CountKey = "streak_count";
+    private string LastDateKey => LocalAccountData.Key(session, "streak_last_date");
+    private string CountKey => LocalAccountData.Key(session, "streak_count");
 
     // Current streak. A streak survives if the user studied today or yesterday;
     // a longer gap means it's broken and reads as 0 until they study again.

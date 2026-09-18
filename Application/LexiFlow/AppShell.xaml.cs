@@ -10,6 +10,7 @@ namespace LexiFlow
             // Pages reached by navigation (not tabs) must have their routes registered.
             Routing.RegisterRoute(nameof(TestGrammarView), typeof(TestGrammarView));
             Routing.RegisterRoute(nameof(TestIdiomView), typeof(TestIdiomView));
+            Routing.RegisterRoute(nameof(TestWordsView), typeof(TestWordsView));
         }
     }
 }

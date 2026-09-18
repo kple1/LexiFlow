@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: worddb
       POSTGRES_USER: worddb
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in the protected .env file}"
     # 포트를 호스트로 열지 않는다. API는 같은 compose 네트워크에서 db:5432로 접근한다.
     # 외부에서 직접 붙어야 할 때만 SSH 터널을 쓴다.
     volumes:
@@ -18,19 +18,58 @@ services:
     restart: unless-stopped
 
   api:
-    image: ghcr.io/kple1/lexiflow/wordapp:latest
-    ports:
-      - "5276:5276"
+    image: ${API_IMAGE:-ghcr.io/kple1/lexiflow/wordapp:latest}
+    expose:
+      - "5276"
+    networks:
+      default: {}
+      edge:
+        ipv4_address: 172.30.250.3
     environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
       ASPNETCORE_URLS: "http://0.0.0.0:5276"
+      AllowedHosts: "${API_DOMAIN:-lexiflow.duckdns.org}"
+      Security__TrustedProxy: "172.30.250.2"
+      Database__ApplyMigrations: "${APPLY_MIGRATIONS:-false}"
       ConnectionStrings__Default: "Host=db;Port=5432;Database=worddb;Username=worddb;Password=${DB_PASSWORD}"
       Notion__Token: "${NOTION_TOKEN}"
       Notion__WordsDataSourceId: "${NOTION_WORDS_DATA_SOURCE_ID}"
-      Admin__Token: "${ADMIN_TOKEN}"
+      Admin__Token: "${ADMIN_TOKEN:?Set a random ADMIN_TOKEN of at least 32 characters}"
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  proxy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      API_DOMAIN: "${API_DOMAIN:-lexiflow.duckdns.org}"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      edge:
+        ipv4_address: 172.30.250.2
+    depends_on:
+      - api
+    restart: unless-stopped
 
 volumes:
   dbdata:
+  caddy_data:
+  caddy_config:
+
+networks:
+  edge:
+    ipam:
+      config:
+        - subnet: 172.30.250.0/24

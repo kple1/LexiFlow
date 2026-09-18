@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using WordApp.Data;
 
 namespace WordApp.Controllers
 {
     [ApiController]
+    [AllowAnonymous]
     [Route("grammars")]
     public class GrammarController : ControllerBase
     {

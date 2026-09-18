@@ -1,9 +1,10 @@
-let token = sessionStorage.getItem("adminToken") || "";
+// Remove legacy browser-persisted secrets; keep the token only until this page closes.
+sessionStorage.removeItem("adminToken");
+let token = "";
 
 function ensureToken() {
   if (!token) {
     token = prompt("관리자 토큰을 입력하세요") || "";
-    sessionStorage.setItem("adminToken", token);
   }
   return token;
 }
@@ -11,7 +12,11 @@ function ensureToken() {
 // Returns { ok: true, data } on success, { ok: false } once the failure has
 // already been reported to the user (alert), so callers just check `.ok`.
 async function api(path, options = {}) {
-  ensureToken();
+  if (location.protocol !== "https:") {
+    alert("보안을 위해 HTTPS 주소로 접속해 주세요.");
+    return { ok: false };
+  }
+  if (!ensureToken()) return { ok: false };
   const res = await fetch(path, {
     ...options,
     headers: {
@@ -25,8 +30,7 @@ async function api(path, options = {}) {
     alert("토큰이 올바르지 않습니다. 다시 입력해주세요.");
     sessionStorage.removeItem("adminToken");
     token = "";
-    ensureToken();
-    return api(path, options);
+    return { ok: false };
   }
 
   if (res.status === 409) {
@@ -70,7 +74,7 @@ async function loadWords() {
       <td>${escapeHtml(w.meaning)}</td>
       <td>${escapeHtml(w.status)}</td>
       <td>${escapeHtml(w.example ?? "")}</td>
-      <td>${w.source}</td>
+      <td>${escapeHtml(w.source)}</td>
       <td class="row-actions">
         <button data-act="edit" ${readonly ? "disabled" : ""}>수정</button>
         <button data-act="delete" class="danger" ${readonly ? "disabled" : ""}>삭제</button>

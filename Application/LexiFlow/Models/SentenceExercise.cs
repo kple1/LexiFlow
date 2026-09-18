@@ -3,7 +3,9 @@ namespace LexiFlow.Models;
 public enum SentenceExerciseKind
 {
     ChooseMeaning,
-    FillBlank
+    FillBlank,
+    ArrangeWords,
+    WriteSentence
 }
 
 public sealed class SentenceExercise

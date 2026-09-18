@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Application/LexiFlow/Services/ApiService.cs" Link="ApiService.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/SessionService.cs" Link="SessionService.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/LocalAccountData.cs" Link="LocalAccountData.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/*.cs" Exclude="../../Application/LexiFlow/Models/User.cs;../../Application/LexiFlow/Models/CorrectWordState.cs" Link="Models/%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

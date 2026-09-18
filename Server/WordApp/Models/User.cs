@@ -8,5 +8,11 @@ namespace WordApp.Models
         public string UserId { get; set; } = "";
         [JsonIgnore]
         public string Pw { get; set; } = "";
+        [JsonIgnore]
+        public string SecurityStamp { get; set; } = Guid.NewGuid().ToString("N");
+        [JsonIgnore]
+        public int FailedLoginCount { get; set; }
+        [JsonIgnore]
+        public DateTime? LockoutUntil { get; set; }
     }
 }

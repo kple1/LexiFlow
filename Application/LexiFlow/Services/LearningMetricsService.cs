@@ -55,9 +55,6 @@ public sealed class LearningMetricsService
 
     private string Key(string suffix)
     {
-        var user = string.IsNullOrWhiteSpace(_session.CurrentUserId)
-            ? "guest"
-            : _session.CurrentUserId.Trim().ToLowerInvariant();
-        return $"learning_{user}_{suffix}";
+        return LocalAccountData.Key(_session, suffix);
     }
 }

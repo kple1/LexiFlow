@@ -18,5 +18,6 @@ COPY --from=build /app/publish .
 # 컨테이너 안에서 0.0.0.0으로 바인딩 (아까 배운 그거)
 ENV ASPNETCORE_URLS=http://0.0.0.0:5276
 EXPOSE 5276
+USER $APP_UID
 
 ENTRYPOINT ["dotnet", "WordApp.dll"]

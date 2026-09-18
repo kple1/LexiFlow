@@ -1,78 +1,136 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using WordApp.Auth;
 using WordApp.Data;
 using WordApp.Models;
 
-namespace WordApp.Controllers
+namespace WordApp.Controllers;
+
+[ApiController]
+[Authorize]
+[Route("users")]
+public class UserController(AppDbContext db) : ControllerBase
 {
-    [ApiController]
-    [Route("users")]
-    public class UserController : ControllerBase
+    public record ChangePwDto(string CurrentPw, string Pw);
+    public record CurrentPasswordDto(string CurrentPw);
+    public record RegisterDto(string UserId, string Pw);
+    public record LoginDto(string UserId, string Pw);
+
+    [HttpGet("me")]
+    public IActionResult Me() => Ok(new { Id = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!), UserId = User.Identity!.Name });
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Get(int id)
     {
-        public record ChangePwDto(string Pw);
-        public record RegisterDto(string UserId, string Pw);
-        public record LoginDto(string UserId, string Pw);
-        private readonly AppDbContext _db;
-        public UserController(AppDbContext db) => _db = db;
+        if (!AccountSecurity.IsOwnAccount(User, id)) return Forbid();
+        var user = await db.Users.FindAsync(id);
+        return user is null ? NotFound() : Ok(new { user.Id, user.UserId });
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+    [AllowAnonymous]
+    [EnableRateLimiting("credentials")]
+    [HttpPost]
+    public async Task<IActionResult> Post(RegisterDto dto)
+    {
+        if (!AccountSecurity.ValidNewUserId(dto.UserId) || !AccountSecurity.ValidNewPassword(dto.Pw))
+            return BadRequest("ID: 3-64 letters, numbers, _, . or -. Password: at least 12 characters, at most 72 UTF-8 bytes.");
+        if (await db.Users.AnyAsync(u => u.UserId == dto.UserId)) return Conflict("User ID already exists.");
+        var user = new User { UserId = dto.UserId, Pw = BCrypt.Net.BCrypt.HashPassword(dto.Pw, 11) };
+        db.Users.Add(user);
+        try { await db.SaveChangesAsync(); }
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        { return Conflict("User ID already exists."); }
+        return CreatedAtAction(nameof(Get), new { id = user.Id }, new { user.Id, user.UserId });
+    }
+
+    [AllowAnonymous]
+    [EnableRateLimiting("credentials")]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginDto dto)
+    {
+        if (string.IsNullOrEmpty(dto.UserId) || dto.UserId.Length > 100 || !AccountSecurity.ValidPasswordInput(dto.Pw))
+            return Unauthorized();
+        var now = DateTime.UtcNow;
+        var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(u => u.UserId == dto.UserId);
+        var valid = AccountSecurity.Verify(dto.Pw, user?.Pw);
+        if (user is null || user.LockoutUntil > now) return Unauthorized();
+        if (!valid)
         {
-            var q = await _db.Users.FindAsync(id);
-            if (q == null)
-                return NotFound();
-            return Ok(q);
+            // Atomic update: parallel failures cannot overwrite one another's counters.
+            var until = now.AddMinutes(15);
+            await db.Users.Where(u => u.Id == user.Id && u.SecurityStamp == user.SecurityStamp)
+                .ExecuteUpdateAsync(update => update
+                    .SetProperty(u => u.FailedLoginCount, u => u.LockoutUntil <= now ? 1 : u.FailedLoginCount + 1)
+                    .SetProperty(u => u.LockoutUntil, u => u.LockoutUntil <= now ? null : u.FailedLoginCount >= 4 ? until : u.LockoutUntil));
+            return Unauthorized();
         }
+        var updated = await db.Users.Where(u => u.Id == user.Id && u.SecurityStamp == user.SecurityStamp
+                && (u.LockoutUntil == null || u.LockoutUntil <= now))
+            .ExecuteUpdateAsync(update => update.SetProperty(u => u.FailedLoginCount, 0).SetProperty(u => u.LockoutUntil, (DateTime?)null));
+        if (updated == 0) return Unauthorized();
 
-        // Sign up. Uses a DTO because User.Pw is [JsonIgnore], which would otherwise
-        // drop the incoming password on deserialization and store an empty hash.
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RegisterDto dto)
+        await db.UserSessions.Where(s => s.UserId == user.Id && s.ExpiresAt <= now).ExecuteDeleteAsync();
+        var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        var expiresAt = now.AddDays(7);
+        db.UserSessions.Add(new UserSession
         {
-            if (await _db.Users.AnyAsync(u => u.UserId == dto.UserId))
-                return Conflict("User ID already exists.");
+            TokenHash = SessionAuthenticationHandler.HashToken(token), UserId = user.Id,
+            SecurityStamp = user.SecurityStamp, ExpiresAt = expiresAt
+        });
+        await db.SaveChangesAsync();
+        Response.Headers.CacheControl = "no-store";
+        return Ok(new { user.Id, user.UserId, AccessToken = token, ExpiresAt = expiresAt });
+    }
 
-            var user = new User
-            {
-                UserId = dto.UserId,
-                Pw = BCrypt.Net.BCrypt.HashPassword(dto.Pw)
-            };
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
-        }
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var hash = User.FindFirstValue(SessionAuthenticationHandler.TokenClaim);
+        await db.UserSessions.Where(s => s.TokenHash == hash).ExecuteDeleteAsync();
+        return NoContent();
+    }
 
-        // Sign in. Verifies the password server-side; the hash is never sent to clients.
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
-        {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == dto.UserId);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Pw, user.Pw))
-                return Unauthorized();
+    [EnableRateLimiting("credentials")]
+    [HttpPatch("{id:int}")]
+    public async Task<IActionResult> Patch(int id, ChangePwDto dto)
+    {
+        if (!AccountSecurity.IsOwnAccount(User, id)) return Forbid();
+        if (!AccountSecurity.ValidNewPassword(dto.Pw)) return BadRequest("Password must be at least 12 characters and at most 72 UTF-8 bytes.");
+        var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == id);
+        if (user is null || !AccountSecurity.Verify(dto.CurrentPw, user.Pw)) return Forbid();
+        var hash = BCrypt.Net.BCrypt.HashPassword(dto.Pw, 11);
+        var stamp = Guid.NewGuid().ToString("N");
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        var updated = await db.Users.Where(u => u.Id == id && u.SecurityStamp == user.SecurityStamp)
+            .ExecuteUpdateAsync(update => update.SetProperty(u => u.Pw, hash)
+                .SetProperty(u => u.SecurityStamp, stamp).SetProperty(u => u.FailedLoginCount, 0)
+                .SetProperty(u => u.LockoutUntil, (DateTime?)null));
+        if (updated == 0) return Unauthorized();
+        await db.UserSessions.Where(s => s.UserId == id).ExecuteDeleteAsync();
+        await transaction.CommitAsync();
+        return NoContent();
+    }
 
-            return Ok(new { user.Id, user.UserId });
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var user = await _db.Users.FindAsync(id);
-            if (user == null)
-                return NotFound();
-            _db.Users.Remove(user);
-            await _db.SaveChangesAsync();
-            return NoContent();
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] ChangePwDto dto)
-        {
-            var q = await _db.Users.FindAsync(id);
-            if (q == null)
-                return NotFound();
-            q.Pw = BCrypt.Net.BCrypt.HashPassword(dto.Pw);
-            await _db.SaveChangesAsync();
-            return Ok(q);
-        }
+    [EnableRateLimiting("credentials")]
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id, CurrentPasswordDto dto)
+    {
+        if (!AccountSecurity.IsOwnAccount(User, id)) return Forbid();
+        var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == id);
+        if (user is null || !AccountSecurity.Verify(dto.CurrentPw, user.Pw)) return Forbid();
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        await db.WordProgresses.Where(p => p.UserId == user.UserId).ExecuteDeleteAsync();
+        await db.GrammarProgresses.Where(p => p.UserId == user.UserId).ExecuteDeleteAsync();
+        await db.IdiomProgresses.Where(p => p.UserId == user.UserId).ExecuteDeleteAsync();
+        var deleted = await db.Users.Where(u => u.Id == id && u.SecurityStamp == user.SecurityStamp).ExecuteDeleteAsync();
+        if (deleted == 0) return Unauthorized();
+        // Sessions are removed by the database FK cascade.
+        await transaction.CommitAsync();
+        return NoContent();
     }
 }

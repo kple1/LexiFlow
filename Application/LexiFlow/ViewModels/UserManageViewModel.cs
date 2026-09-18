@@ -36,16 +36,21 @@ public partial class UserManageViewModel : ObservableObject
         try
         {
             IsBusy = true;
-            bool ok = await _api.LoginAsync(UserId, Password);
-            if (!ok)
+            var credentials = await _api.LoginAsync(UserId, Password);
+            if (credentials is null)
                 return (false, "아이디 또는 비밀번호가 올바르지 않습니다.");
 
-            await _session.SignInAsync(UserId);
+            Password = "";
+            await _session.SignInAsync(credentials);
             return (true, "로그인되었습니다.");
         }
-        catch (Exception ex)
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
         {
-            return (false, $"서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.\n{ex.Message}");
+            return (false, "로그인 요청이 많습니다. 잠시 후 다시 시도해 주세요.");
+        }
+        catch (Exception)
+        {
+            return (false, "서버에 안전하게 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.");
         }
         finally
         {
@@ -66,9 +71,9 @@ public partial class UserManageViewModel : ObservableObject
                 ? (true, "가입이 완료되었습니다. 이제 로그인해 주세요.")
                 : (false, apiError ?? "가입하지 못했습니다.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return (false, $"서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.\n{ex.Message}");
+            return (false, "서버에 안전하게 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.");
         }
         finally
         {

@@ -22,7 +22,7 @@
             <ShellContent ContentTemplate="{DataTemplate view:HomeView}"/>
         </Tab>
         <Tab Route="learn" Icon="test.png" Title="학습" Shell.NavBarIsVisible="False">
-            <ShellContent ContentTemplate="{DataTemplate view:TestWordsView}"/>
+            <ShellContent ContentTemplate="{DataTemplate view:LearningPathView}"/>
         </Tab>
         <Tab Route="archive" Icon="book.png" Title="Archive" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:ArchiveView}"/>

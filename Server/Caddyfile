@@ -1,0 +1,4 @@
+{$API_DOMAIN:lexiflow.duckdns.org} {
+    header -Server
+    reverse_proxy api:5276
+}

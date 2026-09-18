@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using WordApp.Data;
 
 namespace WordApp.Controllers
 {
     [ApiController]
+    [AllowAnonymous]
     [Route("idioms")]
     public class IdiomController : ControllerBase
     {

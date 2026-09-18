@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using WordApp.Auth;
 using WordApp.Data;
 using WordApp.Models;
 
 namespace WordApp.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("users/{userId}/idiom-progress")]
 public class IdiomProgressController : ControllerBase
 {
@@ -18,6 +21,7 @@ public class IdiomProgressController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get(string userId)
     {
+        if (!AccountSecurity.IsOwnProgress(User, userId)) return Forbid();
         var list = await _db.IdiomProgresses
             .AsNoTracking()
             .Where(p => p.UserId == userId)
@@ -29,6 +33,11 @@ public class IdiomProgressController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Upsert(string userId, [FromBody] UpsertProgressDto dto)
     {
+        if (!AccountSecurity.IsOwnProgress(User, userId)) return Forbid();
+        if (dto.Status is not null && dto.Status is not ("New" or "Learning" or "Mastered"))
+            return BadRequest("Invalid progress status.");
+        if (!await _db.Idioms.AnyAsync(item => item.Id == dto.IdiomId))
+            return BadRequest("Unknown learning item.");
         if (string.IsNullOrEmpty(dto.IdiomId))
             return BadRequest("IdiomId is required.");
 

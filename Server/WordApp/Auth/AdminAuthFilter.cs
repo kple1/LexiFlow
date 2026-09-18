@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace WordApp.Auth;
 
@@ -13,7 +15,10 @@ public class AdminAuthFilter : IAsyncActionFilter
         var expected = _cfg["Admin:Token"];
         var provided = context.HttpContext.Request.Headers["X-Admin-Token"].ToString();
 
-        if (string.IsNullOrEmpty(expected) || provided != expected)
+        if (string.IsNullOrEmpty(expected) || expected.Length < 32 || provided.Length > 512 ||
+            !CryptographicOperations.FixedTimeEquals(
+                SHA256.HashData(Encoding.UTF8.GetBytes(expected)),
+                SHA256.HashData(Encoding.UTF8.GetBytes(provided))))
         {
             context.Result = new Microsoft.AspNetCore.Mvc.UnauthorizedResult();
             return;

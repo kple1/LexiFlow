@@ -15,15 +15,15 @@ namespace LexiFlow
             InitializeComponent();
             _services = services;
             _session = session;
-            _session.StateChanged += (_, _) => ApplyRootPage();
+            _session.StateChanged += (_, _) => MainThread.BeginInvokeOnMainThread(ApplyRootPage);
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
             _window = new Window
             {
-                Width = 1024,
-                Height = 550,
+                Width = 1120,
+                Height = 800,
                 // Shown briefly while the persisted session is restored.
                 Page = new ContentPage
                 {
@@ -40,6 +40,8 @@ namespace LexiFlow
             var display = DeviceDisplay.MainDisplayInfo;
             double screenWidth = display.Width / display.Density;
             double screenHeight = display.Height / display.Density;
+            _window.Width = Math.Min(_window.Width, Math.Max(360, screenWidth - 80));
+            _window.Height = Math.Min(_window.Height, Math.Max(480, screenHeight - 80));
             _window.X = (screenWidth - _window.Width) / 2;
             _window.Y = (screenHeight - _window.Height) / 2;
 

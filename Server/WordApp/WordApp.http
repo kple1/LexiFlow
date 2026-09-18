@@ -1,4 +1,4 @@
-@host = http://localhost:5276
+@host = https://localhost:7299
 
 ### 전체 단어 조회
 GET {{host}}/words

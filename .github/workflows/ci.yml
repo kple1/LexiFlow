@@ -1,7 +1,15 @@
 name: CI/CD
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lexiflow-production
+  cancel-in-progress: false
 
 env:
   IMAGE: ghcr.io/kple1/lexiflow/wordapp
@@ -15,6 +23,10 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - run: dotnet build Server/WordApp/WordApp.csproj -c Release
+      - run: dotnet run --project Tests/SecurityChecks -c Release
+      - run: dotnet run --project Tests/ClientSecurityChecks -c Release
+      - run: dotnet run --project Tests/LearningChecks -c Release
+      - run: python3 -m unittest discover -s Tests/DeploymentChecks -p 'test_*.py'
 
   push-image:
     needs: build
@@ -35,13 +47,16 @@ jobs:
         with:
           context: ./Server
           push: true
-          tags: ${{ env.IMAGE }}:latest
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
 
   # 배포는 DEPLOY_ENABLED 저장소 변수가 'true'이고 VM 시크릿이 현재 서버를
   # 가리킬 때만 실행한다.
   deploy:
     needs: push-image
-    if: vars.DEPLOY_ENABLED == 'true'
+    # Explicitly opt in only after the TLS cutover, backup and schema migration are verified.
+    if: vars.DEPLOY_ENABLED == 'true' && vars.SECURITY_DEPLOY_READY == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,43 +64,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sync docker-compose.yml to VM
+      - name: Sync HTTPS deployment configuration to VM
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          source: "Server/docker-compose.yml"
-          target: "~/LexiFlow/Server"
+          source: "Server/docker-compose.yml,Server/Caddyfile,Server/deploy-image.py"
+          target: "~/LexiFlow/Server/incoming"
           strip_components: 1
 
-      # docker-compose.yml only references ${VAR} placeholders (no secrets committed).
-      # This step (re)writes the real values into .env, which docker compose loads
-      # automatically from the same directory — the file itself never touches git.
+      # Preserve protected host secrets. Deploy only the immutable commit image;
+      # back up first, leave DB/schema unchanged, then verify HTTPS and authentication.
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3
         env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_WORDS_DATA_SOURCE_ID: ${{ secrets.NOTION_WORDS_DATA_SOURCE_ID }}
-          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          DEPLOY_IMAGE: ghcr.io/kple1/lexiflow/wordapp:${{ github.sha }}
           GHCR_USER: ${{ github.actor }}
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          envs: DB_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN,GHCR_USER,GHCR_TOKEN
+          envs: DEPLOY_IMAGE,GHCR_USER,GHCR_TOKEN
           script: |
             set -e
-            cat > ~/LexiFlow/Server/.env <<EOF
-            DB_PASSWORD=$DB_PASSWORD
-            NOTION_TOKEN=$NOTION_TOKEN
-            NOTION_WORDS_DATA_SOURCE_ID=$NOTION_WORDS_DATA_SOURCE_ID
-            ADMIN_TOKEN=$ADMIN_TOKEN
-            EOF
+            umask 077
             cd ~/LexiFlow/Server
             printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
             trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
-            docker compose pull
-            docker compose up -d --force-recreate
+            python3 incoming/deploy-image.py
+      - name: Verify public HTTPS endpoint
+        run: curl --fail --silent --show-error --retry 3 https://lexiflow.duckdns.org/health

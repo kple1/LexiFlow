@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using WordApp.Auth;
 using WordApp.Data;
 using WordApp.Models;
@@ -7,6 +8,7 @@ using WordApp.Models;
 namespace WordApp.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("admin/api/grammars")]
 [ServiceFilter(typeof(AdminAuthFilter))]
 public class AdminGrammarsController : ControllerBase

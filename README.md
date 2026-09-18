@@ -1,8 +1,10 @@
 # LexiFlow
 
+> 2026-09-18 운영 서버를 HTTPS·토큰 인증으로 전환했습니다. 구버전 HTTP 앱은 접속할 수 없으므로 1.1 보안 빌드로 업데이트하고 다시 로그인하세요. [검증·배포 기록](docs/SECURITY-DEPLOYMENT-STATUS.md) · [백업·전환 절차](docs/SECURITY-ROLLOUT.md)
+
 > **Lexicon + Flow** — 머릿속 단어들이 자연스럽게 흘러나오는 상태.
 
-Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영어 학습 앱입니다. 핵심 학습 경험은 **문장 뜻 고르기와 빈칸 직접 쓰기**이며, 문장 속 파란 단어를 누르면 뜻을 확인하고 개인 Archive에 저장할 수 있습니다. 서버는 단어·문법·숙어 콘텐츠와 학습 진행도를 동기화하고, .NET MAUI 앱은 오늘의 목표·XP·레벨·연속 학습일을 하나의 흐름으로 보여줍니다.
+Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영어 학습 앱입니다. **단계별 코스에서 뜻 고르기·빈칸 쓰기·문장 순서 맞추기·전체 문장 쓰기**를 연습하고, 문장 속 파란 단어를 누르면 뜻을 확인하고 개인 Archive에 저장할 수 있습니다. 서버는 단어·문법·숙어 콘텐츠와 학습 진행도를 동기화하고, .NET MAUI 앱은 오늘의 목표·XP·레벨·연속 학습일을 하나의 흐름으로 보여줍니다.
 
 <p align="left">
   <img alt=".NET" src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white">
@@ -27,9 +29,15 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/sentence-learning.jpg" alt="문장 뜻을 보고 빈칸에 영어 단어를 직접 입력하며 파란 단어를 눌러 뜻을 확인하는 LexiFlow 문장 학습 화면" width="100%">
+  <img src="docs/screenshots/learning-path.jpg" alt="유닛별 학습 경로와 현재 단계, 잠긴 단계, 학습 시작 버튼을 보여주는 LexiFlow 코스 화면" width="100%">
   <br>
-  <sub>문장 학습 — 뜻 고르기와 빈칸 쓰기, 문장 속 단어 즉시 조회</sub>
+  <sub>학습 경로 — 현재 단계부터 시작하고, 다음 유닛은 미리 살펴보기</sub>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/sentence-learning.jpg" alt="한국어 해석과 핵심 표현을 보고 영어 문장을 작성하는 LexiFlow 학습 화면" width="100%">
+  <br>
+  <sub>문장 학습 — 상단 진행도, 넓은 답안 입력란, 하단 고정 정답 확인</sub>
 </p>
 
 <p align="center">
@@ -42,7 +50,12 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 
 ## ✨ 주요 특징
 
-- **문장 중심 학습** — 매 세션 10문제를 무작위로 구성하고, 문장 뜻 고르기와 빈칸 직접 쓰기를 번갈아 제공
+- **단계별 학습 코스** — 짧은 예문부터 최대 8문제씩 묶어 순차 해제. 읽기·어순·직접 쓰기·긴 문장 4개 유닛으로 구성하고, 완료 별점과 코스는 기기에 계정별 저장
+- **네 가지 문제 유형** — 뜻 고르기, 빈칸 쓰기, 단어 타일로 어순 맞추기, 영어 문장 전체 쓰기. 어순/쓰기 집중 연습도 바로 선택 가능
+- **집중하기 쉬운 학습 화면** — 유닛별 경로와 단계 미리보기, 넓은 창의 2열/좁은 창의 1열 배치, 고정 진행도·확인 버튼. 답을 입력하거나 선택하면 확인 버튼이 활성화되고, 어순 타일은 선택해도 나머지 위치를 유지
+- **별점과 재도전** — 오답까지 모두 해결하면 다음 단계가 열림. 첫 시도 정답률 90%/70% 이상은 별 3개/2개, 나머지는 별 1개. 힌트 사용 답은 첫 시도 점수에서 제외하고 재도전 최고 별점 유지
+- **서버 예문 기반 문장 학습** — 관리 중인 단어·예문에서 매 세션 10문제를 만들고, 전체 예문을 한 바퀴 돌기 전에는 같은 문제를 다시 선정하지 않음
+- **모르는 단어 우선 출제** — Archive에 저장한 단어와 오답·`Learning` 진행도의 단어를 다음 학습에서 먼저 선정
 - **틀린 문장 다시 만나기** — 오답은 학습 큐 뒤로 다시 보내 정답을 맞힐 때까지 자연스럽게 반복
 - **클릭해서 뜻 보기 + Archive** — 문장 속 파란 단어를 누르면 한국어 뜻을 바로 보여주고 사용자별 로컬 Archive에 문맥·조회 횟수와 함께 저장
 - **게임형 성장 흐름** — 오늘의 목표, XP, 레벨, 연속 학습일, 복습 대기를 홈에서 추적
@@ -53,7 +66,13 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 - **스페이스드 리피티션 + 스트릭** — 마지막 복습 시각과 진행 상태를 기반으로 복습 대상을 골라주고, 연속 학습일수를 추적
 - **크로스플랫폼 앱** — .NET MAUI로 Android / Windows 지원
 - **컨테이너 배포** — Docker Compose로 API와 DB를 한 번에 실행, 시크릿은 `.env`로 분리
-- **클라우드 호스팅 + CI/CD** — Oracle Cloud에 배포, push 한 번으로 빌드·이미지·compose 동기화·배포까지 자동화
+- **클라우드 호스팅 + CI/CD** — Oracle Cloud에 배포, 빌드·보안 테스트·이미지 생성을 자동화하고, 별도 승인 변수로 운영 배포 제어
+
+코스는 서버의 영어 예문·한국어 해석이 있는 항목으로 구성됩니다. 2026-09-18 검증 기준 96문장, 12단계이며 새 예문이 들어오면 다음 로딩 때 코스 뒤에 추가됩니다. 저장된 단계 구성을 유지하므로 콘텐츠 순서 변경으로 완료 단계가 바뀌지 않습니다. 연결이 끊기면 저장된 코스, 첫 실행에서 연결할 수 없으면 내장 예문을 사용합니다.
+
+문장 전체 쓰기는 등록된 예문 표현과 비교합니다. 대소문자·문장부호·여분의 공백은 허용하지만 다른 번역이나 의역은 아직 자동 판정하지 않습니다. 유료 생성형 AI API는 호출하지 않습니다.
+
+학습 로직 검증: `dotnet run --project Tests/LearningChecks` (서버 예문 검증 포함: 뒤에 `-- --live`). 단계 잠금, 별점, 계정 분리, 문제 유형, 채점, 비반복 출제를 검사합니다.
 
 ---
 
@@ -93,8 +112,8 @@ Notion API는 변경 알림(webhook)을 제공하지 않기 때문에, 서버가
 
 서버가 정적으로 서빙하는 웹 페이지로, 별도 앱 재빌드 없이 브라우저에서 바로 콘텐츠를 관리할 수 있습니다.
 
-- **접속**: `http://lexiflow.duckdns.org:5276/admin/`
-- **인증**: 최초 접속 시 관리자 토큰을 입력하면 세션 동안 저장되어, 이후 요청에 `X-Admin-Token` 헤더로 자동 첨부됩니다. 토큰은 서버의 `Admin:Token` 설정(환경변수 `Admin__Token`)과 일치해야 합니다.
+- **접속**: `https://lexiflow.duckdns.org/admin/`
+- **인증**: 최초 접속 시 관리자 토큰을 입력하면 페이지 메모리에만 유지되어, 이후 요청에 `X-Admin-Token` 헤더로 자동 첨부됩니다. 토큰은 서버의 `Admin:Token` 설정(환경변수 `Admin__Token`)과 일치해야 합니다.
 - **탭 구성**: 단어 / 문법 / 숙어 — 각각 목록 조회, 추가, 수정, 삭제 지원
 - **Notion 출처 단어는 읽기 전용** — 목록에서 흐리게 표시되며 수정·삭제 버튼이 비활성화됩니다. Notion 쪽에서 고치지 않고 여기서 고쳐도 다음 동기화 때 되돌아가기 때문입니다.
 
@@ -159,7 +178,9 @@ LexiFlow/
     └── LexiFlow/
         ├── Services/
         │   ├── ApiService.cs                 # 서버 API 호출
-        │   ├── SentenceCatalogService.cs     # 뜻 고르기/빈칸 쓰기 문장 카탈로그
+        │   ├── SentenceCatalogService.cs     # 서버 예문 기반 개인화·비반복 문장 선정
+        │   ├── CourseService.cs              # 단계 구성, 해제, 최고 별점 저장
+        │   ├── SentenceAnswer.cs             # 문장 토큰과 입력 채점 규칙
         │   ├── ArchiveService.cs             # 눌러 본 단어를 사용자별 로컬 저장
         │   ├── LearningMetricsService.cs     # 일일 목표, XP, 레벨 지표
         │   ├── ReviewScheduler.cs            # 제네릭 스페이스드 리피티션
@@ -201,10 +222,14 @@ LexiFlow/
 
 ### 사용자 / 진행도
 
+가입·로그인을 제외하고 `Authorization: Bearer <token>`이 필요하며 본인 계정만 접근할 수 있습니다. 비밀번호 변경은 `{ currentPw, pw }`, 탈퇴는 `{ currentPw }` 본문을 요구합니다.
+
 | 메서드 | 엔드포인트 | 설명 |
 | --- | --- | --- |
 | `POST` | `/users` | 회원가입 |
-| `POST` | `/users/login` | 로그인 |
+| `POST` | `/users/login` | 로그인 후 7일 만료 세션 토큰 발급 |
+| `GET` | `/users/me` | 현재 인증 계정 |
+| `POST` | `/users/logout` | 현재 서버 세션 폐기 |
 | `GET` / `PATCH` / `DELETE` | `/users/{id}` | 조회 / 비밀번호 변경 / 탈퇴 |
 | `GET` / `POST` | `/users/{userId}/progress` | 단어 진행도 조회 / 리뷰 결과 반영 |
 | `GET` / `POST` | `/users/{userId}/grammar-progress` | 문법 진행도 조회 / 반영 |
@@ -243,27 +268,16 @@ cp .env.example .env
 DB_PASSWORD=원하는-강력한-비밀번호
 NOTION_TOKEN=ntn_xxx
 NOTION_WORDS_DATA_SOURCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-ADMIN_TOKEN=관리자-패널-접속-토큰
+ADMIN_TOKEN=32자-이상의-암호학적으로-안전한-난수
 ```
 
-### 2. 서버 실행 (Docker — 권장)
+### 2. 서버 실행 (Docker — HTTPS 전환 필요)
 
-Docker Compose를 사용하면 API 서버와 PostgreSQL을 한 번에 실행합니다. 대상 머신에 PostgreSQL을 설치할 필요가 없습니다.
+운영용 Compose는 Caddy(80/443) → 내부 API(5276) → PostgreSQL 구조입니다.
+API와 DB 포트는 호스트에 공개하지 않습니다. 실제 도메인·인증서가 필요하며 로컬 HTTP 데모 설정이 아닙니다.
 
-```bash
-cd Server
-docker compose up --build
-```
-
-- API: `http://localhost:5276`
-- 관리자 패널: `http://localhost:5276/admin/`
-- PostgreSQL: Compose 내부 전용 `db:5432` (호스트에 미노출)
-
-동작 확인:
-
-```bash
-curl http://localhost:5276/words
-```
+이미지 선택, DB 백업, 중복 계정 점검, 명시적인 첫 마이그레이션은 [보안 전환 안내](docs/SECURITY-ROLLOUT.md)를 따르세요.
+검증 없이 기존 서버에서 `docker compose up`을 실행하지 마세요.
 
 ### 3. 서버 실행 (로컬 — Docker 없이)
 
@@ -274,12 +288,13 @@ cd Server/WordApp
 dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Database=worddb;Username=worddb;Password=..."
 dotnet user-secrets set "Notion:Token" "ntn_xxx"
 dotnet user-secrets set "Notion:WordsDataSourceId" "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-dotnet user-secrets set "Admin:Token" "관리자-패널-접속-토큰"
+dotnet user-secrets set "Admin:Token" "32자-이상-난수-관리자-토큰"
 
-dotnet run --urls "http://0.0.0.0:5276"
+dotnet dev-certs https --trust
+dotnet run --urls "https://localhost:7299"
 ```
 
-> 외부 기기(모바일)에서 접근하려면 `localhost`가 아닌 `0.0.0.0`에 바인딩해야 합니다.
+> 모바일은 해당 기기가 신뢰하는 인증서와 호스트 이름이 필요합니다. 인증서 검증을 끄거나 평문 HTTP로 우회하지 않습니다.
 
 ### 4. 클라이언트 실행
 
@@ -288,15 +303,14 @@ dotnet run --urls "http://0.0.0.0:5276"
 ```csharp
 _http = new HttpClient(handler)
 {
-    BaseAddress = new Uri("http://lexiflow.duckdns.org:5276/")
+    BaseAddress = new Uri("https://lexiflow.duckdns.org/")
 };
 ```
 
 | 실행 환경 | 서버 주소 |
 | --- | --- |
-| Windows 데스크톱 | `localhost` |
-| Android 에뮬레이터 | `10.0.2.2` |
-| 실기기 / 원격 접속 | PC의 LAN IP 또는 `lexiflow.duckdns.org` |
+| 로컬 Windows 개발 | `https://localhost:7299/` (신뢰한 개발 인증서) |
+| 에뮬레이터 / 실기기 / 원격 | 기기에서 신뢰할 수 있는 인증서가 있는 HTTPS 주소 |
 
 ```bash
 cd Application/LexiFlow
@@ -368,7 +382,7 @@ bin/Release/net10.0-windows10.0.19041.0/publish/
 | 운영 항목 | 현재 구성 |
 | --- | --- |
 | 리전 / VM | Japan East (Tokyo) · Ubuntu 24.04 · Always Free |
-| 공개 주소 | `http://lexiflow.duckdns.org:5276` |
+| 공개 주소 | `https://lexiflow.duckdns.org` |
 | 런타임 | Docker Compose (`api` + `postgres:17-alpine`) |
 | 데이터베이스 | PostgreSQL 17 · 호스트 포트 미노출 |
 | 배포 | GitHub Actions → private GHCR → SSH 배포 |
@@ -391,118 +405,31 @@ bin/Release/net10.0-windows10.0.19041.0/publish/
 ```csharp
 _http = new HttpClient(handler)
 {
-    BaseAddress = new Uri("http://lexiflow.duckdns.org:5276/")
+    BaseAddress = new Uri("https://lexiflow.duckdns.org/")
 };
 ```
 
-> **네트워크 확인 팁:** 앱을 다시 빌드하기 전에, 기기의 브라우저에서 `http://lexiflow.duckdns.org:5276/words`에 접속해 JSON이 반환되는지 먼저 확인하세요. 이 한 번의 테스트로 문제가 네트워크에 있는지 앱 코드에 있는지 빠르게 구분할 수 있습니다.
+> **네트워크 확인 팁:** 앱을 다시 빌드하기 전에, 기기의 브라우저에서 `https://lexiflow.duckdns.org/words`에 접속해 JSON이 반환되는지 먼저 확인하세요. 이 한 번의 테스트로 문제가 네트워크에 있는지 앱 코드에 있는지 빠르게 구분할 수 있습니다.
 
 ---
 
 ## 🔄 CI/CD (GitHub Actions)
 
-`main` 브랜치에 push하면 **빌드 검증 → 이미지 생성 → compose 동기화 → 서버 배포**가 자동으로 실행됩니다. 손으로 SSH 접속해 배포하거나 compose 파일을 옮기던 과정을 자동화했습니다.
+`main` push 시 빌드·보안 테스트·이미지 생성이 실행됩니다. 운영 배포는 `DEPLOY_ENABLED=true` 및 `SECURITY_DEPLOY_READY=true` 조건을 모두 충족할 때만 진행됩니다. 최초 HTTPS·DB 전환은 [전환 안내](docs/SECURITY-ROLLOUT.md)에 따라 별도 승인 후 수행합니다.
 
 | 단계 | 역할 |
 | --- | --- |
 | **build** | .NET 프로젝트가 정상 빌드되는지 검증 (CI) |
 | **push-image** | Docker 이미지를 빌드해 GitHub Container Registry(ghcr.io)에 업로드 |
-| **deploy** | `docker-compose.yml`을 VM으로 scp 동기화 → GitHub Secrets로 `.env` 재생성 → 이미지 pull → 컨테이너 재기동 (CD) |
+| **deploy** | 설정 파일 임시 업로드 → DB·설정 백업 → 커밋 SHA 이미지로 API·프록시 교체 → HTTPS·인증 검증 (실패 시 이전 앱 이미지 복구) |
 
 각 단계는 `needs`로 연결되어, 앞 단계가 성공해야 다음 단계가 실행됩니다. 빌드가 깨지면 배포까지 진행되지 않습니다.
 
-**배포 전략** — GitHub Actions가 이미지를 빌드해 레지스트리(ghcr.io)에 올리고, VM은 그 이미지를 pull만 하여 실행합니다. 빌드(러너)와 실행(VM)이 분리되어 VM이 빌드 부담을 지지 않습니다. `docker-compose.yml`은 시크릿을 담지 않으므로(`${VAR}` 참조만 있음) 매 배포마다 그대로 VM에 동기화해도 안전하고, 실제 값은 GitHub Secrets에서 그때그때 VM의 `.env`로 주입됩니다.
+**배포 전략** — GitHub Actions가 이미지를 빌드해 GHCR에 올리고, VM은 커밋 SHA 태그를 pull해 실행합니다. 기존 보호된 `.env`의 DB·Notion·관리자 비밀값은 유지하고 `API_IMAGE`만 새 이미지로 고정합니다. API·프록시만 교체하며 DB 컨테이너를 업그레이드하거나 스키마를 자동 변경하지 않습니다. 운영 비밀값 변경은 별도 승인 작업입니다.
 
 ### 워크플로우
 
-`.github/workflows/ci.yml`
-
-```yaml
-name: CI/CD
-on:
-  push:
-    branches: [ main ]
-
-env:
-  IMAGE: ghcr.io/<owner>/<repo>/wordapp   # 반드시 소문자
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-      - run: dotnet build Server/WordApp/WordApp.csproj -c Release
-
-  push-image:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v5
-        with:
-          context: ./Server
-          push: true
-          tags: ${{ env.IMAGE }}:latest
-
-  deploy:
-    needs: push-image
-    if: vars.DEPLOY_ENABLED == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Sync docker-compose.yml to VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          source: "Server/docker-compose.yml"
-          target: "~/LexiFlow/Server"
-          strip_components: 1
-
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@v1.0.3
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_WORDS_DATA_SOURCE_ID: ${{ secrets.NOTION_WORDS_DATA_SOURCE_ID }}
-          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
-          GHCR_USER: ${{ github.actor }}
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          envs: DB_PASSWORD,NOTION_TOKEN,NOTION_WORDS_DATA_SOURCE_ID,ADMIN_TOKEN,GHCR_USER,GHCR_TOKEN
-          script: |
-            set -e
-            cat > ~/LexiFlow/Server/.env <<EOF
-            DB_PASSWORD=$DB_PASSWORD
-            NOTION_TOKEN=$NOTION_TOKEN
-            NOTION_WORDS_DATA_SOURCE_ID=$NOTION_WORDS_DATA_SOURCE_ID
-            ADMIN_TOKEN=$ADMIN_TOKEN
-            EOF
-            cd ~/LexiFlow/Server
-            printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
-            trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
-            docker compose pull
-            docker compose up -d --force-recreate
-```
+실제 설정은 [.github/workflows/ci.yml](.github/workflows/ci.yml)을 기준으로 합니다. 문서에 별도 복사본을 유지하지 않습니다.
 
 ### 사전 설정
 

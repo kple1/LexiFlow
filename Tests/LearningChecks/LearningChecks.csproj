@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Application/LexiFlow/Services/LocalAccountData.cs" Link="LocalAccountData.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/SentenceCatalogService.cs" Link="SentenceCatalogService.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/SentenceAnswer.cs" Link="SentenceAnswer.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/CourseService.cs" Link="CourseService.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/SentenceExercise.cs" Link="SentenceExercise.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/CourseStage.cs" Link="CourseStage.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/ArchivedWord.cs" Link="ArchivedWord.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/Word.cs" Link="Word.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/WordProgress.cs" Link="WordProgress.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/ILearningProgress.cs" Link="ILearningProgress.cs" />
+  </ItemGroup>
+</Project>
