@@ -30,36 +30,6 @@ Notion과 자체 관리자 패널을 데이터 원본으로 쓰는 풀스택 영
 
 ---
 
-## 📸 실제 앱 화면
-
-아래 이미지는 목업이 아닌 **Windows용 LexiFlow 이전 UI 실제 실행 화면**입니다. 1.3의 UI는 차콜·웜그레이 바탕과 구리색 포인트, 시스템 산세리프, 작은 모서리와 짧은 행 중심으로 변경했습니다. 넓은 창은 홈 통계 4열·단어 필터 4열, 좁은 창은 2열로 전환합니다. 아래 이미지는 새 스타일로 교체하기 전의 기록입니다.
-
-<p align="center">
-  <img src="docs/screenshots/home.jpg" alt="오늘의 목표, XP, 연속 학습일, 복습 대기와 레벨 진행도를 보여주는 LexiFlow 홈 화면" width="100%">
-  <br>
-  <sub>오늘 — 목표, XP, 복습 대기, 레벨 진행도를 한눈에 확인</sub>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/learning-path.jpg" alt="유닛별 학습 경로와 현재 단계, 잠긴 단계, 학습 시작 버튼을 보여주는 LexiFlow 코스 화면" width="100%">
-  <br>
-  <sub>학습 경로 — 현재 단계부터 시작하고, 다음 유닛은 미리 살펴보기</sub>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/sentence-learning.jpg" alt="한국어 해석과 핵심 표현을 보고 영어 문장을 작성하는 LexiFlow 학습 화면" width="100%">
-  <br>
-  <sub>문장 학습 — 상단 진행도, 넓은 답안 입력란, 하단 고정 정답 확인</sub>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/archive.jpg" alt="문장에서 눌러 본 단어와 뜻, 예문, 조회 횟수를 모아 보여주는 LexiFlow Archive 화면" width="100%">
-  <br>
-  <sub>Archive — 궁금해서 눌러 본 단어와 문맥을 자동 저장</sub>
-</p>
-
----
-
 ## ✨ 주요 특징
 
 - **360단어 기본 학습팩** — 12개 주제 × 30단어, 각 단어에 품사·내부 난이도·직접 작성한 영문 예문·한국어 번역 제공. 앱에 포함되어 콘텐츠 서버에 연결하지 못해도 사용 가능
