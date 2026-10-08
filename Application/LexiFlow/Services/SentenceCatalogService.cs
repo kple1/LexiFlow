@@ -155,7 +155,9 @@ public sealed class SentenceCatalogService
         IEnumerable<ArchivedWord> archivedWords,
         int count = 10)
     {
-        var serverExercises = BuildServerExercises(words).ToList();
+        var material = words.ToList();
+        if (material.Count == 0) material = BuiltInVocabulary.GetWords();
+        var serverExercises = BuildServerExercises(material).ToList();
         var candidates = serverExercises.ToList();
 
         if (candidates.Count < count)
@@ -175,15 +177,16 @@ public sealed class SentenceCatalogService
     public IReadOnlyList<SentenceExercise> GetCoursePool(IEnumerable<Word> words)
     {
         var pool = BuildServerExercises(words).ToList();
-        if (pool.Count == 0) pool = Catalog.ToList();
-        var translations = pool.Select(item => item.Korean).Distinct().ToList();
-        return pool.Select(item => new SentenceExercise
-        {
-            Id = item.Id, Sentence = item.Sentence, Korean = item.Korean,
-            TargetWord = item.TargetWord, TargetMeaning = item.TargetMeaning, Kind = item.Kind,
-            Vocabulary = item.Vocabulary,
-            Choices = translations.Where(value => value != item.Korean).Take(2).Prepend(item.Korean).ToList()
-        }).ToList();
+        if (pool.Count == 0) pool = BuildServerExercises(BuiltInVocabulary.GetWords()).ToList();
+        return pool;
+    }
+
+    public IReadOnlyList<SentenceExercise> CreateMistakeLesson(IEnumerable<Word> words, int count = 10)
+    {
+        var memory = new SentenceReviewService(_session).Read();
+        return MixKinds(GetCoursePool(words).Where(item => memory.TryGetValue(item.Id, out var record) && record.NeedsPractice)
+            .OrderBy(item => memory[item.Id].DueAt).ThenByDescending(item => memory[item.Id].Wrong)
+            .Take(Math.Max(0, count)).ToList());
     }
 
     public static SentenceExercise WithKind(SentenceExercise item, SentenceExerciseKind kind)
@@ -196,6 +199,7 @@ public sealed class SentenceCatalogService
         {
             Id = item.Id, Sentence = item.Sentence, Korean = item.Korean,
             TargetWord = item.TargetWord, TargetMeaning = item.TargetMeaning, Kind = kind,
+            Topic = item.Topic, Level = item.Level,
             Choices = item.Choices, Vocabulary = item.Vocabulary
         };
     }
@@ -205,7 +209,11 @@ public sealed class SentenceCatalogService
 
     private static IEnumerable<SentenceExercise> BuildServerExercises(IEnumerable<Word> words)
     {
-        var parsed = words
+        var material = words.ToList();
+        var hints = material.Where(word => !string.IsNullOrWhiteSpace(word.English) && !string.IsNullOrWhiteSpace(word.Meaning))
+            .GroupBy(word => Normalize(word.English), StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.First().Meaning, StringComparer.OrdinalIgnoreCase);
+        var parsed = material
             .Select(ParseServerSentence)
             .Where(item => item is not null)
             .Cast<ServerSentence>()
@@ -213,19 +221,16 @@ public sealed class SentenceCatalogService
             .Select(group => group.First())
             .ToList();
 
-        var translations = parsed
-            .Select(item => item.Korean)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
         foreach (var item in parsed)
         {
             var canFillBlank = Regex.IsMatch(item.TargetWord, @"^[\p{L}']+$");
             var kind = SentenceExerciseKind.ChooseMeaning;
 
-            var choices = translations
-                    .Where(value => !value.Equals(item.Korean, StringComparison.OrdinalIgnoreCase))
-                    .OrderBy(_ => Random.Shared.Next())
+            var choices = parsed
+                    .Where(other => !other.Korean.Equals(item.Korean, StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(other => other.Topic == item.Topic ? 0 : 1)
+                    .ThenBy(_ => Random.Shared.Next())
+                    .Select(other => other.Korean).Distinct(StringComparer.OrdinalIgnoreCase)
                     .Take(2)
                     .Prepend(item.Korean)
                     .ToList();
@@ -243,15 +248,12 @@ public sealed class SentenceCatalogService
                 Korean = item.Korean,
                 TargetWord = item.TargetWord,
                 TargetMeaning = item.TargetMeaning,
+                Topic = item.Topic, Level = item.Level,
                 Choices = choices,
-                Vocabulary =
-                [
-                    new VocabularyHint
-                    {
-                        Word = item.TargetWord,
-                        Meaning = item.TargetMeaning
-                    }
-                ]
+                Vocabulary = SentenceAnswer.Tokens(item.Sentence).Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Where(hints.ContainsKey).Select(token => new VocabularyHint { Word = token, Meaning = hints[token] })
+                    .Append(new VocabularyHint { Word = item.TargetWord, Meaning = item.TargetMeaning })
+                    .GroupBy(hint => Normalize(hint.Word)).Select(group => group.Last()).ToList()
             };
         }
     }
@@ -288,9 +290,14 @@ public sealed class SentenceCatalogService
             .Where(item => item.Length > 0)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var selected = Rank(candidates.Where(item => !historySet.Contains(item.Id)), progressByWordId, archived)
-            .Take(count)
-            .ToList();
+        // Reserve up to 30% for reviews that are actually due; keep most slots
+        // for unseen material instead of repeating a small difficult subset.
+        var memory = new SentenceReviewService(_session).Read();
+        var selected = candidates.Where(item => memory.TryGetValue(item.Id, out var record) && record.DueAt <= DateTime.UtcNow)
+            .OrderBy(item => memory[item.Id].DueAt).Take(Math.Max(1, count * 3 / 10)).ToList();
+        var reviewIds = selected.Select(item => item.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        selected.AddRange(Rank(candidates.Where(item => !historySet.Contains(item.Id) && !reviewIds.Contains(item.Id)), progressByWordId, archived)
+            .Take(count - selected.Count));
 
         if (selected.Count < count)
         {
@@ -382,7 +389,7 @@ public sealed class SentenceCatalogService
             sentence,
             korean,
             target,
-            word.Meaning.Trim());
+            word.Meaning.Trim(), word.Topic, word.Level);
     }
 
     private static bool ContainsTarget(string sentence, string target)
@@ -393,27 +400,13 @@ public sealed class SentenceCatalogService
 
     private List<string> LoadHistory()
     {
-        try
-        {
-            var json = Preferences.Get(HistoryKey(), "[]");
-            return JsonSerializer.Deserialize<List<string>>(json) ?? [];
-        }
-        catch
-        {
-            return [];
-        }
+        var json = LargePreferenceStore.Get(HistoryKey(), "[]");
+        return JsonSerializer.Deserialize<List<string>>(json) ?? [];
     }
 
     private void SaveHistory(IEnumerable<string> history)
     {
-        try
-        {
-            Preferences.Set(HistoryKey(), JsonSerializer.Serialize(history.Distinct(StringComparer.OrdinalIgnoreCase)));
-        }
-        catch
-        {
-            // Lesson generation should still work if device preferences are unavailable.
-        }
+        LargePreferenceStore.Set(HistoryKey(), JsonSerializer.Serialize(history.Distinct(StringComparer.OrdinalIgnoreCase)));
     }
 
     private string HistoryKey()
@@ -429,7 +422,9 @@ public sealed class SentenceCatalogService
         string Sentence,
         string Korean,
         string TargetWord,
-        string TargetMeaning);
+        string TargetMeaning,
+        string Topic,
+        string Level);
 
     private static SentenceExercise Exercise(
         string id,

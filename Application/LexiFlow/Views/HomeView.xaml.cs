@@ -33,15 +33,8 @@ public partial class HomeView : ContentPage
 
     private void UpdateGreeting()
     {
-        var timeGreeting = DateTime.Now.Hour switch
-        {
-            < 6 => "늦은 시간에도 멋진 집중이에요",
-            < 12 => "좋은 아침이에요",
-            < 18 => "좋은 오후예요",
-            _ => "오늘 하루도 수고했어요"
-        };
-
-        greetingLabel.Text = timeGreeting;
+        greetingLabel.Text = DateTime.Now.ToString(
+            "M월 d일 dddd", System.Globalization.CultureInfo.GetCultureInfo("ko-KR"));
     }
 
     private void UpdateLocalMetrics()
@@ -52,26 +45,22 @@ public partial class HomeView : ContentPage
         goalProgress.Progress = _metrics.DailyGoalProgress;
         goalProgressLabel.Text = $"{Math.Min(today, goal)} / {goal}";
         goalMessageLabel.Text = today >= goal
-            ? "오늘의 목표를 달성했어요!"
+            ? "일일 목표 완료"
             : today == 0
-                ? "첫 문제를 풀고 흐름을 만들어 보세요"
-                : $"목표까지 {goal - today}문제 남았어요";
-        primaryActionButton.Text = today >= goal ? "문장으로 기억 더 단단하게" : "오늘의 문장 학습";
+                ? "오늘의 학습"
+                : $"목표까지 {goal - today}문제";
+        primaryActionButton.Text = today >= goal ? "계속 학습" : "학습 시작";
 
         var level = _metrics.Level;
-        headerXpLabel.Text = $"{_metrics.TotalXp:N0} XP";
-        levelStatLabel.Text = $"LEVEL {level}";
-        levelLabel.Text = $"레벨 {level} 진행도";
+        headerXpLabel.Text = $"누적 {_metrics.TotalXp:N0} XP";
+        levelStatLabel.Text = $"{level}";
+        levelLabel.Text = $"레벨 {level}";
         levelXpLabel.Text = $"{_metrics.XpInLevel} / {_metrics.XpInLevel + _metrics.XpToNextLevel} XP";
-        levelRemainLabel.Text = $"다음 레벨까지 {_metrics.XpToNextLevel} XP";
+        levelRemainLabel.Text = $"다음까지 {_metrics.XpToNextLevel} XP";
         levelProgress.Progress = _metrics.LevelProgress;
         streakLabel.Text = $"{_streak.Current}일";
 
-        motivationLabel.Text = today >= goal
-            ? "목표 달성! 오늘 쌓은 기억을 한 번 더 강화해도 좋아요."
-            : _streak.Current > 1
-                ? $"{_streak.Current}일째 이어지는 흐름, 오늘도 가볍게 연결해요."
-                : "짧게 해도 괜찮아요. 꾸준함이 실력을 만듭니다.";
+        motivationLabel.Text = $"오늘 {today}문제 완료 · 일일 목표 {goal}문제";
     }
 
     private async Task LoadStatsAsync()
@@ -120,14 +109,14 @@ public partial class HomeView : ContentPage
             dueLabel.Text = $"{due}개";
             masteredLabel.Text = $"{mastered}개";
             wordDueLabel.Text = wordDue == 0
-                ? "뜻 고르기와 빈칸 쓰기 · 10문장"
-                : $"복습할 핵심 단어 {wordDue}개를 문장으로 연습";
+                ? "복습 대기 없음 · 문장 연습 가능"
+                : $"복습 단어 {wordDue}개 · 문장 연습";
             grammarDueLabel.Text = DueMessage(grammarDue, "문법");
             idiomDueLabel.Text = DueMessage(idiomDue, "표현");
         }
         catch
         {
-            errorLabel.Text = "학습 현황을 불러오지 못했어요. 복습은 그대로 시작할 수 있어요.";
+            errorLabel.Text = "학습 현황을 불러오지 못했습니다. 학습은 시작할 수 있습니다.";
             errorBorder.IsVisible = true;
         }
         finally
@@ -137,7 +126,7 @@ public partial class HomeView : ContentPage
     }
 
     private static string DueMessage(int count, string label)
-        => count == 0 ? $"오늘 예정된 {label} 복습을 마쳤어요" : $"지금 복습하면 좋은 {label} {count}개";
+        => count == 0 ? "복습 대기 없음" : $"복습할 {label} {count}개";
 
     private static Dictionary<string, ILearningProgress> ToProgressMap<T>(
         IEnumerable<T> progress, Func<T, string> idOf) where T : ILearningProgress

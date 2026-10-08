@@ -14,9 +14,15 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
     private readonly ArchiveService _archive;
     private readonly SentenceCatalogService _catalog;
     private readonly CourseService _course;
+    private readonly ChatGptConnectionService _chatGpt;
+    private readonly ChatGptWritingService _writing;
     private readonly Queue<SentenceExercise> _remaining = new();
     private readonly HashSet<string> _completed = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<string> _seen = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _mistakes = new(StringComparer.OrdinalIgnoreCase);
+    private readonly SentenceReviewService _review;
+    private bool _mistakesOnly;
+    private string? _lessonAccount;
     private readonly Dictionary<string, Word> _serverWords = new(StringComparer.OrdinalIgnoreCase);
 
     private List<SentenceExercise> _lesson = [];
@@ -26,6 +32,9 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
     private bool _feedbackVisible;
     private bool _isLoading;
     private bool _isGrading;
+    private bool _isEvaluating;
+    private bool _viewActive;
+    private CancellationTokenSource? _writingCancellation;
     private bool _assisted;
     private bool _completionRecorded;
     private string? _stageId;
@@ -42,7 +51,9 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         LearningMetricsService metrics,
         ArchiveService archive,
         SentenceCatalogService catalog,
-        CourseService course)
+        CourseService course,
+        ChatGptConnectionService chatGpt,
+        ChatGptWritingService writing)
     {
         InitializeComponent();
         _api = api;
@@ -52,11 +63,15 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         _archive = archive;
         _catalog = catalog;
         _course = course;
+        _chatGpt = chatGpt;
+        _writing = writing;
+        _review = new SentenceReviewService(session);
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         _stageId = query.TryGetValue("stage", out var id) && !string.IsNullOrWhiteSpace(id?.ToString()) ? id.ToString() : null;
+        _mistakesOnly = query.TryGetValue("review", out var mode) && mode?.ToString() == "mistakes";
         _practiceKind = _stageId is null && query.TryGetValue("practice", out var kind)
             && Enum.TryParse<SentenceExerciseKind>(kind?.ToString(), out var parsed)
             && Enum.IsDefined(parsed) ? parsed : null;
@@ -66,31 +81,48 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        _viewActive = true;
+        try { await _chatGpt.RestoreAsync(); }
+        catch { /* The disconnected state remains visible; never fall back to exact-match grading. */ }
+        if (_lessonAccount != _session.StorageId) _lesson.Clear();
         if (_lesson.Count == 0 && !_isLoading)
             await StartNewLessonAsync();
+        else if (_displayedExercise?.Kind == SentenceExerciseKind.WriteSentence)
+            UpdateWritingConnectionState();
+    }
+
+    protected override void OnDisappearing()
+    {
+        _viewActive = false;
+        _writingCancellation?.Cancel();
+        base.OnDisappearing();
     }
 
     private async Task StartNewLessonAsync()
     {
-        if (_isLoading || _isGrading) return;
+        if (_isLoading || _isGrading || _isEvaluating) return;
         _isLoading = true;
         loadingOverlay.IsVisible = true;
         lessonPanel.IsVisible = false;
         completionPanel.IsVisible = false;
+        feedbackPanel.IsVisible = false;
         _serverWords.Clear();
+        _lessonAccount = _session.StorageId;
+        syncStatusLabel.IsVisible = false;
 
         List<Word> words = [];
         List<WordProgress> progress = [];
 
         try
         {
-            words = await _api.GetWordsAsync().WaitAsync(TimeSpan.FromSeconds(12));
+            words = await _api.GetWordsAsync();
             foreach (var word in words.Where(word => !string.IsNullOrWhiteSpace(word.English)))
                 _serverWords[NormalizeWord(word.English)] = word;
         }
         catch
         {
-            // The built-in sentence course remains available offline.
+            words = BuiltInVocabulary.GetWords();
+            foreach (var word in words) _serverWords[NormalizeWord(word.English)] = word;
         }
 
         if (_session.IsLoggedIn)
@@ -107,26 +139,34 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
 
         try
         {
+            if (_lessonAccount != _session.StorageId) { await Shell.Current.GoToAsync("//home"); return; }
             _lesson = (_stageId is null
-                ? _catalog.CreateLesson(words, progress, _archive.GetAll(), 10)
+                ? _mistakesOnly ? _catalog.CreateMistakeLesson(words) : _catalog.CreateLesson(words, progress, _archive.GetAll(), 10)
                 : _course.StartStage(_stageId)).ToList();
             if (_practiceKind is { } practice)
                 _lesson = _lesson.Select(item => SentenceCatalogService.WithKind(item, practice)).ToList();
             var stage = _stageId is null ? null : _course.GetStages().FirstOrDefault(item => item.Id == _stageId);
-            lessonTitle.Text = stage is null ? "맞춤 문장 복습" : $"STEP {stage.Number:00} · {stage.UnitTitle}";
-            lessonSubtitle.Text = stage is null ? "뜻 · 빈칸 · 어순 · 작문" : $"UNIT {stage.Unit + 1} · {stage.Exercises.Count}문제";
+            lessonTitle.Text = stage is null ? "맞춤 문장 복습" : $"{stage.Number}단계 · {stage.UnitTitle}";
+            lessonSubtitle.Text = stage is null ? "뜻 · 빈칸 · 어순 · 작문" : $"유닛 {stage.Unit + 1} · {stage.Exercises.Count}문제";
+            if (_mistakesOnly) { lessonTitle.Text = "오답 복습"; lessonSubtitle.Text = "이 기기에 저장된 오답 기준"; }
             if (_practiceKind is not null)
             {
-                lessonTitle.Text = _practiceKind == SentenceExerciseKind.ArrangeWords ? "어순 집중 연습" : "문장 쓰기 연습";
-                lessonSubtitle.Text = "모르는 단어가 들어간 문장을 중심으로 10문제 연습해요.";
+                lessonTitle.Text = _practiceKind == SentenceExerciseKind.ArrangeWords ? "어순 연습" : "문장 쓰기";
+                lessonSubtitle.Text = "미학습 단어 중심 · 10문제";
             }
             if (_lesson.Count == 0)
             {
-                await DisplayAlertAsync("아직 잠긴 단계예요", "이전 단계를 완료한 뒤 다시 도전해 주세요.", "확인");
+                await DisplayAlertAsync(_mistakesOnly ? "오답 없음" : "잠긴 단계",
+                    _mistakesOnly ? "복습할 오답이 없습니다. 새 학습을 시작하세요." : "이전 단계를 완료한 뒤 다시 시작하세요.", "확인");
                 await Shell.Current.GoToAsync("..");
                 return;
             }
             RestartLesson();
+        }
+        catch
+        {
+            await DisplayAlertAsync("학습을 열 수 없음", "학습 기록을 읽지 못했습니다. 기존 기록은 유지됩니다. 저장 공간을 확인한 뒤 다시 시도하세요.", "확인");
+            await Shell.Current.GoToAsync("//learn");
         }
         finally
         {
@@ -143,6 +183,7 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
 
         _completed.Clear();
         _seen.Clear();
+        _mistakes.Clear();
         _firstPassCorrect = 0;
         _sessionXp = 0;
         _feedbackVisible = false;
@@ -167,7 +208,9 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         _feedbackVisible = false;
         wordPeekPanel.IsVisible = false;
         feedbackPanel.IsVisible = false;
+        writingFeedbackDetails.IsVisible = false;
         lessonActions.IsVisible = true;
+        lessonActions.IsEnabled = true;
         checkButton.Text = "정답 확인";
         checkButton.IsEnabled = false;
         sessionXpLabel.Text = $"+{_sessionXp} XP";
@@ -180,16 +223,17 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         var isWrite = exercise.Kind == SentenceExerciseKind.WriteSentence;
         typeLabel.Text = exercise.Kind switch
         {
-            SentenceExerciseKind.ArrangeWords => "문장 순서 맞추기",
-            SentenceExerciseKind.WriteSentence => "문장 전체 쓰기",
-            SentenceExerciseKind.FillBlank => "빈칸 직접 쓰기",
-            _ => "문장 뜻 고르기"
+            SentenceExerciseKind.ArrangeWords => "어순 맞추기",
+            SentenceExerciseKind.WriteSentence => "문장 쓰기",
+            SentenceExerciseKind.FillBlank => "빈칸 채우기",
+            _ => "뜻 고르기"
         };
+        if (!string.IsNullOrEmpty(exercise.Topic)) typeLabel.Text += $" · {exercise.Level} · {exercise.Topic}";
         instructionLabel.Text = exercise.Kind switch
         {
             SentenceExerciseKind.ArrangeWords => "단어를 올바른 순서로 놓으세요",
-            SentenceExerciseKind.WriteSentence => "해석에 맞는 영어 예문을 써 보세요",
-            SentenceExerciseKind.FillBlank => "빈칸에 들어갈 영어 단어를 쓰세요",
+            SentenceExerciseKind.WriteSentence => "같은 뜻이 되도록 영어로 표현하세요",
+            SentenceExerciseKind.FillBlank => "빈칸에 들어갈 단어를 쓰세요",
             _ => "이 문장의 뜻을 고르세요"
         };
         koreanPromptBorder.IsVisible = !isChoice;
@@ -200,21 +244,26 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         arrangePanel.IsEnabled = true;
         hintButton.IsVisible = isWrite || isArrange;
         hintButton.IsEnabled = true;
-        hintButton.Text = "예문 힌트 보기";
+        hintButton.Text = "예문 힌트";
         writingCue.IsVisible = isWrite;
-        writingCue.Text = $"사용할 표현: {exercise.TargetWord} · {exercise.TargetMeaning}";
+        writingCue.Text = $"참고 단어: {exercise.TargetWord} · {exercise.TargetMeaning} (다른 표현도 가능)";
         sentenceTokens.IsVisible = isChoice || isBlank;
         wordHelpLabel.IsVisible = sentenceTokens.IsVisible;
         answerEntry.Text = "";
-        answerEntry.Placeholder = isWrite ? "영어 문장 전체를 입력하세요" : "빠진 영어 단어를 입력하세요";
+        answerEntry.Placeholder = isWrite ? "영어 문장 입력" : "영어 단어 입력";
         answerEntry.IsEnabled = true;
-        answerHintLabel.Text = isWrite ? "등록된 예문 기준으로 채점해요. 막히면 힌트를 보세요." : "대소문자와 문장부호는 자유롭게 써도 돼요.";
-        answerHintLabel.TextColor = Color.FromArgb("#A7B2C7");
+        answerHintLabel.Text = isWrite
+            ? "예문과 달라도 뜻이 같으면 인정합니다. 작은 문법·표현 차이는 개선 제안으로 안내합니다."
+            : "대소문자와 문장부호는 채점에 영향을 주지 않습니다.";
+        answerHintLabel.TextColor = ThemeColors.Get("TextSecondary");
+        writingAiPanel.IsVisible = isWrite;
+        writingActivity.IsRunning = writingActivity.IsVisible = false;
 
         BuildSentence(exercise, hideTarget: isBlank);
         BuildChoices(exercise);
         if (isArrange) BuildTiles(exercise);
         UpdateCheckState();
+        if (isWrite) UpdateWritingConnectionState();
         // Do not auto-focus: on small screens the keyboard hides the question.
         _ = lessonScroll.ScrollToAsync(0, 0, false);
     }
@@ -235,17 +284,17 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
             {
                 sentenceTokens.Children.Add(new Border
                 {
-                    BackgroundColor = Color.FromArgb("#20345F"),
-                    Stroke = Color.FromArgb("#5B8CFF"),
+                    BackgroundColor = ThemeColors.Get("PrimarySoft"),
+                    Stroke = ThemeColors.Get("Primary"),
                     StrokeThickness = 1,
-                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 8 },
-                    Padding = new Thickness(13, 3),
-                    Margin = new Thickness(3, 2),
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 6 },
+                    Padding = new Thickness(10, 4),
+                    Margin = new Thickness(2, 2),
                     Content = new Label
                     {
                         Text = "______",
-                        FontSize = 21,
-                        TextColor = Color.FromArgb("#5B8CFF")
+                        FontSize = 18,
+                        TextColor = ThemeColors.Get("Primary")
                     }
                 });
                 continue;
@@ -259,14 +308,14 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
                     Text = token,
                     CommandParameter = hint,
                     BackgroundColor = Colors.Transparent,
-                    TextColor = Color.FromArgb("#7EA5FF"),
-                    FontSize = 21,
+                    TextColor = ThemeColors.Get("Primary"),
+                    FontSize = 18,
                     FontAttributes = FontAttributes.Bold,
-                    HeightRequest = 38,
+                    HeightRequest = DeviceInfo.Idiom == DeviceIdiom.Phone ? 44 : 36,
                     MinimumWidthRequest = 0,
                     Padding = new Thickness(3, 0),
                     Margin = new Thickness(1, 1),
-                    CornerRadius = 7
+                    CornerRadius = 6
                 };
                 wordButton.Clicked += OnSentenceWordClick;
                 sentenceTokens.Children.Add(wordButton);
@@ -276,8 +325,8 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
                 sentenceTokens.Children.Add(new Label
                 {
                     Text = token,
-                    FontSize = 21,
-                    TextColor = Color.FromArgb("#F8FAFC"),
+                    FontSize = 18,
+                    TextColor = ThemeColors.Get("TextPrimary"),
                     Padding = new Thickness(token.Length == 1 && !char.IsLetterOrDigit(token[0]) ? 0 : 3, 5, 0, 3),
                     Margin = new Thickness(1, 1)
                 });
@@ -297,16 +346,16 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
             {
                 Text = choice,
                 CommandParameter = choice,
-                BackgroundColor = Color.FromArgb("#1C2942"),
-                TextColor = Color.FromArgb("#F8FAFC"),
-                BorderColor = Color.FromArgb("#2A3A58"),
+                BackgroundColor = ThemeColors.Get("Surface"),
+                TextColor = ThemeColors.Get("TextPrimary"),
+                BorderColor = ThemeColors.Get("Stroke"),
                 BorderWidth = 1,
-                CornerRadius = 14,
+                CornerRadius = 6,
                 HeightRequest = -1,
-                MinimumHeightRequest = 58,
+                MinimumHeightRequest = DeviceInfo.Idiom == DeviceIdiom.Phone ? 44 : 36,
                 LineBreakMode = LineBreakMode.WordWrap,
-                Padding = new Thickness(18, 14),
-                FontSize = 16,
+                Padding = new Thickness(12, 10),
+                FontSize = 14,
                 HorizontalOptions = LayoutOptions.Fill
             };
             button.Clicked += OnChoiceClick;
@@ -323,9 +372,9 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         foreach (var child in choicePanel.Children.OfType<Button>())
         {
             var isSelected = ReferenceEquals(child, selected);
-            child.BackgroundColor = Color.FromArgb(isSelected ? "#20345F" : "#1C2942");
-            child.BorderColor = Color.FromArgb(isSelected ? "#5B8CFF" : "#2A3A58");
-            child.BorderWidth = isSelected ? 2 : 1;
+            child.BackgroundColor = ThemeColors.Get(isSelected ? "PrimarySoft" : "Surface");
+            child.BorderColor = ThemeColors.Get(isSelected ? "Primary" : "Stroke");
+            child.BorderWidth = 1;
         }
         UpdateCheckState();
     }
@@ -336,15 +385,19 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
             return;
 
         var exercise = _displayedExercise;
-        var saved = _archive.Save(hint.Word, hint.Meaning, exercise.Sentence);
-        peekWordLabel.Text = saved.Word;
-        peekMeaningLabel.Text = saved.Meaning;
-        wordPeekPanel.IsVisible = true;
+        try
+        {
+            var saved = _archive.Save(hint.Word, hint.Meaning, exercise.Sentence);
+            peekWordLabel.Text = saved.Word;
+            peekMeaningLabel.Text = saved.Meaning;
+            wordPeekPanel.IsVisible = true;
+        }
+        catch { ShowStorageWarning("뜻: " + hint.Meaning + " · 보관함에 저장하지 못했습니다. 기존 기록은 유지됩니다."); }
     }
 
     private async void OnCheckClick(object? sender, EventArgs e)
     {
-        if (_isGrading || _isLoading) return;
+        if (_isGrading || _isLoading || _isEvaluating) return;
         if (_feedbackVisible)
         {
             ShowCurrentExercise();
@@ -359,7 +412,7 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         {
             if (_selectedTiles.Count != _tiles.Length)
             {
-                checkButton.Text = "단어를 모두 놓아 주세요";
+                checkButton.Text = "모든 단어를 배치하세요";
                 return;
             }
             await GradeAsync(SentenceAnswer.Matches(string.Join(" ", _selectedTiles.Select(index => _tiles[index])), exercise.Sentence));
@@ -369,7 +422,7 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         {
             if (string.IsNullOrWhiteSpace(_selectedChoice))
             {
-                checkButton.Text = "답을 하나 골라 주세요";
+                checkButton.Text = "답을 선택하세요";
                 return;
             }
 
@@ -380,28 +433,132 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         var input = answerEntry.Text ?? "";
         if (string.IsNullOrWhiteSpace(input))
         {
-            answerHintLabel.Text = "빈칸에 답을 입력해 주세요.";
-            answerHintLabel.TextColor = Color.FromArgb("#FB7185");
+            answerHintLabel.Text = "답을 입력하세요.";
+            answerHintLabel.TextColor = ThemeColors.Get("Danger");
             answerEntry.Focus();
             return;
         }
 
-        var expected = exercise.Kind == SentenceExerciseKind.WriteSentence ? exercise.Sentence : exercise.TargetWord;
-        await GradeAsync(SentenceAnswer.Matches(input, expected));
+        if (exercise.Kind == SentenceExerciseKind.WriteSentence)
+        {
+            await EvaluateWritingAsync(exercise, input.Trim());
+            return;
+        }
+        await GradeAsync(SentenceAnswer.Matches(input, exercise.TargetWord));
     }
+
+    private void UpdateWritingConnectionState()
+    {
+        if (!_viewActive || _isEvaluating) return;
+        if (!_chatGpt.PlanUsageEnabled)
+        {
+            writingStatusLabel.Text = _chatGpt.IsConnected
+                ? "ChatGPT 구독 사용 권한이 필요합니다. 다시 연결해 권한을 승인해 주세요."
+                : "Continue with ChatGPT로 본인 계정을 연결해 주세요.";
+            writingConnectionButton.Text = "Continue with ChatGPT";
+            UpdateCheckState();
+            return;
+        }
+        writingConnectionButton.Text = "연결 관리";
+        writingStatusLabel.Text = $"ChatGPT 플랜 사용 · {_chatGpt.AccountLabel}\nGPT-6.1 Sol로 문장의 의미와 문법을 확인합니다.";
+        UpdateCheckState();
+    }
+
+    private async void OnWritingConnectionClick(object? sender, EventArgs e)
+    {
+        if (_isEvaluating || _isGrading) return;
+        await Shell.Current.GoToAsync("//account");
+    }
+
+    private async void OnWritingUsageClick(object? sender, EventArgs e)
+    {
+        try { await Browser.Default.OpenAsync(new Uri("https://chatgpt.com/#settings/Usage"), BrowserLaunchMode.SystemPreferred); }
+        catch { writingStatusLabel.Text = "브라우저를 열지 못했습니다. ChatGPT 설정에서 사용량을 확인해 주세요."; }
+    }
+
+    private async Task EvaluateWritingAsync(SentenceExercise exercise, string answer)
+    {
+        if (_isEvaluating || _remaining.Count == 0 || !_viewActive || _lessonAccount != _session.StorageId) return;
+        if (!_chatGpt.PlanUsageEnabled)
+        {
+            writingStatusLabel.Text = "본인 ChatGPT 계정을 먼저 연결해 주세요. GPT-6.1 Sol을 사용합니다.";
+            return;
+        }
+        using var cancellation = new CancellationTokenSource();
+        _writingCancellation = cancellation;
+        _isEvaluating = true;
+        var owner = _session.StorageId;
+        var token = _session.AccessToken;
+        var connectionVersion = _chatGpt.ConnectionVersion;
+        answerEntry.IsEnabled = hintButton.IsEnabled = lessonActions.IsEnabled = false;
+        writingConnectionButton.IsEnabled = false;
+        writingActivity.IsRunning = writingActivity.IsVisible = true;
+        writingStatusLabel.Text = "문장의 의미와 문법을 확인하는 중…";
+        UpdateCheckState();
+        try
+        {
+            var result = await _writing.EvaluateAsync(exercise, answer, ChatGptWritingService.WritingModel, cancellation.Token);
+            if (cancellation.IsCancellationRequested || !_viewActive || !_session.IsLoggedIn || owner != _session.StorageId
+                || token != _session.AccessToken || connectionVersion != _chatGpt.ConnectionVersion
+                || _remaining.Count == 0 || !ReferenceEquals(_remaining.Peek(), exercise)) return;
+            if (!result.IsDecidable)
+            {
+                // No dequeue, XP, mistakes, progress or sample disclosure on an uncertain result.
+                writingStatusLabel.Text = "판단 보류 · " + result.Feedback + "\n점수와 학습 기록은 변경하지 않았습니다.";
+                return;
+            }
+            _isEvaluating = false;
+            await GradeAsync(result.Accepted, writingEvaluation: result, submittedAnswer: answer);
+        }
+        catch (OperationCanceledException)
+        {
+            if (_viewActive && !cancellation.IsCancellationRequested)
+                writingStatusLabel.Text = "판단 시간이 초과됐습니다. 답안은 유지되며 오답으로 기록하지 않았습니다. 다시 시도해 주세요.";
+        }
+        catch (Exception error)
+        {
+            if (_viewActive && owner == _session.StorageId)
+                writingStatusLabel.Text = WritingErrorMessage(error) + "\n오답으로 기록하지 않았습니다.";
+        }
+        finally
+        {
+            if (ReferenceEquals(_writingCancellation, cancellation)) _writingCancellation = null;
+            _isEvaluating = false;
+            writingActivity.IsRunning = writingActivity.IsVisible = false;
+            writingConnectionButton.IsEnabled = true;
+            if (!_feedbackVisible)
+            {
+                answerEntry.IsEnabled = lessonActions.IsEnabled = true;
+                hintButton.IsEnabled = !_assisted;
+            }
+            UpdateCheckState();
+        }
+    }
+
+    private static string WritingErrorMessage(Exception error) => error is ChatGptException aiError
+        ? aiError.SafeMessage
+        : "ChatGPT에 연결하지 못했습니다. 연결 상태를 확인하고 다시 시도해 주세요.";
 
     private async void OnDontKnowClick(object? sender, EventArgs e)
     {
-        if (_feedbackVisible || _remaining.Count == 0)
+        if (_feedbackVisible || _remaining.Count == 0 || _isEvaluating || _isGrading)
             return;
 
         await GradeAsync(correct: false, revealed: true);
     }
 
-    private async Task GradeAsync(bool correct, bool revealed = false)
+    private async Task GradeAsync(bool correct, bool revealed = false,
+        WritingEvaluation? writingEvaluation = null, string? submittedAnswer = null)
     {
         if (_remaining.Count == 0 || _feedbackVisible || _isGrading)
             return;
+
+        if (_lessonAccount != _session.StorageId)
+        {
+            await DisplayAlertAsync("계정 변경됨", "현재 계정에서 학습을 다시 시작하세요.", "확인");
+            await Shell.Current.GoToAsync("//home");
+            return;
+        }
 
         _isGrading = true;
         checkButton.IsEnabled = false;
@@ -417,11 +574,18 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         }
         else
         {
+            _mistakes.Add(exercise.Id);
             _remaining.Enqueue(exercise);
         }
+        try { _review.Record(exercise.Id, correct && !_assisted); }
+        catch { ShowStorageWarning("오답 기록을 저장하지 못했습니다. 이번 답안이 복습 목록에 반영되지 않을 수 있습니다."); }
 
-        _streak.RegisterStudyToday();
-        _sessionXp += _metrics.RegisterReview(correct);
+        try
+        {
+            _streak.RegisterStudyToday();
+            _sessionXp += _metrics.RegisterReview(correct);
+        }
+        catch { ShowStorageWarning("XP 또는 연속 학습 기록을 기기에 저장하지 못했습니다."); }
         _feedbackVisible = true;
         feedbackPanel.IsVisible = true;
         lessonActions.IsVisible = false;
@@ -435,18 +599,37 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         foreach (var button in choicePanel.Children.OfType<Button>())
             button.IsEnabled = false;
 
-        var accent = Color.FromArgb(correct ? "#22C55E" : "#F59E0B");
+        var accent = ThemeColors.Get(correct ? "Success" : revealed ? "Warning" : "Danger");
         feedbackPanel.Stroke = accent;
-        feedbackPanel.BackgroundColor = Color.FromArgb(correct ? "#163A2A" : "#3B2B15");
+        feedbackPanel.BackgroundColor = ThemeColors.Get(correct ? "SuccessSoft" : revealed ? "WarningSoft" : "DangerSoft");
         feedbackIconBorder.BackgroundColor = accent;
         feedbackIconLabel.Text = correct ? "✓" : "!";
-        feedbackTitleLabel.Text = correct ? "정답이에요!" : revealed ? "정답을 확인했어요" : "괜찮아요, 뒤에서 다시 만나요";
+        feedbackTitleLabel.Text = correct ? "정답" : revealed ? "정답 확인 · 다시 출제" : "오답 · 다시 출제";
         feedbackBodyLabel.Text = $"{exercise.Sentence}\n{exercise.Korean}\n{exercise.TargetWord} · {exercise.TargetMeaning}";
-        checkButton.Text = "계속";
+        writingFeedbackDetails.IsVisible = writingEvaluation is not null;
+        if (writingEvaluation is not null)
+        {
+            feedbackTitleLabel.Text = writingEvaluation.Verdict switch
+            {
+                "accepted" => writingEvaluation.Corrections.Count == 0 ? "의미가 잘 전달됐어요" : "의미 통과 · 다듬기 제안",
+                "revise" => "문장을 다듬어 보세요 · 다시 출제",
+                _ => "뜻이 달라요 · 다시 출제"
+            };
+            feedbackBodyLabel.Text = writingEvaluation.Feedback;
+            writingSubmittedLabel.Text = submittedAnswer;
+            writingCorrectedLabel.Text = writingEvaluation.CorrectedAnswer;
+            writingCorrectionPanel.IsVisible = !string.IsNullOrWhiteSpace(writingEvaluation.CorrectedAnswer);
+            writingCorrectionsLabel.Text = string.Join("\n", writingEvaluation.Corrections.Select(correction =>
+                $"{correction.Original} → {correction.Revised}\n{correction.Reason}"));
+            writingCorrectionsLabel.IsVisible = writingEvaluation.Corrections.Count > 0;
+            writingSuggestedLabel.Text = writingEvaluation.SuggestedAnswer;
+        }
+        checkButton.Text = "다음";
         sessionXpLabel.Text = $"+{_sessionXp} XP";
         lessonProgress.Progress = _lesson.Count == 0 ? 0 : (double)_completed.Count / _lesson.Count;
         try { await SaveServerProgressAsync(exercise, correct && !_assisted); }
         finally { _isGrading = false; UpdateCheckState(); }
+        if (_viewActive) await lessonScroll.ScrollToAsync(feedbackPanel, ScrollToPosition.MakeVisible, true);
     }
 
     private async Task SaveServerProgressAsync(SentenceExercise exercise, bool correct)
@@ -461,45 +644,86 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
                 word.Id,
                 correct,
                 correct ? "Mastered" : "Learning").WaitAsync(TimeSpan.FromSeconds(5));
+            if (word.Id.StartsWith("lexicore-v1:", StringComparison.Ordinal))
+            {
+                if (!syncStatusLabel.IsVisible)
+                    ShowStorageWarning("기본 학습팩 진도는 현재 계정의 이 기기에만 저장됩니다. 기기 간 자동 동기화는 지원하지 않습니다.");
+            }
         }
         catch
         {
-            // Sentence lessons remain available when progress sync is offline.
+            ShowStorageWarning(BuiltInWordProgressService.IsBuiltInId(word.Id)
+                ? "기본팩 단어 진도를 저장하지 못했습니다. 단어장에서 기록을 확인하세요."
+                : "서버 진도를 저장하지 못했습니다. 오답·코스 기록은 이 기기에만 남으며 자동 재전송되지 않습니다.");
         }
+    }
+
+    private void ShowStorageWarning(string message)
+    {
+        syncStatusLabel.Text = message;
+        syncStatusLabel.IsVisible = true;
     }
 
     private void CompleteLesson()
     {
         lessonPanel.IsVisible = false;
         completionPanel.IsVisible = true;
+        feedbackPanel.IsVisible = false;
         scoreLabel.Text = $"{_firstPassCorrect} / {_lesson.Count}";
         earnedXpLabel.Text = $"+{_sessionXp} XP";
+        retryMistakesButton.IsVisible = _mistakes.Count > 0;
+        reviewSummaryLabel.Text = _mistakes.Count == 0 ? "오답 없음" : $"이번 학습 오답 {_mistakes.Count}개";
         if (_stageId is not null && !_completionRecorded)
         {
-            var stars = _course.Complete(_stageId, _firstPassCorrect, _completed.Count);
-            completionStars.Text = new string('★', stars) + new string('☆', 3 - stars);
-            completionTitle.Text = "단계 완료!";
-            completionMessage.Text = "별점이 저장됐어요. 코스에서 다음 단계에 도전하세요.";
-            nextLessonButton.Text = "코스에서 이어가기";
-            _completionRecorded = true;
+            try
+            {
+                var stars = _course.Complete(_stageId, _firstPassCorrect, _completed.Count);
+                completionStars.Text = new string('★', stars) + new string('☆', 3 - stars);
+                completionTitle.Text = "단계 완료";
+                completionMessage.Text = "별점을 저장했습니다.";
+                nextLessonButton.Text = "코스 이어가기";
+                _completionRecorded = true;
+            }
+            catch
+            {
+                completionStars.Text = "";
+                completionTitle.Text = "학습 완료 · 기록 저장 실패";
+                completionMessage.Text = "별점을 저장하지 못했습니다. 저장 공간을 확인한 뒤 다시 시도하세요.";
+                nextLessonButton.Text = "코스로 돌아가기";
+            }
         }
         else if (_stageId is null)
         {
+            completionTitle.Text = "학습 완료";
+            completionMessage.Text = "모든 문제를 풀었습니다.";
             completionStars.Text = "";
-            nextLessonButton.Text = "새 문장 10개 시작";
+            nextLessonButton.Text = "새 학습 시작";
         }
         _ = lessonScroll.ScrollToAsync(0, 0, false);
     }
 
     private async void OnNewLessonClick(object? sender, EventArgs e)
     {
+        if (_isGrading || _isEvaluating) return;
         if (_stageId is null) await StartNewLessonAsync();
         else await Shell.Current.GoToAsync("..");
+    }
+
+    private void OnRetryMistakesClick(object? sender, EventArgs e)
+    {
+        if (_isGrading || _isLoading || _isEvaluating) return;
+        _lesson = _lesson.Where(exercise => _mistakes.Contains(exercise.Id)).ToList();
+        if (_lesson.Count == 0) return;
+        _stageId = null;
+        lessonTitle.Text = "이번 오답 다시 풀기";
+        lessonSubtitle.Text = $"{_lesson.Count}문제 · 기존 별점 유지";
+        RestartLesson();
     }
 
     private async void OnCourseClick(object? sender, EventArgs e)
     {
         if (_isGrading || _isLoading) return;
+        _writingCancellation?.Cancel();
         await Shell.Current.GoToAsync("..");
     }
 
@@ -522,13 +746,14 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
 
     private void OnHintClick(object? sender, EventArgs e)
     {
-        if (_displayedExercise is null || _feedbackVisible || _isGrading) return;
+        if (_displayedExercise is null || _feedbackVisible || _isGrading || _isEvaluating) return;
         _assisted = true;
         sentenceTokens.IsVisible = true;
         wordHelpLabel.IsVisible = true;
         BuildSentence(_displayedExercise, hideTarget: false);
         hintButton.IsEnabled = false;
-        hintButton.Text = "힌트 사용 · 별점은 첫 시도 정답 기준";
+        hintButton.Text = "힌트 사용됨";
+        answerHintLabel.Text = "힌트를 사용한 답은 첫 시도 정답에서 제외됩니다.";
     }
 
     private void BuildTiles(SentenceExercise exercise)
@@ -547,7 +772,7 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         selectedTokens.Children.Clear();
         availableTokens.Children.Clear();
         if (_selectedTiles.Count == 0)
-            selectedTokens.Children.Add(new Label { Text = "여기에 문장을 만들어 보세요", TextColor = Color.FromArgb("#71809B"), Margin = 10 });
+            selectedTokens.Children.Add(new Label { Text = "선택한 단어가 여기에 표시됩니다", FontSize = 13, TextColor = ThemeColors.Get("TextMuted"), Margin = 8 });
         foreach (var index in _selectedTiles) AddTile(selectedTokens, index, true);
         // Keep a placeholder in the word bank so other tiles never jump under the pointer.
         foreach (var index in _tileOrder) AddTile(availableTokens, index, false);
@@ -563,12 +788,15 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         {
             SentenceExerciseKind.ChooseMeaning => _selectedChoice is not null,
             SentenceExerciseKind.ArrangeWords => _tiles.Length > 0 && _selectedTiles.Count == _tiles.Length,
-            SentenceExerciseKind.FillBlank or SentenceExerciseKind.WriteSentence => !string.IsNullOrWhiteSpace(answerEntry.Text),
+            SentenceExerciseKind.FillBlank => !string.IsNullOrWhiteSpace(answerEntry.Text),
+            SentenceExerciseKind.WriteSentence => !string.IsNullOrWhiteSpace(answerEntry.Text)
+                && _session.IsLoggedIn && _chatGpt.PlanUsageEnabled,
             _ => false
         });
-        checkButton.IsEnabled = ready && !_isGrading;
+        checkButton.IsEnabled = ready && !_isGrading && !_isEvaluating;
         checkButton.Opacity = checkButton.IsEnabled ? 1 : .45;
-        if (!_feedbackVisible) checkButton.Text = "정답 확인";
+        checkButton.Text = _isEvaluating ? "판단 중…" : _feedbackVisible ? "다음"
+            : _displayedExercise?.Kind == SentenceExerciseKind.WriteSentence ? "AI로 확인" : "정답 확인";
     }
 
     private void AddTile(FlexLayout container, int index, bool selected)
@@ -576,12 +804,13 @@ public partial class TestWordsView : ContentPage, IQueryAttributable
         var used = !selected && _selectedTiles.Contains(index);
         var button = new Button
         {
-            Text = _tiles[index], FontSize = 16, Margin = 4, Padding = new Thickness(13, 6),
-            BackgroundColor = Color.FromArgb(selected ? "#20345F" : "#1C2942"),
-            TextColor = used ? Colors.Transparent : Colors.White,
+            Text = _tiles[index], FontSize = 14, Margin = 3, Padding = new Thickness(10, 4),
+            HeightRequest = DeviceInfo.Idiom == DeviceIdiom.Phone ? 44 : 36,
+            BackgroundColor = ThemeColors.Get(selected ? "PrimarySoft" : "SurfaceElevated"),
+            TextColor = used ? Colors.Transparent : ThemeColors.Get("TextPrimary"),
             IsEnabled = !used, Opacity = used ? .25 : 1,
-            CornerRadius = 12, MinimumWidthRequest = 44,
-            BorderWidth = 1, BorderColor = Color.FromArgb(selected ? "#7EA5FF" : "#41516C")
+            CornerRadius = 6, MinimumWidthRequest = DeviceInfo.Idiom == DeviceIdiom.Phone ? 44 : 36,
+            BorderWidth = 1, BorderColor = ThemeColors.Get(selected ? "Primary" : "Stroke")
         };
         button.Clicked += (_, _) =>
         {

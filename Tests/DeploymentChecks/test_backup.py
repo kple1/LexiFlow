@@ -13,6 +13,71 @@ spec.loader.exec_module(backup)
 
 
 class BackupSafetyChecks(unittest.TestCase):
+    def test_daily_identity_matches_korea_timer_not_utc_calendar(self):
+        bootstrap = dt.datetime(2026, 9, 18, 4, 14, tzinfo=dt.timezone.utc)
+        scheduled = dt.datetime(2026, 9, 18, 18, 0, 18, tzinfo=dt.timezone.utc)
+        self.assertEqual(backup.backup_date(bootstrap), dt.date(2026, 9, 18))
+        self.assertEqual(backup.backup_date(scheduled), dt.date(2026, 9, 19))
+        self.assertEqual(backup.backup_date(scheduled + dt.timedelta(days=1)), dt.date(2026, 9, 20))
+
+    def test_korea_midnight_and_year_boundary(self):
+        before = dt.datetime(2026, 12, 31, 14, 59, 59, tzinfo=dt.timezone.utc)
+        self.assertEqual(backup.backup_date(before), dt.date(2026, 12, 31))
+        self.assertEqual(backup.backup_date(before + dt.timedelta(seconds=1)), dt.date(2027, 1, 1))
+        with self.assertRaises(ValueError):
+            backup.backup_date(dt.datetime(2026, 9, 19))
+
+    def test_first_scheduled_run_after_bootstrap_creates_new_restore_point(self):
+        scheduled = dt.datetime(2026, 9, 18, 18, 0, 18, tzinfo=dt.timezone.utc)
+        old = {'file': 'worddb-2026-09-18.tar.cms', 'sha256': 'old-hash',
+               'completed_at': '2026-09-18T04:14:07+00:00'}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            original = root / old['file']
+            original.write_bytes(b'existing encrypted backup')
+            cert = root / 'test-certificate.pem'
+            cert.write_bytes(b'test certificate')
+            def dump(path):
+                path.write_bytes(b'PGDMP-synthetic-test-data')
+                return ['Users'], {'Users': 4}
+            def encrypt(args, **kwargs):
+                Path(args[args.index('-out') + 1]).write_bytes(b'new encrypted test backup')
+            def finish(config, final, record, current):
+                return dict(record, completed_at=current.isoformat(), cloud_roundtrip_verified=True)
+            with patch.object(backup, 'ROOT', root), patch.object(backup, 'now', return_value=scheduled), \
+                 patch.object(backup, 'snapshot_dump', side_effect=dump) as snapshot, \
+                 patch.object(backup, 'restore_check') as restore, patch.object(backup, 'run', side_effect=encrypt), \
+                 patch.object(backup, 'finish_upload', side_effect=finish) as upload, patch.object(backup, 'verify_cloud') as verify:
+                result = backup.backup({'certificate': str(cert)}, {'last_success': old})
+                self.assertEqual(result['file'], 'worddb-2026-09-19.tar.cms')
+                snapshot.assert_called_once()
+                restore.assert_called_once()
+                upload.assert_called_once()
+                verify.assert_not_called()
+                self.assertEqual(original.read_bytes(), b'existing encrypted backup')
+                self.assertEqual(old['completed_at'], '2026-09-18T04:14:07+00:00')
+
+    def test_same_korea_day_retry_verifies_without_redumping_or_refreshing_age(self):
+        current = dt.datetime(2026, 9, 18, 18, 5, tzinfo=dt.timezone.utc)
+        previous = {'file': 'worddb-2026-09-19.tar.cms', 'sha256': 'known',
+                    'completed_at': '2026-09-18T18:00:18+00:00'}
+        with patch.object(backup, 'now', return_value=current), patch.object(backup, 'verify_cloud') as verify, \
+             patch.object(backup, 'snapshot_dump') as snapshot:
+            self.assertIs(backup.backup({}, {'last_success': previous}), previous)
+            verify.assert_called_once_with({}, previous['file'], 'known')
+            snapshot.assert_not_called()
+            self.assertEqual(previous['completed_at'], '2026-09-18T18:00:18+00:00')
+
+    def test_retention_uses_same_korea_date_as_artifact_name(self):
+        current = dt.datetime(2026, 9, 18, 18, tzinfo=dt.timezone.utc)
+        with tempfile.TemporaryDirectory() as directory:
+            final = Path(directory) / 'worddb-2026-09-19.tar.cms'
+            final.write_bytes(b'encrypted')
+            with patch.object(backup, 'cloud_request', return_value=MagicMock()), patch.object(backup, 'verify_cloud'), \
+                 patch.object(backup, 'expired_files', return_value=[]) as expired:
+                backup.finish_upload({}, final, {'sha256': 'expected'}, current)
+                expired.assert_called_once_with(backup.ROOT, dt.date(2026, 9, 19))
+
     def test_production_restore_targets_rejected(self):
         for name in ('worddb', 'postgres', 'lexiflow_verify_worddb', 'lexiflow_verify_' + 'a'*32 + ';DROP DATABASE worddb'):
             with self.assertRaises(ValueError):

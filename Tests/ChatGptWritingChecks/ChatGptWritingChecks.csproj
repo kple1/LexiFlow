@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Application/LexiFlow/Services/ChatGptWritingService.cs" Link="ChatGptWritingService.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/ChatGptAuthContracts.cs" Link="ChatGptAuthContracts.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/ChatGptModel.cs" Link="ChatGptModel.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/WritingEvaluation.cs" Link="WritingEvaluation.cs" />
+    <Compile Include="../../Application/LexiFlow/Models/SentenceExercise.cs" Link="SentenceExercise.cs" />
+  </ItemGroup>
+</Project>

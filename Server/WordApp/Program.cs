@@ -16,8 +16,17 @@ builder.Services.AddHttpClient<NotionService>();
 if (!builder.Environment.IsEnvironment("Testing") && builder.Configuration.GetValue("Notion:SyncEnabled", true))
     builder.Services.AddHostedService<WordSyncService>();
 builder.Services.AddScoped<AdminAuthFilter>();
+builder.Services.AddScoped<RankingService>();
+builder.Services.Configure<AccountEmailOptions>(builder.Configuration.GetSection("AccountEmail"));
+builder.Services.AddSingleton<IAccountEmailSender, AccountEmailSender>();
+builder.Services.AddSingleton<AccountEmailQueue>();
+builder.Services.AddScoped<AccountEmailWorkflow>();
+if (!builder.Environment.IsEnvironment("Testing")) builder.Services.AddHostedService<AccountEmailWorker>();
 builder.AddApiSecurity();
 var app = builder.Build();
+if (builder.Configuration.GetValue<bool>("AccountEmail:Enabled")
+    && !app.Services.GetRequiredService<IAccountEmailSender>().IsConfigured)
+    throw new InvalidOperationException("AccountEmail is enabled but the HTTPS origin or authenticated TLS mail configuration is invalid.");
 
 if (!app.Environment.IsEnvironment("Testing"))
 {
@@ -53,7 +62,8 @@ app.Use(async (context, next) =>
     context.Response.Headers["X-Frame-Options"] = "DENY";
     context.Response.Headers["Referrer-Policy"] = "no-referrer";
     context.Response.Headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
-    if (context.Request.Path.StartsWithSegments("/users") || context.Request.Path.StartsWithSegments("/admin"))
+    if (context.Request.Path.StartsWithSegments("/users") || context.Request.Path.StartsWithSegments("/admin")
+        || context.Request.Path.StartsWithSegments("/account") || context.Request.Path.StartsWithSegments("/ranking"))
         context.Response.Headers.CacheControl = "no-store";
     // Fail closed instead of redirecting a request that might already contain credentials.
     if (!context.Request.IsHttps)

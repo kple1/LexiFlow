@@ -39,8 +39,8 @@
 		<ApplicationId>com.companyname.lexiflow</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
-		<ApplicationVersion>2</ApplicationVersion>
+		<ApplicationDisplayVersion>1.6.1</ApplicationDisplayVersion>
+		<ApplicationVersion>26</ApplicationVersion>
 		
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
@@ -57,6 +57,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="Content/vocabulary-*.json" LogicalName="LexiFlow.Content.%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<!-- App Icon -->
 
 		<!-- Splash Screen -->
@@ -64,6 +68,7 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\tab_*.svg" BaseSize="24,24" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -82,10 +87,12 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.23.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="14.1.1" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AssemblyMetadata Include="LexiFlow.UpdateVersion" Value="$(ApplicationDisplayVersion)" />
 	  <Folder Include="Resources\AppIcon\" />
 	</ItemGroup>
 

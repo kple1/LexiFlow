@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>LexiFlow · 계정 보안</title>
+  <link rel="stylesheet" href="account.css">
+  <script src="account.js" defer></script>
+</head>
+<body>
+  <main>
+    <a class="brand" href="index.html">LexiFlow<span>ACCOUNT</span></a>
+    <section class="card" aria-labelledby="heading">
+      <p class="eyebrow">배움은 이어지고, 계정은 안전하게</p>
+      <h1 id="heading">계정 복구</h1>
+      <p id="description">인증된 이메일로 계정을 보호하세요.</p>
+      <p id="message" role="status" aria-live="polite">서버 상태를 확인하고 있습니다…</p>
+      <noscript>안전한 계정 처리를 위해 JavaScript를 활성화해 주세요.</noscript>
+      <form id="account-form" method="post" action="/account/no-script">
+        <div id="email-field" hidden>
+          <label for="email">이메일</label>
+          <input id="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com">
+        </div>
+        <div id="username-field" hidden>
+          <label for="username">아이디</label>
+          <input id="username" autocomplete="username" maxlength="64" placeholder="앱에서 사용할 아이디">
+          <small>3~64자 · 문자, 숫자, _, ., -</small>
+        </div>
+        <div id="password-fields" hidden>
+          <label for="password">새 비밀번호</label>
+          <input id="password" type="password" autocomplete="new-password" minlength="12" maxlength="72">
+          <small>12자 이상 · UTF-8 72바이트 이내. 비밀번호 관리자 사용을 권장합니다.</small>
+          <label for="confirm">새 비밀번호 확인</label>
+          <input id="confirm" type="password" autocomplete="new-password" minlength="12" maxlength="72">
+        </div>
+        <button id="submit" type="submit" disabled>계속</button>
+      </form>
+      <nav aria-label="계정 메뉴">
+        <a href="index.html#signup">새 계정 만들기</a>
+        <a href="index.html#forgot">비밀번호 찾기</a>
+      </nav>
+    </section>
+    <p class="footnote">완료 후 LexiFlow 앱으로 돌아가 로그인해 주세요.<br>메일 링크를 다른 사람에게 전달하지 마세요.</p>
+  </main>
+</body>
+</html>

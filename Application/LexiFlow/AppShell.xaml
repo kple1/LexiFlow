@@ -6,28 +6,34 @@
     xmlns:view="clr-namespace:LexiFlow.Views"
     Title="LexiFlow"
     FlyoutBehavior="Disabled"
-    Shell.TabBarBackgroundColor="#0D1527"
-    Shell.TabBarForegroundColor="#5B8CFF"
-    Shell.TabBarTitleColor="#5B8CFF"
-    Shell.TabBarUnselectedColor="#71809B">
+    Shell.TabBarBackgroundColor="{StaticResource AppBackground}"
+    Shell.TabBarForegroundColor="{StaticResource Primary}"
+    Shell.TabBarTitleColor="{StaticResource Primary}"
+    Shell.TabBarUnselectedColor="{StaticResource TextSecondary}">
     <Shell.Resources>
         <Style TargetType="Shell" ApplyToDerivedTypes="True">
-            <Setter Property="Shell.BackgroundColor" Value="#0D1527"/>
-            <Setter Property="Shell.ForegroundColor" Value="#F8FAFC"/>
+            <Setter Property="Shell.BackgroundColor" Value="{StaticResource AppBackground}"/>
+            <Setter Property="Shell.ForegroundColor" Value="{StaticResource TextPrimary}"/>
         </Style>
     </Shell.Resources>
 
     <TabBar>
-        <Tab Route="home" Icon="daily.png" Title="오늘" Shell.NavBarIsVisible="False">
+        <Tab Route="home" Icon="tab_today.png" Title="오늘" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:HomeView}"/>
         </Tab>
-        <Tab Route="learn" Icon="test.png" Title="학습" Shell.NavBarIsVisible="False">
+        <Tab Route="learn" Icon="tab_learn.png" Title="학습" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:LearningPathView}"/>
         </Tab>
-        <Tab Route="archive" Icon="book.png" Title="Archive" Shell.NavBarIsVisible="False">
+        <Tab Route="library" Icon="tab_library.png" Title="단어장" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:WordsView}"/>
+        </Tab>
+        <Tab Route="archive" Icon="tab_archive.png" Title="Archive" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:ArchiveView}"/>
         </Tab>
-        <Tab Route="account" Icon="user.png" Title="나" Shell.NavBarIsVisible="False">
+        <Tab Route="ranking" Icon="tab_ranking.png" Title="랭킹" Shell.NavBarIsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate view:RankingView}"/>
+        </Tab>
+        <Tab Route="account" Icon="tab_profile.png" Title="나" Shell.NavBarIsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate view:AccountView}"/>
         </Tab>
     </TabBar>

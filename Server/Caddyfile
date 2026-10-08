@@ -1,4 +1,11 @@
 {$API_DOMAIN:lexiflow.duckdns.org} {
     header -Server
-    reverse_proxy api:5276
+    handle_path /updates/windows-x64/* {
+        root * /srv/lexiflow-updates/windows-x64
+        header Cache-Control "no-cache"
+        file_server
+    }
+    handle {
+        reverse_proxy api:5276
+    }
 }

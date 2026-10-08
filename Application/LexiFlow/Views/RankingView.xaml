@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:LexiFlow.Models"
+             x:Class="LexiFlow.Views.RankingView" Title="랭킹">
+    <ContentPage.Resources>
+        <LinearGradientBrush x:Key="ChampionStroke" StartPoint="0,0.5" EndPoint="1,0.5">
+            <GradientStop Color="#35D9D0" Offset="0"/>
+            <GradientStop Color="#6676F5" Offset="0.25"/>
+            <GradientStop Color="#D66BE8" Offset="0.5"/>
+            <GradientStop Color="#F0AA64" Offset="0.75"/>
+            <GradientStop Color="#35D9D0" Offset="1"/>
+        </LinearGradientBrush>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="12" MaximumWidthRequest="1120" HorizontalOptions="Fill"
+          Padding="{OnIdiom Phone='16,16,16,20', Default='24,20,24,24'}">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <VerticalStackLayout Spacing="3">
+                <Label Text="랭킹" Style="{StaticResource Title}"/>
+                <Label Text="누적 학습 완료 · TOP 50" Style="{StaticResource MutedLabel}"/>
+            </VerticalStackLayout>
+            <Button x:Name="refreshButton" Grid.Column="1" Text="새로고침" Style="{StaticResource SecondaryButton}" Clicked="OnRefresh" VerticalOptions="Center"/>
+        </Grid>
+        <VerticalStackLayout Grid.Row="1" Spacing="8">
+            <ActivityIndicator x:Name="spinner" IsVisible="False" Color="{StaticResource Primary}"/>
+            <Label x:Name="statusLabel" Style="{StaticResource MutedLabel}" LineBreakMode="WordWrap"/>
+            <Button x:Name="loginButton" Text="로그인하러 가기" Clicked="OnLogin" IsVisible="False" HorizontalOptions="Start"/>
+        </VerticalStackLayout>
+        <CollectionView x:Name="rankingList" Grid.Row="2" SelectionMode="None">
+            <CollectionView.Header>
+                <VerticalStackLayout Spacing="12" Padding="0,0,0,12">
+                    <Border x:Name="ownCard" Style="{StaticResource CardBorder}" IsVisible="False">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="내 학습 기록" FontSize="13" TextColor="{StaticResource TextSecondary}"/>
+                            <Label x:Name="ownScoreLabel" FontSize="24" FontAttributes="Bold"/>
+                            <Label x:Name="ownDetailsLabel" Style="{StaticResource MutedLabel}" LineBreakMode="WordWrap"/>
+                            <Label x:Name="ownRankLabel" FontSize="14" TextColor="{StaticResource Primary}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Label Text="전체 계정의 로그인 ID·순위·학습 완료 수가 로그인한 사용자에게 공개됩니다. 이메일·비밀번호·인증 정보는 표시하지 않습니다."
+                           Style="{StaticResource MutedLabel}" FontSize="12" LineBreakMode="WordWrap"/>
+                    <Label Text="서버 단어·문법·표현의 ‘외움’ 항목을 1개씩 셉니다. 같은 항목 반복은 추가 점수가 없고, 기기 전용 기본 단어·문장 단계·XP는 포함하지 않습니다. 공동 순위는 1, 1, 3 방식입니다."
+                           Style="{StaticResource MutedLabel}" FontSize="12" LineBreakMode="WordWrap"/>
+                    <Label x:Name="updatedLabel" FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                </VerticalStackLayout>
+            </CollectionView.Header>
+            <CollectionView.EmptyView>
+                <Label x:Name="emptyLabel" Text="불러온 순위가 없습니다." Style="{StaticResource MutedLabel}" Padding="12,20" HorizontalTextAlignment="Center"/>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:RankingEntry">
+                    <Border Style="{StaticResource CardBorder}" Padding="12,10" Margin="0,0,0,8">
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsChampion}" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource ChampionStroke}"/>
+                                <Setter Property="StrokeThickness" Value="2.5"/>
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <Grid ColumnDefinitions="56,*,Auto" ColumnSpacing="10">
+                            <Label Text="{Binding RankLabel}" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
+                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                <Label Text="{Binding DisplayNickname}" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Details}" FontSize="12" TextColor="{StaticResource TextMuted}" LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="2" Text="{Binding ScoreLabel}" FontAttributes="Bold" VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

@@ -17,6 +17,20 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      recovery-test-db:
+        image: postgres:17
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: lexiflow_test
+          POSTGRES_PASSWORD: disposable-ci-test-only
+        ports:
+          - 55439:5432
+        options: >-
+          --health-cmd "pg_isready -U lexiflow_test -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -24,7 +38,12 @@ jobs:
           dotnet-version: '10.0.x'
       - run: dotnet build Server/WordApp/WordApp.csproj -c Release
       - run: dotnet run --project Tests/SecurityChecks -c Release
+      - name: PostgreSQL migration and concurrent account recovery checks
+        run: dotnet run --project Tests/SecurityChecks -c Release --no-build
+        env:
+          LEXIFLOW_TEST_POSTGRES: Host=127.0.0.1;Port=55439;Database=postgres;Username=lexiflow_test;Password=disposable-ci-test-only
       - run: dotnet run --project Tests/ClientSecurityChecks -c Release
+      - run: dotnet run --project Tests/UpdateChecks -c Release
       - run: dotnet run --project Tests/LearningChecks -c Release
       - run: python3 -m unittest discover -s Tests/DeploymentChecks -p 'test_*.py'
 
@@ -56,7 +75,8 @@ jobs:
   deploy:
     needs: push-image
     # Explicitly opt in only after the TLS cutover, backup and schema migration are verified.
-    if: vars.DEPLOY_ENABLED == 'true' && vars.SECURITY_DEPLOY_READY == 'true'
+    # Additional gate stays unset until the recovery schema, sender and app cutover are ready.
+    if: vars.DEPLOY_ENABLED == 'true' && vars.SECURITY_DEPLOY_READY == 'true' && vars.ACCOUNT_RECOVERY_DEPLOY_READY == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read

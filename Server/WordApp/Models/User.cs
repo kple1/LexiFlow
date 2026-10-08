@@ -14,5 +14,9 @@ namespace WordApp.Models
         public int FailedLoginCount { get; set; }
         [JsonIgnore]
         public DateTime? LockoutUntil { get; set; }
+        [JsonIgnore]
+        public string? VerifiedEmail { get; set; }
+        [JsonIgnore]
+        public string? NormalizedEmail { get; set; }
     }
 }

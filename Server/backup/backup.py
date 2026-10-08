@@ -29,6 +29,9 @@ DB_CONTAINER = 'server-db-1'
 MAX_BYTES = 8 * 1024 * 1024
 RETENTION_DAYS = 7
 STALE_HOURS = 30
+# The timer runs at 03:00 Korea time (18:00 UTC on the previous date).
+# Use that same calendar for daily identity, including manual/bootstrap runs.
+BACKUP_TIMEZONE = dt.timezone(dt.timedelta(hours=9), 'Asia/Seoul')
 NAME = re.compile(r'worddb-(\d{4}-\d{2}-\d{2})\.tar\.cms\Z')
 
 
@@ -38,6 +41,12 @@ def now():
 
 def stamp(value):
     return value.isoformat()
+
+
+def backup_date(current):
+    if current.tzinfo is None or current.utcoffset() is None:
+        raise ValueError('Backup date requires an aware timestamp')
+    return current.astimezone(BACKUP_TIMEZONE).date()
 
 
 def sha(path):
@@ -225,7 +234,7 @@ def health_issues(state, config, current):
 
 def backup(config, state):
     current = now()
-    name = 'worddb-' + current.date().isoformat() + '.tar.cms'
+    name = 'worddb-' + backup_date(current).isoformat() + '.tar.cms'
     final = ROOT / name
     # Idempotent retry: never overwrite a successful daily cloud restore point.
     previous = state.get('last_success', {})
@@ -284,7 +293,7 @@ def finish_upload(config, final, record, current):
     verify_cloud(config, final.name, record['sha256'])
     record.update(completed_at=stamp(now()), cloud_roundtrip_verified=True)
     # Only prune after today's independently verified remote copy exists.
-    for path in expired_files(ROOT, current.date()):
+    for path in expired_files(ROOT, backup_date(current)):
         path.unlink()
     return record
 

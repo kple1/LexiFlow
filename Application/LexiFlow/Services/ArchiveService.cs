@@ -67,19 +67,12 @@ public sealed class ArchiveService
 
     private List<ArchivedWord> Load()
     {
-        try
-        {
-            var json = Preferences.Get(StorageKey(), "[]");
-            return JsonSerializer.Deserialize<List<ArchivedWord>>(json, _jsonOptions) ?? [];
-        }
-        catch
-        {
-            return [];
-        }
+        var json = LargePreferenceStore.Get(StorageKey(), "[]");
+        return JsonSerializer.Deserialize<List<ArchivedWord>>(json, _jsonOptions) ?? [];
     }
 
     private void SaveAll(List<ArchivedWord> entries)
-        => Preferences.Set(StorageKey(), JsonSerializer.Serialize(entries, _jsonOptions));
+        => LargePreferenceStore.Set(StorageKey(), JsonSerializer.Serialize(entries, _jsonOptions));
 
     private string StorageKey()
     {

@@ -22,6 +22,65 @@ namespace WordApp.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("WordApp.Models.AccountActionToken", b =>
+                {
+                    b.Property<string>("TokenHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TokenHash");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AccountActionTokens");
+                });
+
+            modelBuilder.Entity("WordApp.Models.AccountMailBudget", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.ToTable("AccountMailBudgets");
+                });
+
             modelBuilder.Entity("WordApp.Models.Grammar", b =>
                 {
                     b.Property<string>("Id")
@@ -188,6 +247,32 @@ namespace WordApp.Migrations
                     b.ToTable("IdiomProgresses");
                 });
 
+            modelBuilder.Entity("WordApp.Models.RankingProfile", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("NormalizedNickname")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("NormalizedNickname")
+                        .IsUnique();
+
+                    b.ToTable("RankingProfiles");
+                });
+
             modelBuilder.Entity("WordApp.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -201,6 +286,10 @@ namespace WordApp.Migrations
 
                     b.Property<DateTime?>("LockoutUntil")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
 
                     b.Property<string>("Pw")
                         .IsRequired()
@@ -217,7 +306,14 @@ namespace WordApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("VerifiedEmail")
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -333,6 +429,16 @@ namespace WordApp.Migrations
                     b.ToTable("WordProgresses");
                 });
 
+            modelBuilder.Entity("WordApp.Models.AccountActionToken", b =>
+                {
+                    b.HasOne("WordApp.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WordApp.Models.GrammarProgress", b =>
                 {
                     b.HasOne("WordApp.Models.User", null)
@@ -351,6 +457,17 @@ namespace WordApp.Migrations
                         .HasPrincipalKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WordApp.Models.RankingProfile", b =>
+                {
+                    b.HasOne("WordApp.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WordApp.Models.UserSession", b =>

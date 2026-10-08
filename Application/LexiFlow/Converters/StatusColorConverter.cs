@@ -1,4 +1,5 @@
 using System.Globalization;
+using LexiFlow.Services;
 
 namespace LexiFlow.Converters;
 
@@ -8,9 +9,9 @@ public class StatusColorConverter : IValueConverter
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         => (value as string) switch
         {
-            "Mastered" => Color.FromArgb("#2E7D32"), // green
-            "Learning" => Color.FromArgb("#F9A825"), // amber
-            "New" => Color.FromArgb("#555555"),      // grey
+            "Mastered" => ThemeColors.Get("SuccessSoft"),
+            "Learning" => ThemeColors.Get("WarningSoft"),
+            "New" => ThemeColors.Get("SurfaceElevated"),
             _ => Colors.Transparent
         };
 

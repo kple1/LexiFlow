@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LexiFlow.Views.UserControls.AppUpdatePanel">
+    <Border Style="{StaticResource CardBorder}">
+        <VerticalStackLayout Spacing="9">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Text="앱 업데이트" FontAttributes="Bold"/>
+                <Label x:Name="versionLabel" Grid.Column="1" Style="{StaticResource MutedLabel}"/>
+            </Grid>
+            <Label x:Name="updateStatusLabel" Style="{StaticResource MutedLabel}" LineBreakMode="WordWrap"/>
+            <ProgressBar x:Name="downloadProgress" IsVisible="False" ProgressColor="{StaticResource Primary}"/>
+            <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                <Button x:Name="checkButton" Text="업데이트 확인" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0" Clicked="OnCheck"/>
+                <Button x:Name="downloadButton" Text="다운로드" Style="{StaticResource SecondaryButton}" IsVisible="False" Margin="0,0,8,0" Clicked="OnDownload"/>
+                <Button x:Name="applyButton" Text="재시작해 적용" IsVisible="False" Margin="0,0,8,0" Clicked="OnApply"/>
+                <Button x:Name="cancelButton" Text="취소" Style="{StaticResource SecondaryButton}" IsVisible="False" Clicked="OnCancel"/>
+            </FlexLayout>
+        </VerticalStackLayout>
+    </Border>
+</ContentView>

@@ -30,6 +30,9 @@ namespace LexiFlow
             builder.Services.AddSingleton<ArchiveService>();
             builder.Services.AddSingleton<SentenceCatalogService>();
             builder.Services.AddSingleton<CourseService>();
+            builder.Services.AddSingleton<ChatGptConnectionService>();
+            builder.Services.AddSingleton<IChatGptTokenProvider>(services => services.GetRequiredService<ChatGptConnectionService>());
+            builder.Services.AddSingleton<ChatGptWritingService>();
             builder.Services.AddTransient<LearningPathView>();
 
             builder.Services.AddTransient<AppShell>();
@@ -44,6 +47,7 @@ namespace LexiFlow
             builder.Services.AddTransient<UserManageView>();
             builder.Services.AddTransient<AccountView>();
             builder.Services.AddTransient<ArchiveView>();
+            builder.Services.AddTransient<RankingView>();
 
             builder.Services.AddTransient<WordsViewModel>();
             builder.Services.AddTransient<GrammarViewModel>();

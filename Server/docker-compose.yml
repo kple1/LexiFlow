@@ -35,6 +35,14 @@ services:
       Notion__Token: "${NOTION_TOKEN}"
       Notion__WordsDataSourceId: "${NOTION_WORDS_DATA_SOURCE_ID}"
       Admin__Token: "${ADMIN_TOKEN:?Set a random ADMIN_TOKEN of at least 32 characters}"
+      # Disabled until an owned sender domain, SMTP credentials and delivery tests are ready.
+      AccountEmail__Enabled: "${ACCOUNT_EMAIL_ENABLED:-false}"
+      AccountEmail__PublicBaseUrl: "https://${API_DOMAIN:-lexiflow.duckdns.org}/"
+      AccountEmail__Host: "${ACCOUNT_EMAIL_HOST:-}"
+      AccountEmail__Port: "${ACCOUNT_EMAIL_PORT:-587}"
+      AccountEmail__Username: "${ACCOUNT_EMAIL_USERNAME:-}"
+      AccountEmail__Password: "${ACCOUNT_EMAIL_PASSWORD:-}"
+      AccountEmail__From: "${ACCOUNT_EMAIL_FROM:-}"
     depends_on:
       db:
         condition: service_healthy
@@ -54,6 +62,7 @@ services:
       API_DOMAIN: "${API_DOMAIN:-lexiflow.duckdns.org}"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./public-updates:/srv/lexiflow-updates:ro
       - caddy_data:/data
       - caddy_config:/config
     networks:

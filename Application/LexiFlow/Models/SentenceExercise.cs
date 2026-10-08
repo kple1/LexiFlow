@@ -16,6 +16,8 @@ public sealed class SentenceExercise
     public string Korean { get; init; } = "";
     public string TargetWord { get; init; } = "";
     public string TargetMeaning { get; init; } = "";
+    public string Topic { get; init; } = "";
+    public string Level { get; init; } = "";
     public IReadOnlyList<string> Choices { get; init; } = [];
     public IReadOnlyList<VocabularyHint> Vocabulary { get; init; } = [];
 }

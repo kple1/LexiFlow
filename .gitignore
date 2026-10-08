@@ -9,3 +9,4 @@ __pycache__/
 *.cms
 Server/backup/config.json
 Server/backup/recovery-*.pem
+Server/public-updates/

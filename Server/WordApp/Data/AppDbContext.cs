@@ -14,9 +14,12 @@ public class AppDbContext : DbContext
     public DbSet<Idiom> Idioms => Set<Idiom>();
     public DbSet<User> Users => Set<User>();
     public DbSet<UserSession> UserSessions => Set<UserSession>();
+    public DbSet<AccountActionToken> AccountActionTokens => Set<AccountActionToken>();
+    public DbSet<AccountMailBudget> AccountMailBudgets => Set<AccountMailBudget>();
     public DbSet<WordProgress> WordProgresses => Set<WordProgress>();
     public DbSet<GrammarProgress> GrammarProgresses => Set<GrammarProgress>();
     public DbSet<IdiomProgress> IdiomProgresses => Set<IdiomProgress>();
+    public DbSet<RankingProfile> RankingProfiles => Set<RankingProfile>();
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
@@ -42,6 +45,25 @@ public class AppDbContext : DbContext
         mb.Entity<User>().Property(u => u.Pw).HasMaxLength(200);
         mb.Entity<User>().HasIndex(u => u.UserId).IsUnique();
         mb.Entity<User>().Property(u => u.SecurityStamp).HasMaxLength(32);
+        mb.Entity<User>().Property(u => u.VerifiedEmail).HasMaxLength(254);
+        mb.Entity<User>().Property(u => u.NormalizedEmail).HasMaxLength(254);
+        mb.Entity<User>().HasIndex(u => u.NormalizedEmail).IsUnique();
+        mb.Entity<RankingProfile>().HasKey(p => p.UserId);
+        mb.Entity<RankingProfile>().Property(p => p.Nickname).HasMaxLength(20);
+        mb.Entity<RankingProfile>().Property(p => p.NormalizedNickname).HasMaxLength(40);
+        mb.Entity<RankingProfile>().HasIndex(p => p.NormalizedNickname).IsUnique();
+        mb.Entity<RankingProfile>().HasOne(p => p.User).WithMany().HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
+        mb.Entity<AccountActionToken>().HasKey(t => t.TokenHash);
+        mb.Entity<AccountActionToken>().Property(t => t.TokenHash).HasMaxLength(64);
+        mb.Entity<AccountActionToken>().Property(t => t.Purpose).HasMaxLength(20);
+        mb.Entity<AccountActionToken>().Property(t => t.SecurityStamp).HasMaxLength(32);
+        mb.Entity<AccountActionToken>().Property(t => t.Email).HasMaxLength(254);
+        mb.Entity<AccountActionToken>().Property(t => t.NormalizedEmail).HasMaxLength(254);
+        mb.Entity<AccountActionToken>().HasIndex(t => t.ExpiresAt);
+        mb.Entity<AccountActionToken>().HasOne(t => t.User).WithMany().HasForeignKey(t => t.UserId).OnDelete(DeleteBehavior.Cascade);
+        mb.Entity<AccountMailBudget>().HasKey(b => b.Key);
+        mb.Entity<AccountMailBudget>().Property(b => b.Key).HasMaxLength(100);
+        mb.Entity<AccountMailBudget>().HasIndex(b => b.ExpiresAt);
         mb.Entity<UserSession>().HasKey(s => s.TokenHash);
         mb.Entity<UserSession>().Property(s => s.TokenHash).HasMaxLength(64);
         mb.Entity<UserSession>().Property(s => s.SecurityStamp).HasMaxLength(32);

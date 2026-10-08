@@ -1,69 +1,67 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LexiFlow.Views.WordDetailView"
-             Title="단어 상세">
+             x:Class="LexiFlow.Views.WordDetailView" Title="단어 상세">
     <ScrollView>
-        <VerticalStackLayout Padding="{OnIdiom Phone='20,24,20,60', Default='40,32,40,60'}"
-                             Spacing="18"
-                             HorizontalOptions="Fill"
-                             MaximumWidthRequest="680">
-            <Label Text="WORD DETAIL" Style="{StaticResource EyebrowLabel}"/>
-
-            <Border Style="{StaticResource CardBorder}"
-                    BackgroundColor="{StaticResource PrimarySoft}"
-                    Stroke="{StaticResource Primary}"
-                    Padding="{OnIdiom Phone=24, Default=34}">
-                <VerticalStackLayout Spacing="13">
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                        <Label x:Name="englishLabel"
-                               FontFamily="RobotoSerif"
-                               FontSize="{OnIdiom Phone=38, Default=46}"
-                               VerticalOptions="Center"/>
-                        <Button Text="🔊"
-                                FontSize="20"
-                                Clicked="OnListenClick"
-                                BackgroundColor="#33FFFFFF"
-                                WidthRequest="48"
-                                HeightRequest="48"
-                                Padding="0"
-                                CornerRadius="24"/>
+        <VerticalStackLayout Padding="{OnIdiom Phone='16,16,16,32', Default='24,20,24,32'}"
+                             Spacing="12" HorizontalOptions="Fill" MaximumWidthRequest="760">
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label x:Name="collectionLabel" FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="englishLabel" FontSize="24" FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                            <Label x:Name="partOfSpeechLabel" Style="{StaticResource MutedLabel}" FontSize="12"/>
+                        </VerticalStackLayout>
+                        <Button x:Name="wordListenButton" Grid.Column="1" Text="발음" Style="{StaticResource SecondaryButton}"
+                                HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="14,0" VerticalOptions="Start"
+                                Clicked="OnListenClick" SemanticProperties.Description="영어 단어 발음 듣기"/>
+                    </Grid>
+                    <Label x:Name="meaningLabel" FontSize="16" TextColor="{StaticResource TextPrimary}"/>
+                    <HorizontalStackLayout Spacing="8">
+                        <Label x:Name="statusLabel" FontSize="12" TextColor="{StaticResource Primary}"/>
+                        <Label Text="·" FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                        <Label x:Name="progressStorageLabel" FontSize="12" TextColor="{StaticResource TextMuted}"/>
                     </HorizontalStackLayout>
-                    <Label x:Name="meaningLabel"
-                           FontSize="20"
-                           TextColor="{StaticResource TextSecondary}"
-                           HorizontalTextAlignment="Center"/>
-                    <Border x:Name="statusBadge"
-                            IsVisible="False"
-                            HorizontalOptions="Center"
-                            Padding="10,4"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 10">
-                        <Label x:Name="statusLabel" FontSize="11" FontAttributes="Bold" TextColor="White"/>
-                    </Border>
                 </VerticalStackLayout>
             </Border>
 
-            <Border x:Name="speechErrorBorder"
-                    IsVisible="False"
-                    BackgroundColor="{StaticResource DangerSoft}"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 12"
-                    Padding="13">
-                <Label x:Name="speechErrorLabel" Style="{StaticResource MutedLabel}" TextColor="{StaticResource Danger}"/>
+            <Border x:Name="speechErrorBorder" IsVisible="False" BackgroundColor="{StaticResource DangerSoft}"
+                    StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="12">
+                <Label x:Name="speechErrorLabel" FontSize="13" TextColor="{StaticResource Danger}"/>
             </Border>
 
-            <Border Style="{StaticResource CardBorder}">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="EXAMPLE" Style="{StaticResource EyebrowLabel}"/>
-                    <Label x:Name="exampleLabel" FontSize="17" LineBreakMode="WordWrap"/>
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <Label Text="예문" Style="{StaticResource SubTitle}" VerticalOptions="Center"/>
+                        <Button x:Name="exampleListenButton" Grid.Column="1" Text="듣기" Clicked="OnListenExampleClick"
+                                HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="14,0"
+                                Style="{StaticResource GhostButton}" SemanticProperties.Description="영어 예문 발음 듣기"/>
+                    </Grid>
+                    <Label x:Name="exampleLabel" FontSize="17" LineHeight="1.25" LineBreakMode="WordWrap"/>
+                    <BoxView x:Name="translationDivider" HeightRequest="1" Color="{StaticResource Stroke}"/>
+                    <Label x:Name="translationLabel" Style="{StaticResource Body}" LineHeight="1.2" LineBreakMode="WordWrap"/>
                 </VerticalStackLayout>
             </Border>
 
-            <Border x:Name="noteCard" Style="{StaticResource SoftCardBorder}">
+            <Border x:Name="noteCard" Style="{StaticResource SoftCardBorder}" Padding="14">
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="MEMORY NOTE" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Accent}"/>
+                    <Label Text="학습 메모" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}"/>
                     <Label x:Name="noteLabel" Style="{StaticResource Body}" LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="보관함" Style="{StaticResource SubTitle}"/>
+                    <Label x:Name="archiveStatusLabel" Style="{StaticResource MutedLabel}" LineBreakMode="WordWrap"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button x:Name="archiveButton" Text="Archive에 저장" Clicked="OnSaveArchiveClick"
+                                HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="12,0"/>
+                        <Button Grid.Column="1" Text="보관함 열기" Style="{StaticResource GhostButton}" Clicked="OnOpenArchiveClick"
+                                HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="12,0"/>
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>

@@ -6,18 +6,18 @@
     <ContentView.Resources>
         <conv:StatusColorConverter x:Key="StatusColor"/>
     </ContentView.Resources>
-    <VerticalStackLayout Margin="10" Spacing="4" HeightRequest="150" VerticalOptions="Start">
-        <Label Text="{Binding English}" FontSize="20" FontAttributes="Bold"
+    <VerticalStackLayout Margin="10" Spacing="4" VerticalOptions="Start">
+        <Label Text="{Binding English}" FontSize="17" FontAttributes="Bold"
                HorizontalOptions="Center" HorizontalTextAlignment="Center"
                LineBreakMode="WordWrap" MaxLines="2" x:Name="word"/>
-        <Label Text="{Binding Meaning}" FontSize="16" TextColor="Gray"
+        <Label Text="{Binding Meaning}" FontSize="14" TextColor="{StaticResource TextSecondary}"
                HorizontalOptions="Center" HorizontalTextAlignment="Center"
                LineBreakMode="WordWrap" MaxLines="2" VerticalOptions="Start"/>
         <Border IsVisible="{Binding HasUserStatus}" HorizontalOptions="Center"
                 Padding="8,1" StrokeThickness="0"
                 BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}"
-                StrokeShape="RoundRectangle 8">
-            <Label Text="{Binding UserStatus}" FontSize="11" TextColor="White" LineBreakMode="NoWrap"/>
+                StrokeShape="RoundRectangle 6">
+            <Label Text="{Binding UserStatus}" FontSize="11" TextColor="{StaticResource TextPrimary}" LineBreakMode="NoWrap"/>
         </Border>
     </VerticalStackLayout>
 </ContentView>

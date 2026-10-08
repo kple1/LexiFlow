@@ -1,4 +1,5 @@
 using LexiFlow.ViewModels;
+using LexiFlow.Services;
 
 namespace LexiFlow.Views;
 
@@ -12,10 +13,10 @@ public partial class UserManageView : ContentPage
         BindingContext = _vm = vm;
     }
 
-    private async void OnSignInClick(object sender, EventArgs e)
+    private async void OnSignInClick(object? sender, EventArgs e)
         => await SignInAsync();
 
-    private async void OnPasswordCompleted(object sender, EventArgs e)
+    private async void OnPasswordCompleted(object? sender, EventArgs e)
         => await SignInAsync();
 
     private async Task SignInAsync()
@@ -25,17 +26,29 @@ public partial class UserManageView : ContentPage
             ShowMessage(message, success: false);
     }
 
-    private async void OnSignUpClick(object sender, EventArgs e)
+    private async void OnSignUpClick(object? sender, EventArgs e)
     {
-        var (ok, message) = await _vm.SignUpAsync();
-        ShowMessage(message, ok);
+        await OpenAccountPageAsync("signup");
+    }
+
+    private async void OnForgotPasswordClick(object? sender, EventArgs e)
+        => await OpenAccountPageAsync("forgot");
+
+    private async Task OpenAccountPageAsync(string action)
+    {
+        try
+        {
+            await Browser.Default.OpenAsync(new Uri("https://lexiflow.duckdns.org/account/index.html#" + action), BrowserLaunchMode.External);
+            ShowMessage("브라우저에서 진행한 뒤 이 앱으로 돌아와 로그인해 주세요.", true);
+        }
+        catch { ShowMessage("브라우저를 열지 못했습니다. 잠시 후 다시 시도해 주세요.", false); }
     }
 
     private void ShowMessage(string message, bool success)
     {
         messageCard.IsVisible = true;
-        messageCard.BackgroundColor = Color.FromArgb(success ? "#163A2A" : "#45202B");
-        messageLabel.TextColor = Color.FromArgb(success ? "#86EFAC" : "#FDA4AF");
+        messageCard.BackgroundColor = ThemeColors.Get(success ? "SuccessSoft" : "DangerSoft");
+        messageLabel.TextColor = ThemeColors.Get(success ? "Success" : "Danger");
         messageLabel.Text = message;
     }
 }

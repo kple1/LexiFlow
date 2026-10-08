@@ -1,111 +1,118 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:conv="clr-namespace:LexiFlow.Converters"
-             x:Class="LexiFlow.Views.WordsView"
-             x:Name="wordsPage"
-             Title="단어">
+             xmlns:local="clr-namespace:LexiFlow.Views"
+             x:Class="LexiFlow.Views.WordsView" Title="단어">
     <ContentPage.Resources>
-        <conv:StatusColorConverter x:Key="StatusColor"/>
+        <local:WordStatusLabelConverter x:Key="WordStatusLabel"/>
     </ContentPage.Resources>
-
-    <Grid RowDefinitions="Auto,Auto,Auto,*"
-          RowSpacing="16"
-          Padding="{OnIdiom Phone='20,24,20,96', Default='40,32,40,48'}"
-          HorizontalOptions="Fill"
-          MaximumWidthRequest="900">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-            <VerticalStackLayout Spacing="4">
-                <Label Text="WORD LIBRARY" Style="{StaticResource EyebrowLabel}"/>
-                <Label Text="나의 단어장" Style="{StaticResource Title}"/>
-                <Label Text="찾아보고, 들어보고, 기억을 쌓아 가세요." Style="{StaticResource Body}"/>
-            </VerticalStackLayout>
-            <Button Grid.Column="1"
-                    Text="복습 시작"
-                    HeightRequest="44"
-                    VerticalOptions="End"
-                    Clicked="OnStartReviewClick"/>
+    <Grid RowDefinitions="Auto,*" RowSpacing="16"
+          Padding="{OnIdiom Phone='16,16,16,20', Default='24,20,24,24'}"
+          MaximumWidthRequest="1120" HorizontalOptions="Fill">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <Label Text="단어" Style="{StaticResource Title}" VerticalOptions="Center"/>
+            <Button Grid.Column="1" Text="학습 시작" HeightRequest="{OnIdiom Phone=44, Default=36}"
+                    VerticalOptions="Center" Clicked="OnStartReviewClick"/>
         </Grid>
-
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10">
-            <Border BackgroundColor="{StaticResource Surface}"
-                    Stroke="{StaticResource Stroke}"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14"
-                    Padding="5,0">
-                <Entry x:Name="searchEntry"
-                       Style="{StaticResource FieldEntry}"
-                       BackgroundColor="Transparent"
-                       Placeholder="영어 또는 뜻으로 검색"
-                       Text="{Binding SearchText}"
-                       ReturnType="Search"
-                       Completed="OnSearchCompleted"/>
-            </Border>
-            <Button Grid.Column="1"
-                    Text="검색"
-                    WidthRequest="84"
-                    Command="{Binding LoadWordsCommand}"
-                    IsEnabled="{Binding IsNotBusy}"/>
-        </Grid>
-
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
-            <Label Text="{Binding ResultSummary}" Style="{StaticResource MutedLabel}" VerticalOptions="Center"/>
-            <ActivityIndicator Grid.Column="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Primary}"/>
-        </Grid>
-
-        <Grid Grid.Row="3">
-            <CollectionView ItemsSource="{Binding Words}"
-                            SelectionMode="None"
-                            IsVisible="{Binding IsNotBusy}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="{OnIdiom Phone=1, Default=2}"
-                                     HorizontalItemSpacing="12"
-                                     VerticalItemSpacing="12"/>
-                </CollectionView.ItemsLayout>
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="10" Padding="20">
-                        <Label Text="⌕" FontSize="38" TextColor="{StaticResource TextMuted}" HorizontalTextAlignment="Center"/>
-                        <Label Text="조건에 맞는 단어가 없어요" Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
-                        <Label Text="다른 검색어로 찾아보세요." Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+        <CollectionView x:Name="wordList" Grid.Row="1" ItemsSource="{Binding Words}"
+                        SelectionMode="None" SizeChanged="OnLibrarySizeChanged">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout x:Name="wordLayout" Orientation="Vertical" Span="1"
+                                 HorizontalItemSpacing="8" VerticalItemSpacing="8"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.Header>
+                <VerticalStackLayout Spacing="12" Padding="0,0,0,12">
+                    <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Stroke}"
+                            StrokeThickness="1" StrokeShape="RoundRectangle 6" Padding="8,0">
+                        <Entry x:Name="searchEntry" Style="{StaticResource FieldEntry}" BackgroundColor="Transparent"
+                               HeightRequest="44" Placeholder="영어, 뜻, 예문 검색"
+                               Text="{Binding SearchText}" ReturnType="Search" Completed="OnSearchCompleted"
+                               ClearButtonVisibility="WhileEditing" SemanticProperties.Description="영어, 뜻, 예문, 주제 즉시 검색"/>
+                    </Border>
+                    <Grid x:Name="filterGrid" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*"
+                          RowSpacing="10" ColumnSpacing="12">
+                        <VerticalStackLayout x:Name="levelFilter" Spacing="4">
+                            <Label Text="난이도" Style="{StaticResource MutedLabel}" FontSize="12"/>
+                            <Picker Style="{StaticResource AppPicker}" HeightRequest="44"
+                                    SemanticProperties.Description="난이도 필터"
+                                    ItemsSource="{Binding LevelOptions}" SelectedItem="{Binding SelectedLevel}"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout x:Name="topicFilter" Grid.Column="1" Spacing="4">
+                            <Label Text="주제" Style="{StaticResource MutedLabel}" FontSize="12"/>
+                            <Picker Style="{StaticResource AppPicker}" HeightRequest="44"
+                                    SemanticProperties.Description="주제 필터"
+                                    ItemsSource="{Binding TopicOptions}" SelectedItem="{Binding SelectedTopic}"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout x:Name="statusFilter" Grid.Row="1" Spacing="4">
+                            <Label Text="학습 상태" Style="{StaticResource MutedLabel}" FontSize="12"/>
+                            <Picker Style="{StaticResource AppPicker}" HeightRequest="44"
+                                    SemanticProperties.Description="학습 상태 필터"
+                                    ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding SelectedStatus}"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout x:Name="sortFilter" Grid.Row="1" Grid.Column="1" Spacing="4">
+                            <Label Text="정렬" Style="{StaticResource MutedLabel}" FontSize="12"/>
+                            <Picker Style="{StaticResource AppPicker}" HeightRequest="44"
+                                    SemanticProperties.Description="단어 정렬"
+                                    ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSort}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="8">
+                        <Button Text="필터 초기화" Style="{StaticResource GhostButton}" Command="{Binding ResetFiltersCommand}"
+                                HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="12,0"/>
+                        <Button Grid.Column="1" Text="새로고침" Style="{StaticResource SecondaryButton}"
+                                Command="{Binding LoadWordsCommand}" IsEnabled="{Binding IsNotBusy}"
+                                HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="12,0"/>
+                        <ActivityIndicator Grid.Column="3" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                           Color="{StaticResource Primary}" WidthRequest="20"/>
+                    </Grid>
+                    <Border IsVisible="{Binding HasNotice}" Style="{StaticResource SoftCardBorder}" Padding="12">
+                        <Label Text="{Binding NoticeMessage}" Style="{StaticResource MutedLabel}" LineBreakMode="WordWrap"/>
+                    </Border>
+                    <Border IsVisible="{Binding HasError}" BackgroundColor="{StaticResource DangerSoft}" StrokeThickness="0"
+                            StrokeShape="RoundRectangle 6" Padding="12">
+                        <Label Text="{Binding ErrorMessage}" FontSize="13" TextColor="{StaticResource Danger}" LineBreakMode="WordWrap"/>
+                    </Border>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding ResultSummary}" FontSize="14" FontAttributes="Bold"/>
+                        <Label Text="{Binding ProgressSummary}" Style="{StaticResource MutedLabel}" FontSize="12"/>
+                        <Label Text="기본팩 기록은 이 기기에만 저장됩니다." FontSize="11" TextColor="{StaticResource TextMuted}"/>
                     </VerticalStackLayout>
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource CardBorder}" Padding="18" Margin="0">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnWordTapped"/>
-                            </Border.GestureRecognizers>
-                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="7" ColumnSpacing="12">
-                                <Label Text="{Binding English}" FontFamily="RobotoSerif" FontSize="22" LineBreakMode="TailTruncation"/>
-                                <Border Grid.Column="1"
-                                        IsVisible="{Binding HasUserStatus}"
-                                        BackgroundColor="{Binding UserStatus, Converter={StaticResource StatusColor}}"
-                                        StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 10"
-                                        Padding="9,3"
-                                        VerticalOptions="Center">
-                                    <Label Text="{Binding UserStatus}" FontSize="10" FontAttributes="Bold" TextColor="White"/>
-                                </Border>
-                                <Label Grid.Row="1" Text="{Binding Meaning}" Style="{StaticResource MutedLabel}" LineBreakMode="TailTruncation"/>
-                                <Label Grid.Row="1" Grid.Column="1" Text="›" FontSize="24" TextColor="{StaticResource TextMuted}" VerticalOptions="Center"/>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <Border IsVisible="{Binding HasError}"
-                    BackgroundColor="{StaticResource DangerSoft}"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 16"
-                    Padding="20"
-                    VerticalOptions="Start">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Danger}"/>
-                    <Button Text="다시 시도" Command="{Binding LoadWordsCommand}" Style="{StaticResource SecondaryButton}"/>
                 </VerticalStackLayout>
-            </Border>
-        </Grid>
+            </CollectionView.Header>
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Spacing="8" Padding="16,24" IsVisible="{Binding IsNotBusy}">
+                    <Label Text="{Binding EmptyTitle}" Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding EmptyDescription}" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource CardBorder}" Padding="12,10" Margin="0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnWordTapped"/>
+                        </Border.GestureRecognizers>
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="6" ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="{Binding English}" FontSize="17" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Meaning}" FontSize="13" TextColor="{StaticResource TextSecondary}"
+                                       LineBreakMode="TailTruncation" MaxLines="1"/>
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1" Grid.RowSpan="2" Text="보기" Style="{StaticResource GhostButton}"
+                                    HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="12,0" FontSize="12" VerticalOptions="Center"
+                                    Clicked="OnWordOpenClick" SemanticProperties.Description="{Binding English, StringFormat='{0} 상세 보기'}"/>
+                            <HorizontalStackLayout Grid.Row="1" Spacing="8">
+                                <Label Text="{Binding CollectionLabel}" FontSize="11" TextColor="{StaticResource TextMuted}" VerticalOptions="Center"/>
+                                <Label Text="·" FontSize="11" TextColor="{StaticResource TextMuted}" VerticalOptions="Center"/>
+                                <Label Text="{Binding UserStatus, Converter={StaticResource WordStatusLabel}}"
+                                       FontSize="11" TextColor="{StaticResource Primary}" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Footer>
+                <BoxView HeightRequest="12" Color="Transparent"/>
+            </CollectionView.Footer>
+        </CollectionView>
     </Grid>
 </ContentPage>

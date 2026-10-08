@@ -1,87 +1,63 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LexiFlow.Views.ArchiveView"
-             Title="Archive">
-    <Grid RowDefinitions="Auto,Auto,Auto,*"
-          RowSpacing="16"
-          Padding="{OnIdiom Phone='20,24,20,96', Default='40,32,40,48'}"
-          HorizontalOptions="Fill"
-          MaximumWidthRequest="860">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-            <VerticalStackLayout Spacing="4">
-                <Label Text="MY ARCHIVE" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource Accent}"/>
-                <Label Text="눌러본 단어" Style="{StaticResource Title}"/>
-                <Label Text="문장에서 궁금해 눌렀던 단어가 자동으로 모여요." Style="{StaticResource Body}"/>
-            </VerticalStackLayout>
-            <Button Grid.Column="1"
-                    Text="문장 학습"
-                    HeightRequest="44"
-                    VerticalOptions="End"
-                    Clicked="OnPracticeClick"/>
+             x:Class="LexiFlow.Views.ArchiveView" Title="보관함">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="12"
+          Padding="{OnIdiom Phone='16,16,16,20', Default='24,20,24,24'}"
+          HorizontalOptions="Fill" MaximumWidthRequest="1120">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <Label Text="보관함" Style="{StaticResource Title}" VerticalOptions="Center"/>
+            <Button Grid.Column="1" Text="문장 학습" HeightRequest="{OnIdiom Phone=44, Default=36}"
+                    VerticalOptions="Center" Clicked="OnPracticeClick"/>
         </Grid>
 
-        <Border Grid.Row="1"
-                BackgroundColor="{StaticResource Surface}"
-                Stroke="{StaticResource Stroke}"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14"
-                Padding="5,0">
-            <Entry x:Name="searchEntry"
-                   Style="{StaticResource FieldEntry}"
-                   BackgroundColor="Transparent"
-                   Placeholder="저장한 단어 검색"
-                   TextChanged="OnSearchTextChanged"/>
+        <Border Grid.Row="1" BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Stroke}"
+                StrokeThickness="1" StrokeShape="RoundRectangle 6" Padding="8,0">
+            <Entry x:Name="searchEntry" Style="{StaticResource FieldEntry}" BackgroundColor="Transparent"
+                   HeightRequest="44" Placeholder="저장한 단어 검색" ClearButtonVisibility="WhileEditing"
+                   SemanticProperties.Description="보관함 영어 또는 뜻 검색" TextChanged="OnSearchTextChanged"/>
         </Border>
 
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
-            <Label x:Name="summaryLabel" Text="저장된 단어 0개" Style="{StaticResource MutedLabel}"/>
-            <Border Grid.Column="1" BackgroundColor="{StaticResource PrimarySoft}" StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="9,4">
-                <Label Text="단어를 누르면 자동 저장" FontSize="11" TextColor="{StaticResource Primary}"/>
-            </Border>
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <Label x:Name="summaryLabel" Text="저장된 단어 0개" FontSize="13" FontAttributes="Bold" VerticalOptions="Center"/>
+            <Label Grid.Column="1" Text="이 기기에 저장" FontSize="11" TextColor="{StaticResource TextMuted}" VerticalOptions="Center"/>
         </Grid>
 
-        <CollectionView x:Name="archiveList" Grid.Row="3" SelectionMode="None">
+        <Border x:Name="storageErrorBorder" Grid.Row="3" IsVisible="False" BackgroundColor="{StaticResource DangerSoft}"
+                StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="12">
+            <VerticalStackLayout Spacing="12">
+                <Label x:Name="storageErrorLabel" FontSize="13" TextColor="{StaticResource Danger}" LineBreakMode="WordWrap"/>
+                <Button Text="다시 불러오기" Style="{StaticResource SecondaryButton}" Clicked="OnReloadClick"
+                        HeightRequest="{OnIdiom Phone=44, Default=36}" HorizontalOptions="Start"/>
+            </VerticalStackLayout>
+        </Border>
+        <CollectionView x:Name="archiveList" Grid.Row="4" SelectionMode="None">
             <CollectionView.EmptyView>
-                <VerticalStackLayout VerticalOptions="Center" Spacing="12" Padding="24">
-                    <Border BackgroundColor="{StaticResource PrimarySoft}"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 32"
-                            WidthRequest="64"
-                            HeightRequest="64"
-                            HorizontalOptions="Center">
-                        <Label Text="A"
-                               FontFamily="RobotoSerif"
-                               FontSize="28"
-                               TextColor="{StaticResource Primary}"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"/>
-                    </Border>
-                    <Label Text="아직 저장한 단어가 없어요" Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
-                    <Label Text="문장 학습에서 궁금한 단어를 누르면 뜻과 예문이 여기에 쌓입니다."
-                           Style="{StaticResource MutedLabel}"
-                           HorizontalTextAlignment="Center"/>
-                    <Button Text="첫 문장 시작" Clicked="OnPracticeClick" Margin="0,8,0,0"/>
+                <VerticalStackLayout VerticalOptions="Center" Spacing="8" Padding="16,24">
+                    <Label x:Name="emptyTitleLabel" Text="아직 저장한 단어가 없어요"
+                           Style="{StaticResource SubTitle}" HorizontalTextAlignment="Center"/>
+                    <Label x:Name="emptyDescriptionLabel" Text="문장 학습에서 단어를 누르거나 단어 상세에서 저장해 보세요."
+                           Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+                    <Button Text="문장 학습 시작" Clicked="OnPracticeClick" Margin="0,8,0,0"
+                            HeightRequest="{OnIdiom Phone=44, Default=36}" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource CardBorder}" Padding="18" Margin="0,0,0,10">
-                        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="7" ColumnSpacing="14">
-                            <Label Text="{Binding Word}" FontFamily="RobotoSerif" FontSize="23"/>
-                            <Button Grid.Column="1"
-                                    Text="삭제"
-                                    Style="{StaticResource GhostButton}"
-                                    HeightRequest="36"
-                                    Padding="11,0"
-                                    FontSize="11"
-                                    CommandParameter="{Binding Word}"
-                                    Clicked="OnRemoveClick"/>
-                            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Meaning}" FontSize="16" TextColor="{StaticResource Primary}"/>
-                            <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                                <Label Text="{Binding Sentence}" Style="{StaticResource MutedLabel}" LineBreakMode="TailTruncation"/>
-                                <Label Grid.Column="1" Text="{Binding Lookups, StringFormat='조회 {0}회'}" FontSize="11" TextColor="{StaticResource TextMuted}"/>
-                            </Grid>
+                    <Border Style="{StaticResource CardBorder}" Padding="12,10" Margin="0,0,0,8">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="8" ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="{Binding Word}" FontSize="17" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Meaning}" FontSize="13" TextColor="{StaticResource TextSecondary}" LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1" Text="삭제" Style="{StaticResource GhostButton}"
+                                    HeightRequest="{OnIdiom Phone=44, Default=36}" Padding="12,0" FontSize="12"
+                                    VerticalOptions="Start" CommandParameter="{Binding Word}" Clicked="OnRemoveClick"
+                                    SemanticProperties.Description="{Binding Word, StringFormat='{0} 보관함에서 삭제'}"/>
+                            <Label Grid.Row="1" Text="{Binding Sentence}" FontSize="13"
+                                   TextColor="{StaticResource TextMuted}" LineBreakMode="TailTruncation" MaxLines="2"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Lookups, StringFormat='조회 {0}회'}"
+                                   FontSize="11" TextColor="{StaticResource TextMuted}" VerticalOptions="End"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

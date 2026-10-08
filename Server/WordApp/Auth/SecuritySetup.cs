@@ -50,6 +50,12 @@ public static class SecuritySetup
             options.AddPolicy("credentials", context =>
                 RateLimitPartition.GetFixedWindowLimiter(ClientIp(context), _ => new FixedWindowRateLimiterOptions
                 { PermitLimit = 10, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
+            options.AddPolicy("account-email", context =>
+                RateLimitPartition.GetFixedWindowLimiter(ClientIp(context), _ => new FixedWindowRateLimiterOptions
+                { PermitLimit = 6, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
+            options.AddPolicy("ranking-profile", context =>
+                RateLimitPartition.GetFixedWindowLimiter(ClientIp(context), _ => new FixedWindowRateLimiterOptions
+                { PermitLimit = 12, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
         });
     }
 

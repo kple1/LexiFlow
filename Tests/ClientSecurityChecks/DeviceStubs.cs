@@ -12,8 +12,15 @@ public static class SecureStorage
 public static class Preferences
 {
     private static readonly Dictionary<string, object> Values = [];
+    public static bool FailWrites { get; set; }
     public static T Get<T>(string key, T fallback) => Values.TryGetValue(key, out var value) ? (T)value : fallback;
-    public static void Set<T>(string key, T value) where T : notnull => Values[key] = value;
+    public static void Set<T>(string key, T value) where T : notnull
+    {
+        if (FailWrites) throw new IOException("Simulated device storage failure.");
+        if (value is string text && System.Text.Encoding.Unicode.GetByteCount(text) > 8192)
+            throw new IOException("Windows preference value exceeds 8 KiB.");
+        Values[key] = value;
+    }
     public static bool ContainsKey(string key) => Values.ContainsKey(key);
     public static void Remove(string key) => Values.Remove(key);
 }

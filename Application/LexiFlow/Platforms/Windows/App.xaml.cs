@@ -16,6 +16,7 @@ namespace LexiFlow.WinUI
         /// </summary>
         public App()
         {
+            if (LexiFlow.Updates.UpdateBootstrap.TryRunHelper()) return;
             this.InitializeComponent();
         }
 

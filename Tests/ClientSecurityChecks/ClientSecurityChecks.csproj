@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="../../Application/LexiFlow/Content/vocabulary-*.json" LogicalName="LexiFlow.Content.%(Filename)%(Extension)" />
+    <Compile Include="../../Application/LexiFlow/Services/BuiltInVocabulary.cs" Link="BuiltInVocabulary.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/LargePreferenceStore.cs" Link="LargePreferenceStore.cs" />
+    <Compile Include="../../Application/LexiFlow/Services/BuiltInWordProgressService.cs" Link="BuiltInWordProgressService.cs" />
     <Compile Include="../../Application/LexiFlow/Services/ApiService.cs" Link="ApiService.cs" />
     <Compile Include="../../Application/LexiFlow/Services/SessionService.cs" Link="SessionService.cs" />
     <Compile Include="../../Application/LexiFlow/Services/LocalAccountData.cs" Link="LocalAccountData.cs" />

@@ -4,17 +4,17 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using WordApp.Auth;
 using WordApp.Data;
 using WordApp.Models;
+using WordApp.Services;
 
 namespace WordApp.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("users")]
-public class UserController(AppDbContext db) : ControllerBase
+public class UserController(AppDbContext db, AccountEmailQueue emailQueue) : ControllerBase
 {
     public record ChangePwDto(string CurrentPw, string Pw);
     public record CurrentPasswordDto(string CurrentPw);
@@ -35,17 +35,13 @@ public class UserController(AppDbContext db) : ControllerBase
     [AllowAnonymous]
     [EnableRateLimiting("credentials")]
     [HttpPost]
-    public async Task<IActionResult> Post(RegisterDto dto)
+    public IActionResult Post(RegisterDto dto)
     {
         if (!AccountSecurity.ValidNewUserId(dto.UserId) || !AccountSecurity.ValidNewPassword(dto.Pw))
             return BadRequest("ID: 3-64 letters, numbers, _, . or -. Password: at least 12 characters, at most 72 UTF-8 bytes.");
-        if (await db.Users.AnyAsync(u => u.UserId == dto.UserId)) return Conflict("User ID already exists.");
-        var user = new User { UserId = dto.UserId, Pw = BCrypt.Net.BCrypt.HashPassword(dto.Pw, 11) };
-        db.Users.Add(user);
-        try { await db.SaveChangesAsync(); }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
-        { return Conflict("User ID already exists."); }
-        return CreatedAtAction(nameof(Get), new { id = user.Id }, new { user.Id, user.UserId });
+        // Older clients must not bypass email ownership verification. Existing
+        // accounts and logins are untouched; the new app opens the signup page.
+        return StatusCode(410, "Update the app and complete email-verified signup.");
     }
 
     [AllowAnonymous]
@@ -112,7 +108,10 @@ public class UserController(AppDbContext db) : ControllerBase
                 .SetProperty(u => u.LockoutUntil, (DateTime?)null));
         if (updated == 0) return Unauthorized();
         await db.UserSessions.Where(s => s.UserId == id).ExecuteDeleteAsync();
+        await db.AccountActionTokens.Where(t => t.UserId == id).ExecuteDeleteAsync();
         await transaction.CommitAsync();
+        if (user.VerifiedEmail is not null)
+            emailQueue.Enqueue(new AccountMailRequest(AccountEmailWorkflow.Changed, user.VerifiedEmail));
         return NoContent();
     }
 

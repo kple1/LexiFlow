@@ -6,6 +6,7 @@ namespace LexiFlow.Services;
 public sealed class CourseService(SessionService session, SentenceCatalogService catalog)
 {
     private const int StageSize = 8;
+    public string AccountKey => session.StorageId;
     private string Key(string suffix) => LocalAccountData.Key(session, "course_" + suffix);
 
     public IReadOnlyList<CourseStage> GetStages(IEnumerable<Word>? words = null)
@@ -18,7 +19,8 @@ public sealed class CourseService(SessionService session, SentenceCatalogService
         var pool = catalog.GetCoursePool(words ?? []);
         var existing = stages.SelectMany(stage => stage.Exercises).Select(item => item.Id).ToHashSet();
         var additions = pool.Where(item => !existing.Contains(item.Id))
-            .OrderBy(item => SentenceAnswer.Tokens(item.Sentence).Length)
+            .OrderBy(item => item.Level switch { "기초" => 0, "일상" => 1, "확장" => 2, _ => 3 })
+            .ThenBy(item => SentenceAnswer.Tokens(item.Sentence).Length)
             .ThenBy(item => item.Sentence.Length).ThenBy(item => item.Id, StringComparer.Ordinal)
             .Chunk(StageSize);
         foreach (var chunk in additions)
@@ -26,7 +28,7 @@ public sealed class CourseService(SessionService session, SentenceCatalogService
             var number = stages.Count + 1;
             stages.Add(new CourseStage { Id = $"stage-{number}", Number = number, Exercises = chunk.ToList() });
         }
-        Preferences.Set(Key("stages"), JsonSerializer.Serialize(stages));
+        LargePreferenceStore.Set(Key("stages"), JsonSerializer.Serialize(stages));
         return stages;
     }
 
@@ -60,13 +62,12 @@ public sealed class CourseService(SessionService session, SentenceCatalogService
         var stars = ratio >= .9 ? 3 : ratio >= .7 ? 2 : 1;
         var best = Read<Dictionary<string, int>>("stars") ?? [];
         best[id] = Math.Max(best.GetValueOrDefault(id), stars);
-        Preferences.Set(Key("stars"), JsonSerializer.Serialize(best));
+        LargePreferenceStore.Set(Key("stars"), JsonSerializer.Serialize(best));
         return stars;
     }
 
     private T? Read<T>(string suffix)
     {
-        try { return JsonSerializer.Deserialize<T>(Preferences.Get(Key(suffix), "null")); }
-        catch (JsonException) { return default; }
+        return JsonSerializer.Deserialize<T>(LargePreferenceStore.Get(Key(suffix), "null"));
     }
 }

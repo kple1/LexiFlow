@@ -13,6 +13,7 @@ namespace LexiFlow
         public App(IServiceProvider services, SessionService session)
         {
             InitializeComponent();
+            UserAppTheme = AppTheme.Dark;
             _services = services;
             _session = session;
             _session.StateChanged += (_, _) => MainThread.BeginInvokeOnMainThread(ApplyRootPage);
@@ -22,12 +23,13 @@ namespace LexiFlow
         {
             _window = new Window
             {
+                Title = "LexiFlow",
                 Width = 1120,
                 Height = 800,
                 // Shown briefly while the persisted session is restored.
                 Page = new ContentPage
                 {
-                    BackgroundColor = Color.FromArgb("#222222"),
+                    BackgroundColor = (Color)Resources["AppBackground"],
                     Content = new ActivityIndicator
                     {
                         IsRunning = true,
@@ -50,6 +52,9 @@ namespace LexiFlow
             {
                 await _session.RestoreAsync();
                 ApplyRootPage();
+                // Signal a successful UI/session startup before any network update check.
+                LexiFlow.Updates.UpdateBootstrap.SignalHealthy();
+                _ = LexiFlow.Updates.AppUpdateService.Default.CheckAsync();
             });
 
             return _window;

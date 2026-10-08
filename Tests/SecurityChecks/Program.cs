@@ -13,15 +13,23 @@ using Microsoft.Extensions.Logging;
 using WordApp.Auth;
 using WordApp.Data;
 using WordApp.Models;
+using WordApp.Services;
 
-internal static class SecurityChecks
+internal static partial class SecurityChecks
 {
     private const string Password = "Correct-password-2026";
     private static int _checks;
-    public static async Task Main()
+    public static async Task Main(string[] args)
     {
         Environment.SetEnvironmentVariable("ASPNETCORE_TEST_CONTENTROOT_WORDAPP",
             Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../Server/WordApp")));
+        if (args.Contains("--postgres-recovery-only"))
+        {
+            if (!TestPostgres.Enabled) throw new InvalidOperationException("Set LEXIFLOW_TEST_POSTGRES to a disposable local cluster first.");
+            await PostgresRecoveryChecks();
+            Console.WriteLine($"{_checks} PostgreSQL recovery checks passed (isolated test databases; no production traffic).");
+            return;
+        }
         await Ownership();
         await Sessions();
         await PasswordChange();
@@ -29,7 +37,10 @@ internal static class SecurityChecks
         await CredentialValidation();
         await LoginLockout();
         await TransportAndLimits();
-        Console.WriteLine($"{_checks} security checks passed (isolated SQLite; no production traffic).");
+        await RecoveryChecks();
+        await RankingChecks();
+        if (TestPostgres.Enabled) await PostgresRecoveryChecks();
+        Console.WriteLine($"{_checks} security checks passed (isolated {(TestPostgres.Enabled ? "PostgreSQL" : "SQLite")}; no production traffic).");
     }
 
     private static void Check(bool ok, string name)
@@ -153,8 +164,8 @@ internal static class SecurityChecks
         await Status(await client.PostAsJsonAsync("/users", new { UserId = "new_user", Pw = new string('가', 30) }), HttpStatusCode.BadRequest, "BCrypt byte limit enforced for Unicode");
         await Status(await client.PostAsJsonAsync("/users", new { UserId = "../bad", Pw = Password }), HttpStatusCode.BadRequest, "unsafe new user id rejected");
         await Status(await client.PostAsJsonAsync("/users", new { UserId = "new_user\n", Pw = Password }), HttpStatusCode.BadRequest, "trailing newline in user id rejected");
-        await Status(await client.PostAsJsonAsync("/users", new { UserId = "new_user", Pw = Password }), HttpStatusCode.Created, "valid signup succeeds");
-        await Status(await client.PostAsJsonAsync("/users", new { UserId = "new_user", Pw = Password }), HttpStatusCode.Conflict, "duplicate account rejected");
+        await Status(await client.PostAsJsonAsync("/users", new { UserId = "new_user", Pw = Password }), HttpStatusCode.Gone, "legacy signup cannot bypass email verification");
+        await Status(await client.PostAsJsonAsync("/users", new { UserId = "new_user", Pw = Password }), HttpStatusCode.Gone, "legacy signup retry still requires verified flow");
         await Status(await client.PostAsJsonAsync("/users/login", new { UserId = "alice", Pw = (string?)null }), HttpStatusCode.BadRequest, "null password rejected");
     }
 
@@ -187,25 +198,38 @@ internal static class SecurityChecks
 
     private sealed record Credentials(int Id, string UserId, string AccessToken, DateTime ExpiresAt);
 
-    private sealed class ApiFactory : WebApplicationFactory<global::Program>
+    private sealed class ApiFactory(bool recoveryEnabled = false) : WebApplicationFactory<global::Program>
     {
         public const string AdminToken = "test-only-admin-secret-not-for-production";
         private static readonly string Hash = BCrypt.Net.BCrypt.HashPassword(Password, 11);
         private readonly SqliteConnection _connection = new("Data Source=:memory:;Foreign Keys=True");
+        private TestPostgres? _postgres;
         private bool _initialized;
+        public readonly TestEmailSender Mail = new();
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Testing");
             builder.ConfigureLogging(logging => logging.ClearProviders());
             builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
-            { ["Admin:Token"] = AdminToken, ["Security:TrustedProxy"] = "" }));
+            { ["Admin:Token"] = AdminToken, ["Security:TrustedProxy"] = "", ["AccountEmail:Enabled"] = recoveryEnabled.ToString(),
+              ["AccountEmail:PublicBaseUrl"] = "https://localhost/" }));
             builder.ConfigureServices(services =>
             {
                 services.RemoveAll<DbContextOptions<AppDbContext>>();
                 services.RemoveAll<IDbContextOptionsConfiguration<AppDbContext>>();
                 services.RemoveAll<AppDbContext>();
-                _connection.Open();
-                services.AddDbContext<AppDbContext>(options => options.UseSqlite(_connection));
+                if (TestPostgres.Enabled)
+                {
+                    _postgres = new TestPostgres();
+                    services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_postgres.ConnectionString));
+                }
+                else
+                {
+                    _connection.Open();
+                    services.AddDbContext<AppDbContext>(options => options.UseSqlite(_connection));
+                }
+                services.RemoveAll<IAccountEmailSender>();
+                services.AddSingleton<IAccountEmailSender>(Mail);
             });
         }
         public HttpClient Client()
@@ -215,12 +239,14 @@ internal static class SecurityChecks
             {
                 using var scope = Services.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.EnsureCreated();
+                if (_postgres is not null) db.Database.Migrate();
+                else db.Database.EnsureCreated();
                 db.Users.AddRange(new User { Id = 1, UserId = "alice", Pw = Hash }, new User { Id = 2, UserId = "bob", Pw = Hash });
                 db.Words.Add(new Word { Id = "item", English = "example" });
                 db.Grammars.Add(new Grammar { Id = "item", Title = "example" });
                 db.Idioms.Add(new Idiom { Id = "item", Title = "example" });
                 db.SaveChanges();
+                if (_postgres is not null) db.Database.ExecuteSqlRaw("ALTER TABLE \"Users\" ALTER COLUMN \"Id\" RESTART WITH 3");
                 _initialized = true;
             }
             return client;
@@ -228,7 +254,11 @@ internal static class SecurityChecks
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (disposing) _connection.Dispose();
+            if (disposing)
+            {
+                _connection.Dispose();
+                _postgres?.Dispose();
+            }
         }
     }
 }

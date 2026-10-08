@@ -1,60 +1,59 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:LexiFlow.Views.UserControls"
              x:Class="LexiFlow.Views.AccountView"
              Title="나">
     <Grid>
         <ScrollView>
-            <VerticalStackLayout Padding="{OnIdiom Phone='20,24,20,112', Default='40,32,40,72'}"
-                                 Spacing="20"
+            <VerticalStackLayout Padding="{OnIdiom Phone='20,20,20,56', Default='24,20,24,40'}"
+                                 Spacing="16"
                                  HorizontalOptions="Fill"
                                  MaximumWidthRequest="760">
                 <VerticalStackLayout Spacing="4">
-                    <Label Text="MY FLOW" Style="{StaticResource EyebrowLabel}"/>
-                    <Label Text="나의 학습" Style="{StaticResource Title}"/>
-                    <Label Text="쌓아 온 작은 성취를 한눈에 확인하세요." Style="{StaticResource Body}"/>
+                    <Label Text="내 계정" Style="{StaticResource Title}"/>
+                    <Label Text="학습 기록 및 설정" Style="{StaticResource Body}"/>
                 </VerticalStackLayout>
 
                 <Border Style="{StaticResource CardBorder}"
-                        BackgroundColor="{StaticResource PrimarySoft}"
-                        Stroke="{StaticResource Primary}">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        BackgroundColor="{StaticResource Surface}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                         <Border BackgroundColor="{StaticResource Primary}"
                                 StrokeThickness="0"
-                                StrokeShape="RoundRectangle 30"
-                                WidthRequest="60"
-                                HeightRequest="60">
+                                StrokeShape="RoundRectangle 6"
+                                WidthRequest="36"
+                                HeightRequest="36">
                             <Label x:Name="avatarLabel"
                                    Text="L"
-                                   FontSize="25"
+                                   FontSize="18"
                                    FontAttributes="Bold"
-                                   TextColor="White"
+                                   TextColor="{StaticResource PrimaryContrast}"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                         </Border>
                         <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                            <Label x:Name="userLabel" Text="-" FontSize="22" FontAttributes="Bold"/>
+                            <Label x:Name="userLabel" Text="-" FontSize="18" FontAttributes="Bold"/>
                             <Label x:Name="accountLevelLabel" Text="LEVEL 1 · 0 XP" Style="{StaticResource MutedLabel}" TextColor="{StaticResource Primary}"/>
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
 
                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
-                    <Border Grid.Column="0" Style="{StaticResource SoftCardBorder}" Padding="12,16">
+                    <Border Grid.Column="0" Style="{StaticResource SoftCardBorder}" Padding="12">
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="streakLabel" Text="0일" Style="{StaticResource StatValueLabel}" FontSize="21"/>
+                            <Label x:Name="streakLabel" Text="0일" Style="{StaticResource StatValueLabel}" FontSize="18"/>
                             <Label Text="연속 학습" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                     </Border>
-                    <Border Grid.Column="1" Style="{StaticResource SoftCardBorder}" Padding="12,16">
+                    <Border Grid.Column="1" Style="{StaticResource SoftCardBorder}" Padding="12">
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="masteredLabel" Text="0" Style="{StaticResource StatValueLabel}" FontSize="21" TextColor="{StaticResource Success}"/>
+                            <Label x:Name="masteredLabel" Text="0" Style="{StaticResource StatValueLabel}" FontSize="18" TextColor="{StaticResource Success}"/>
                             <Label Text="마스터" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                     </Border>
-                    <Border Grid.Column="2" Style="{StaticResource SoftCardBorder}" Padding="12,16">
+                    <Border Grid.Column="2" Style="{StaticResource SoftCardBorder}" Padding="12">
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="learningLabel" Text="0" Style="{StaticResource StatValueLabel}" FontSize="21" TextColor="{StaticResource Warning}"/>
+                            <Label x:Name="learningLabel" Text="0" Style="{StaticResource StatValueLabel}" FontSize="18" TextColor="{StaticResource Warning}"/>
                             <Label Text="학습 중" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                     </Border>
@@ -81,7 +80,7 @@
                         IsVisible="False"
                         BackgroundColor="{StaticResource DangerSoft}"
                         StrokeThickness="0"
-                        StrokeShape="RoundRectangle 14"
+                        StrokeShape="RoundRectangle 6"
                         Padding="14">
                     <Label Text="서버 학습 기록 일부를 불러오지 못했어요. 기기의 XP 기록은 안전합니다."
                            Style="{StaticResource MutedLabel}"
@@ -93,25 +92,60 @@
                     <Border Style="{StaticResource CardBorder}">
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
                             <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                                <Label Text="매일 오전 9시 복습 알림" FontSize="16" FontAttributes="Bold"/>
+                                <Label Text="매일 오전 9시 복습 알림" FontSize="14" FontAttributes="Bold"/>
                                 <Label x:Name="reminderStatusLabel" Text="알림 권한은 원할 때만 요청해요." Style="{StaticResource MutedLabel}"/>
                             </VerticalStackLayout>
                             <Button x:Name="reminderButton"
                                     Grid.Column="1"
                                     Text="켜기"
                                     Style="{StaticResource SecondaryButton}"
-                                    HeightRequest="42"
                                     Clicked="OnEnableReminderClick"/>
                         </Grid>
                     </Border>
                 </VerticalStackLayout>
 
                 <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="문장 쓰기 · ChatGPT" Style="{StaticResource SubTitle}"/>
+                        <Label Text="같은 뜻의 다른 표현도 인정하고, 문법 교정과 모범답안을 받아요." Style="{StaticResource Body}"/>
+                        <Label Text="본인 PC용 연결입니다. ChatGPT 로그인과 사용량 공유 동의는 OpenAI 화면에서 직접 진행해 주세요. API 키는 필요하지 않습니다."
+                               Style="{StaticResource MutedLabel}"/>
+                        <Label Text="문제·예문·작성한 답안을 이 PC에서 OpenAI로 전송합니다. 개인정보를 입력하지 마세요. 계정 토큰은 이 기기에 보호 저장하며 LexiFlow 서버에 보내지 않습니다."
+                               Style="{StaticResource MutedLabel}" FontSize="12"/>
+                        <Label Text="ChatGPT 플랜 한도가 적용됩니다. AI도 틀릴 수 있으며, 오류나 판단 보류는 오답·학습 기록으로 저장하지 않습니다."
+                               Style="{StaticResource MutedLabel}" FontSize="12"/>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <ActivityIndicator x:Name="chatGptActivity" IsVisible="False" IsRunning="False"
+                                               WidthRequest="18" HeightRequest="18" Color="{StaticResource Primary}"/>
+                            <Label x:Name="chatGptStatusLabel" Grid.Column="1" Text="연결 상태 확인 중…" Style="{StaticResource MutedLabel}"/>
+                        </Grid>
+                        <VerticalStackLayout x:Name="chatGptActions" Spacing="8">
+                            <VerticalStackLayout x:Name="chatGptProfilesPanel" IsVisible="False" Spacing="8">
+                                <Label Text="저장된 ChatGPT 계정" Style="{StaticResource MutedLabel}"/>
+                                <Picker x:Name="chatGptProfilePicker" SemanticProperties.Description="저장된 ChatGPT 계정" Style="{StaticResource AppPicker}" ItemDisplayBinding="{Binding Label}"/>
+                                <Button Text="선택한 계정 사용" Style="{StaticResource SecondaryButton}" Clicked="OnChatGptSelectProfileClick"/>
+                            </VerticalStackLayout>
+                            <Button x:Name="chatGptConnectButton" Text="Continue with ChatGPT" Style="{StaticResource SecondaryButton}" Clicked="OnChatGptConnectClick"/>
+                            <Button x:Name="chatGptOtherAccountButton" Text="다른 ChatGPT 계정 연결" Style="{StaticResource SecondaryButton}" Clicked="OnChatGptOtherAccountClick" IsVisible="False"/>
+                            <Button x:Name="chatGptDisconnectButton" Text="현재 ChatGPT 계정 연결 해제" Style="{StaticResource DangerButton}" Clicked="OnChatGptDisconnectClick" IsVisible="False"/>
+                            <Button Text="ChatGPT 사용량·연결 관리" Style="{StaticResource SecondaryButton}" Clicked="OnChatGptUsageClick"/>
+                        </VerticalStackLayout>
+                        <Button x:Name="chatGptCancelButton" Text="연결 취소" Style="{StaticResource SecondaryButton}" Clicked="OnChatGptCancelClick" IsVisible="False"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorder}">
                     <VerticalStackLayout x:Name="securityActions" Spacing="12">
                         <Label Text="계정 보안" Style="{StaticResource SubTitle}"/>
+                        <Label x:Name="recoveryEmailStatusLabel" Text="복구 이메일 상태 확인 중…" Style="{StaticResource MutedLabel}"/>
+                        <Entry x:Name="recoveryEmailEntry" Keyboard="Email" Placeholder="복구 이메일 등록 또는 변경"
+                               Style="{StaticResource FieldEntry}" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
                         <Label Text="비밀번호 변경과 탈퇴는 현재 비밀번호를 다시 확인해요." Style="{StaticResource MutedLabel}"/>
                         <Entry x:Name="currentPasswordEntry" IsPassword="True" Placeholder="현재 비밀번호"
                                Style="{StaticResource FieldEntry}" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
+                        <Button x:Name="recoveryEmailButton" Text="복구 이메일 인증메일 보내기" Style="{StaticResource SecondaryButton}" Clicked="OnRecoveryEmailClick"/>
+                        <Label Text="현재 비밀번호 확인 후 발송해요. 메일에서 인증을 마칠 때까지 기존 복구 이메일은 유지됩니다."
+                               Style="{StaticResource MutedLabel}" FontSize="12"/>
                         <Entry x:Name="newPasswordEntry" IsPassword="True" Placeholder="새 비밀번호 (12자 이상)"
                                Style="{StaticResource FieldEntry}" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
                         <Button Text="비밀번호 변경" Style="{StaticResource SecondaryButton}" Clicked="OnChangePasswordClick"/>
@@ -119,13 +153,14 @@
                         <Button Text="계정 및 학습 데이터 삭제" Style="{StaticResource DangerButton}" Clicked="OnDeleteAccountClick"/>
                     </VerticalStackLayout>
                 </Border>
+                <controls:AppUpdatePanel/>
                 <Button Text="로그아웃"
                         Style="{StaticResource DangerButton}"
                         Clicked="OnSignOutClick"/>
             </VerticalStackLayout>
         </ScrollView>
 
-        <Grid x:Name="loadingOverlay" IsVisible="False" BackgroundColor="#660B1120">
+        <Grid x:Name="loadingOverlay" IsVisible="False" BackgroundColor="#66171717">
             <ActivityIndicator IsRunning="True" Color="{StaticResource Primary}" HorizontalOptions="Center" VerticalOptions="Center"/>
         </Grid>
     </Grid>

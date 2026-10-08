@@ -5,33 +5,23 @@
              Title="오늘">
     <Grid>
         <ScrollView>
-            <VerticalStackLayout Padding="{OnIdiom Phone='20,24,20,112', Default='40,32,40,80'}"
-                                 Spacing="22"
+            <VerticalStackLayout Padding="{OnIdiom Phone='16,20,16,80', Default='28,24,28,48'}"
+                                 Spacing="18"
                                  HorizontalOptions="Fill"
-                                 MaximumWidthRequest="860">
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="TODAY'S FLOW" Style="{StaticResource EyebrowLabel}"/>
-                        <Label x:Name="greetingLabel"
-                               Text="오늘도 한 걸음 시작해 볼까요?"
-                               Style="{StaticResource Title}"
-                               FontSize="{OnIdiom Phone=27, Default=34}"/>
+                                 MaximumWidthRequest="1040">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label x:Name="greetingLabel" Text="오늘" Style="{StaticResource Title}"/>
                         <Label x:Name="motivationLabel"
-                               Text="짧게 해도 괜찮아요. 꾸준함이 실력을 만듭니다."
-                               Style="{StaticResource Body}"/>
+                               Text="오늘 0문제 완료 · 일일 목표 10문제"
+                               Style="{StaticResource MutedLabel}"/>
                     </VerticalStackLayout>
-                    <Border Grid.Column="1"
-                            Style="{StaticResource SoftCardBorder}"
-                            Padding="14,10"
-                            VerticalOptions="Start">
-                        <HorizontalStackLayout Spacing="7">
-                            <Label Text="⚡" FontSize="15"/>
-                            <Label x:Name="headerXpLabel"
-                                   Text="0 XP"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource Warning}"/>
-                        </HorizontalStackLayout>
-                    </Border>
+                    <Label x:Name="headerXpLabel"
+                           Grid.Column="1"
+                           Text="누적 0 XP"
+                           FontSize="12"
+                           TextColor="{StaticResource TextSecondary}"
+                           VerticalOptions="Center"/>
                 </Grid>
 
                 <Border x:Name="errorBorder"
@@ -39,153 +29,149 @@
                         BackgroundColor="{StaticResource DangerSoft}"
                         Stroke="{StaticResource Danger}"
                         StrokeThickness="1"
-                        StrokeShape="RoundRectangle 14"
-                        Padding="14,12">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                        <Label Text="!" FontAttributes="Bold" TextColor="{StaticResource Danger}"/>
-                        <Label x:Name="errorLabel"
-                               Grid.Column="1"
-                               Text="학습 현황을 불러오지 못했어요."
-                               TextColor="{StaticResource TextPrimary}"/>
-                    </Grid>
+                        StrokeShape="RoundRectangle 6"
+                        Padding="12,10">
+                    <Label x:Name="errorLabel"
+                           Text="학습 현황을 불러오지 못했습니다."
+                           FontSize="13"
+                           TextColor="{StaticResource TextPrimary}"/>
                 </Border>
-
-                <Border Style="{StaticResource CardBorder}"
-                        BackgroundColor="{StaticResource PrimarySoft}"
-                        Stroke="{StaticResource Primary}">
-                    <VerticalStackLayout Spacing="16">
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="14">
-                            <VerticalStackLayout Spacing="4">
-                                <Label Text="오늘의 목표" Style="{StaticResource EyebrowLabel}" TextColor="{StaticResource TextPrimary}"/>
-                                <Label x:Name="goalMessageLabel"
-                                       Text="첫 문제를 풀고 흐름을 만들어 보세요"
-                                       FontSize="20"
-                                       FontAttributes="Bold"/>
-                            </VerticalStackLayout>
-                            <Border Grid.Column="1"
-                                    BackgroundColor="#33FFFFFF"
-                                    StrokeThickness="0"
-                                    StrokeShape="RoundRectangle 14"
-                                    Padding="12,8"
-                                    VerticalOptions="Center">
-                                <Label x:Name="goalProgressLabel"
-                                       Text="0 / 10"
-                                       FontAttributes="Bold"/>
-                            </Border>
-                        </Grid>
-                        <ProgressBar x:Name="goalProgress"
-                                     Style="{StaticResource LearningProgressBar}"
-                                     ProgressColor="{StaticResource Success}"/>
-                                <Button x:Name="primaryActionButton"
-                                Text="오늘의 문장 학습"
-                                Clicked="OnStartWordReviewClick"
-                                BackgroundColor="{StaticResource TextPrimary}"
-                                TextColor="{StaticResource AppBackground}"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <Grid RowDefinitions="Auto,Auto"
-                      ColumnDefinitions="*,*"
-                      RowSpacing="12"
-                      ColumnSpacing="12">
-                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource SoftCardBorder}">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="연속 학습" Style="{StaticResource MutedLabel}"/>
-                            <Label x:Name="streakLabel" Text="0일" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
-                            <Label Text="🔥 흐름을 이어가세요" FontSize="12" TextColor="{StaticResource Warning}"/>
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource SoftCardBorder}">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="복습 대기" Style="{StaticResource MutedLabel}"/>
-                            <Label x:Name="dueLabel" Text="0개" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
-                            <Label Text="지금 기억을 단단하게" FontSize="12" TextColor="{StaticResource Primary}"/>
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource SoftCardBorder}">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="마스터" Style="{StaticResource MutedLabel}"/>
-                            <Label x:Name="masteredLabel" Text="0개" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
-                            <Label Text="내 것으로 만든 항목" FontSize="12" TextColor="{StaticResource Success}"/>
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource SoftCardBorder}">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="현재 레벨" Style="{StaticResource MutedLabel}"/>
-                            <Label x:Name="levelStatLabel" Text="LEVEL 1" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
-                            <Label x:Name="levelRemainLabel" Text="다음 레벨까지 200 XP" FontSize="12" TextColor="{StaticResource Accent}"/>
-                        </VerticalStackLayout>
-                    </Border>
-                </Grid>
 
                 <Border Style="{StaticResource CardBorder}">
                     <VerticalStackLayout Spacing="12">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <VerticalStackLayout Spacing="3">
-                                <Label x:Name="levelLabel" Text="레벨 1 진행도" Style="{StaticResource SubTitle}"/>
-                                <Label x:Name="levelXpLabel" Text="0 / 200 XP" Style="{StaticResource MutedLabel}"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                                <Label Text="일일 목표" Style="{StaticResource MutedLabel}"/>
+                                <Label x:Name="goalMessageLabel"
+                                       Text="오늘의 학습"
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
                             </VerticalStackLayout>
-                            <Label Grid.Column="1" Text="성장 기록" Style="{StaticResource EyebrowLabel}" VerticalOptions="Center"/>
+                            <Button x:Name="primaryActionButton"
+                                    Grid.Column="1"
+                                    Text="학습 시작"
+                                    WidthRequest="{OnIdiom Phone=108, Default=132}"
+                                    VerticalOptions="Center"
+                                    Clicked="OnStartWordReviewClick"/>
                         </Grid>
-                        <ProgressBar x:Name="levelProgress"
-                                     Style="{StaticResource LearningProgressBar}"
-                                     ProgressColor="{StaticResource Accent}"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="14">
+                            <ProgressBar x:Name="goalProgress"
+                                         Style="{StaticResource LearningProgressBar}"
+                                         ProgressColor="{StaticResource Primary}"
+                                         VerticalOptions="Center"/>
+                            <Label x:Name="goalProgressLabel"
+                                   Grid.Column="1"
+                                   Text="0 / 10"
+                                   FontSize="12"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                        </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="학습 경로" Style="{StaticResource SubTitle}"/>
-                    <Label Text="기억이 흐려질 때 딱 맞춰 다시 만나요." Style="{StaticResource MutedLabel}"/>
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="14">
+                        <Grid x:Name="statsGrid"
+                              RowDefinitions="Auto,Auto"
+                              ColumnDefinitions="*,*,*,*"
+                              RowSpacing="16"
+                              ColumnSpacing="12">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="StatsLayoutStates">
+                                    <VisualState x:Name="WideStats">
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="760"/>
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Property="RowSpacing" Value="0"/>
+                                            <Setter TargetName="streakStat" Property="Grid.ColumnSpan" Value="1"/>
+                                            <Setter TargetName="dueStat" Property="Grid.Column" Value="1"/>
+                                            <Setter TargetName="dueStat" Property="Grid.ColumnSpan" Value="1"/>
+                                            <Setter TargetName="masteredStat" Property="Grid.Row" Value="0"/>
+                                            <Setter TargetName="masteredStat" Property="Grid.Column" Value="2"/>
+                                            <Setter TargetName="masteredStat" Property="Grid.ColumnSpan" Value="1"/>
+                                            <Setter TargetName="levelStat" Property="Grid.Row" Value="0"/>
+                                            <Setter TargetName="levelStat" Property="Grid.Column" Value="3"/>
+                                            <Setter TargetName="levelStat" Property="Grid.ColumnSpan" Value="1"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="CompactStats">
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="0"/>
+                                        </VisualState.StateTriggers>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <VerticalStackLayout x:Name="streakStat" Grid.ColumnSpan="2" Spacing="4">
+                                <Label Text="연속 학습" Style="{StaticResource MutedLabel}"/>
+                                <Label x:Name="streakLabel" Text="0일" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout x:Name="dueStat" Grid.Column="2" Grid.ColumnSpan="2" Spacing="4">
+                                <Label Text="복습 대기" Style="{StaticResource MutedLabel}"/>
+                                <Label x:Name="dueLabel" Text="0개" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout x:Name="masteredStat" Grid.Row="1" Grid.ColumnSpan="2" Spacing="4">
+                                <Label Text="학습 완료" Style="{StaticResource MutedLabel}"/>
+                                <Label x:Name="masteredLabel" Text="0개" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout x:Name="levelStat" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Spacing="4">
+                                <Label Text="현재 레벨" Style="{StaticResource MutedLabel}"/>
+                                <Label x:Name="levelStatLabel" Text="1" Style="{StaticResource StatValueLabel}" HorizontalTextAlignment="Start"/>
+                                <Label x:Name="levelRemainLabel" Text="다음까지 200 XP" FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                        <BoxView HeightRequest="1" Color="{StaticResource Stroke}"/>
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="8">
+                            <Label x:Name="levelLabel" Text="레벨 1" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                            <Label x:Name="levelXpLabel" Grid.Column="1" Text="0 / 200 XP" FontSize="12" TextColor="{StaticResource TextMuted}"/>
+                            <ProgressBar x:Name="levelProgress"
+                                         Grid.Row="1"
+                                         Grid.ColumnSpan="2"
+                                         Style="{StaticResource LearningProgressBar}"
+                                         ProgressColor="{StaticResource Primary}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="학습 목록" Style="{StaticResource SubTitle}"/>
+                    <Border Style="{StaticResource CardBorder}" Padding="14,0">
+                        <VerticalStackLayout Spacing="0">
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Padding="0,12">
+                                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                                    <Label Text="문장 학습" FontSize="14" FontAttributes="Bold"/>
+                                    <Label x:Name="wordDueLabel" Text="복습 단어 확인 중" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="열기" Style="{StaticResource SecondaryButton}" VerticalOptions="Center" Clicked="OnStartWordReviewClick"/>
+                            </Grid>
+                            <BoxView HeightRequest="1" Color="{StaticResource Stroke}"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Padding="0,12">
+                                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                                    <Label Text="문법 복습" FontSize="14" FontAttributes="Bold"/>
+                                    <Label x:Name="grammarDueLabel" Text="복습 문법 확인 중" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="열기" Style="{StaticResource SecondaryButton}" VerticalOptions="Center" Clicked="OnStartGrammarReviewClick"/>
+                            </Grid>
+                            <BoxView HeightRequest="1" Color="{StaticResource Stroke}"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Padding="0,12">
+                                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                                    <Label Text="표현 복습" FontSize="14" FontAttributes="Bold"/>
+                                    <Label x:Name="idiomDueLabel" Text="복습 표현 확인 중" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="열기" Style="{StaticResource SecondaryButton}" VerticalOptions="Center" Clicked="OnStartIdiomReviewClick"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
                 </VerticalStackLayout>
-
-                <Border Style="{StaticResource CardBorder}">
-                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
-                        <Border BackgroundColor="{StaticResource PrimarySoft}" StrokeThickness="0" StrokeShape="RoundRectangle 15" Padding="13">
-                            <Label Text="A" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                            <Label Text="문장 학습" FontSize="17" FontAttributes="Bold"/>
-                            <Label x:Name="wordDueLabel" Text="뜻 고르기와 빈칸 쓰기 · 10문장" Style="{StaticResource MutedLabel}"/>
-                        </VerticalStackLayout>
-                        <Button Grid.Column="2" Text="시작" Style="{StaticResource SecondaryButton}" HeightRequest="42" Clicked="OnStartWordReviewClick"/>
-                    </Grid>
-                </Border>
-
-                <Border Style="{StaticResource CardBorder}">
-                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
-                        <Border BackgroundColor="#2A234C" StrokeThickness="0" StrokeShape="RoundRectangle 15" Padding="13">
-                            <Label Text="文" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Accent}"/>
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                            <Label Text="문법 카드" FontSize="17" FontAttributes="Bold"/>
-                            <Label x:Name="grammarDueLabel" Text="오늘 복습할 문법을 확인 중이에요" Style="{StaticResource MutedLabel}"/>
-                        </VerticalStackLayout>
-                        <Button Grid.Column="2" Text="시작" Style="{StaticResource SecondaryButton}" HeightRequest="42" Clicked="OnStartGrammarReviewClick"/>
-                    </Grid>
-                </Border>
-
-                <Border Style="{StaticResource CardBorder}">
-                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
-                        <Border BackgroundColor="{StaticResource SuccessSoft}" StrokeThickness="0" StrokeShape="RoundRectangle 15" Padding="13">
-                            <Label Text="❞" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Success}"/>
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                            <Label Text="표현 카드" FontSize="17" FontAttributes="Bold"/>
-                            <Label x:Name="idiomDueLabel" Text="오늘 복습할 표현을 확인 중이에요" Style="{StaticResource MutedLabel}"/>
-                        </VerticalStackLayout>
-                        <Button Grid.Column="2" Text="시작" Style="{StaticResource SecondaryButton}" HeightRequest="42" Clicked="OnStartIdiomReviewClick"/>
-                    </Grid>
-                </Border>
             </VerticalStackLayout>
         </ScrollView>
 
         <Grid x:Name="loadingOverlay"
               IsVisible="False"
-              BackgroundColor="#660B1120">
+              BackgroundColor="#99171717">
             <ActivityIndicator IsRunning="True"
                                Color="{StaticResource Primary}"
-                               WidthRequest="42"
-                               HeightRequest="42"
+                               WidthRequest="28"
+                               HeightRequest="28"
                                HorizontalOptions="Center"
                                VerticalOptions="Center"/>
         </Grid>

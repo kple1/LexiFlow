@@ -33,16 +33,18 @@ public static class LocalAccountData
             foreach (var key in new[] { $"sentence_archive_{old}_v1", $"sentence_lesson_history_{old}_v3",
                 $"course_v1_{Uri.EscapeDataString(legacyOwner)}_stages", $"course_v1_{Uri.EscapeDataString(legacyOwner)}_stars",
                 $"learning_{old}_today", $"learning_{old}_today_reviews", $"learning_{old}_total_xp",
-                "streak_last_date", "streak_count" }) Preferences.Remove(key);
+                "streak_last_date", "streak_count" }) LargePreferenceStore.Remove(key);
         }
-        foreach (var suffix in new[] { "archive", "history", "course_stages", "course_stars", "today",
+        foreach (var suffix in new[] { "archive", "history", "course_stages", "course_stars", "sentence_review", "builtin_word_progress_v1", "today",
             "today_reviews", "total_xp", "streak_count", "streak_last_date", "migrated_from" })
-            Preferences.Remove(Key(session, suffix));
+            LargePreferenceStore.Remove(Key(session, suffix));
+        foreach (var word in BuiltInVocabulary.GetWords())
+            Preferences.Remove(Key(session, $"builtin_word_progress_v1:{word.Id}"));
     }
 
     private static void CopyString(string source, string target)
     {
-        if (Preferences.ContainsKey(source) && !Preferences.ContainsKey(target))
+        if (Preferences.ContainsKey(source) && !LargePreferenceStore.Contains(target))
             Preferences.Set(target, Preferences.Get(source, ""));
     }
     private static void CopyInt(string source, string target)

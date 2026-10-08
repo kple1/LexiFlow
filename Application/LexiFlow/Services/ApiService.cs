@@ -9,6 +9,7 @@ public class ApiService
 {
     private readonly HttpClient _http;
     private readonly SessionService _session;
+    private readonly BuiltInWordProgressService _builtInProgress;
 
     public ApiService(SessionService session) : this(session, new HttpClient(new HttpClientHandler
     {
@@ -21,10 +22,25 @@ public class ApiService
         if (http.BaseAddress?.Scheme != Uri.UriSchemeHttps)
             throw new ArgumentException("HTTPS is required.", nameof(http));
         _session = session;
+        _builtInProgress = new BuiltInWordProgressService(session);
         _http = http;
     }
 
-    public async Task<List<Word>> GetWordsAsync() => await GetPublicAsync<List<Word>>("words") ?? [];
+    public bool LastWordLoadUsedFallback { get; private set; }
+    public async Task<List<Word>> GetWordsAsync()
+    {
+        try
+        {
+            var words = await GetPublicAsync<List<Word>>("words");
+            LastWordLoadUsedFallback = false;
+            return BuiltInVocabulary.Merge(words ?? []);
+        }
+        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
+        {
+            LastWordLoadUsedFallback = true;
+            return BuiltInVocabulary.GetWords();
+        }
+    }
     public async Task<List<Grammar>> GetGrammarAsync() => await GetPublicAsync<List<Grammar>>("grammars") ?? [];
     public async Task<List<Idiom>> GetIdiomAsync() => await GetPublicAsync<List<Idiom>>("idioms") ?? [];
 
@@ -42,8 +58,10 @@ public class ApiService
         return $"users/{Uri.EscapeDataString(userId)}/{suffix}";
     }
 
-    private async Task<HttpResponseMessage> SendAuthorizedAsync(HttpRequestMessage request)
+    private async Task<HttpResponseMessage> SendAuthorizedAsync(
+        HttpRequestMessage request, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var token = _session.AccessToken;
         if (token is null)
         {
@@ -51,7 +69,7 @@ public class ApiService
             throw new HttpRequestException("Please sign in again.", null, HttpStatusCode.Unauthorized);
         }
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var response = await _http.SendAsync(request);
+        var response = await _http.SendAsync(request, cancellationToken);
         if (response.StatusCode == HttpStatusCode.Unauthorized) _session.Invalidate(token);
         if (!response.IsSuccessStatusCode)
         {
@@ -75,15 +93,58 @@ public class ApiService
         using var response = await SendAuthorizedAsync(request);
     }
 
-    public Task<List<WordProgress>> GetProgressAsync(string userId) => GetProgressAsync<WordProgress>(userId, "progress");
+    public async Task<List<WordProgress>> GetProgressAsync(string userId)
+    {
+        var token = _session.AccessToken;
+        var accountId = _session.CurrentAccountId;
+        var server = await GetProgressAsync<WordProgress>(userId, "progress");
+        if (token != _session.AccessToken || accountId != _session.CurrentAccountId)
+            throw new InvalidOperationException("The signed-in account changed while loading progress.");
+        // The server owns only server IDs. The local namespace cannot shadow its identities.
+        return server.Where(item => !BuiltInWordProgressService.IsBuiltInId(item.WordId))
+            .Concat(GetLocalWordProgress(userId)).ToList();
+    }
+
+    public IReadOnlyList<WordProgress> GetLocalWordProgress(string userId)
+    {
+        _ = OwnPath(userId, "progress");
+        return _builtInProgress.Read(userId);
+    }
     public Task<List<GrammarProgress>> GetGrammarProgressAsync(string userId) => GetProgressAsync<GrammarProgress>(userId, "grammar-progress");
     public Task<List<IdiomProgress>> GetIdiomProgressAsync(string userId) => GetProgressAsync<IdiomProgress>(userId, "idiom-progress");
     public Task UpsertProgressAsync(string userId, string wordId, bool correct, string? status = null)
-        => SaveProgressAsync(userId, "progress", new { WordId = wordId, Correct = correct, Status = status });
+    {
+        _ = OwnPath(userId, "progress");
+        if (BuiltInWordProgressService.IsBuiltInId(wordId))
+        {
+            _builtInProgress.Record(userId, wordId, correct, status);
+            return Task.CompletedTask;
+        }
+        return SaveProgressAsync(userId, "progress", new { WordId = wordId, Correct = correct, Status = status });
+    }
     public Task UpsertGrammarProgressAsync(string userId, string grammarId, bool correct, string? status = null)
         => SaveProgressAsync(userId, "grammar-progress", new { GrammarId = grammarId, Correct = correct, Status = status });
     public Task UpsertIdiomProgressAsync(string userId, string idiomId, bool correct, string? status = null)
         => SaveProgressAsync(userId, "idiom-progress", new { IdiomId = idiomId, Correct = correct, Status = status });
+
+    public async Task<RankingSnapshot> GetRankingAsync(CancellationToken cancellationToken = default)
+    {
+        var account = _session.StorageId;
+        var token = _session.AccessToken;
+        using var request = new HttpRequestMessage(HttpMethod.Get, "ranking");
+        using var response = await SendAuthorizedAsync(request, cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<RankingSnapshot>(cancellationToken)
+            ?? throw new System.Text.Json.JsonException("Missing ranking snapshot.");
+        result.Validate();
+        EnsureRankingOwner(account, token);
+        return result;
+    }
+
+    private void EnsureRankingOwner(string account, string? token)
+    {
+        if (!_session.IsLoggedIn || account != _session.StorageId || token != _session.AccessToken)
+            throw new InvalidOperationException("The signed-in account changed while loading ranking.");
+    }
 
     public async Task<SessionCredentials?> LoginAsync(string userId, string pw)
     {
@@ -99,6 +160,7 @@ public class ApiService
         if (response.IsSuccessStatusCode) return (true, null);
         return (false, response.StatusCode switch
         {
+            HttpStatusCode.Gone => "새 앱의 이메일 인증 가입 화면을 이용해 주세요.",
             HttpStatusCode.Conflict => "이미 사용 중인 아이디입니다.",
             HttpStatusCode.BadRequest => "아이디는 3~64자(문자·숫자·_·.·-), 비밀번호는 12자 이상·UTF-8 72바이트 이내로 입력해 주세요.",
             HttpStatusCode.TooManyRequests => "요청이 많습니다. 잠시 후 다시 시도해 주세요.",
@@ -109,6 +171,20 @@ public class ApiService
     public async Task LogoutAsync()
     {
         using var request = new HttpRequestMessage(HttpMethod.Post, "users/logout");
+        using var response = await SendAuthorizedAsync(request);
+    }
+
+    public async Task<RecoveryEmailStatus?> GetRecoveryEmailAsync()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, "account/email");
+        using var response = await SendAuthorizedAsync(request);
+        return await response.Content.ReadFromJsonAsync<RecoveryEmailStatus>();
+    }
+
+    public async Task RequestRecoveryEmailAsync(string email, string currentPassword)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "account/email/request")
+        { Content = JsonContent.Create(new { Email = email, CurrentPw = currentPassword }) };
         using var response = await SendAuthorizedAsync(request);
     }
 
